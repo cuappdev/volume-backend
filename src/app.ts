@@ -21,3 +21,5 @@ const server = new Server();
 ((port = process.env.APP_PORT || 5000) => {
     server.app.listen(port, () => console.log(`> Listening on port ${port}`));
 })();
+
+//test tedi has access
