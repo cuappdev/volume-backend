@@ -9,7 +9,7 @@ dotenv.config({
     path: '.env',
 });
 
-const FEED_LIST = ['https://cornellsun.com/feed/'];
+const FEED_LIST = ['https://cornellsun.com/feed/', 'http://cunooz.com/?feed=rss2'];
 
 const app = express();
 

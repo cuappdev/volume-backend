@@ -1,23 +1,19 @@
 import dotenv from 'dotenv';
-import express from 'express';
+import API from './API';
 
 // load the environment variables from the .env file
 dotenv.config({
     path: '.env',
 });
 
-/**
- * Express server application class.
- * @description Will later contain the routing system.
- */
-class Server {
-    public app = express();
-}
-
 // initialize server app
-const server = new Server();
+const app = new API();
+const server = app.getServer(false);
 
 // make server listen on some port
-((port = process.env.APP_PORT || 5000) => {
-    server.app.listen(port, () => console.log(`> Listening on port ${port}`));
+((port = process.env.APP_PORT || 5000, server_address = '0.0.0.0') => {
+    app.express.listen(port, () => console.log(`App is running on ${server_address}:${port}`));
+    console.log('PRESS CTRL-C to stop\n');
 })();
+
+export { server };

@@ -1,0 +1,45 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "Welcome to the volume-backend API docs!",
+      "version": "1.0.0",
+      "title": "volume-backend"
+    },
+    "tags": [
+      {
+        "name": "General",
+        "description": "Operations to interact with Volume."
+      }
+    ],
+    "paths": {
+      "/general/": {
+        "get": {
+          "tags": [
+            "General"
+          ],
+          "summary": "Sanity check to see if the application is running.",
+          "responses": {
+            "200": {
+              "description": "{success: true, data: \"Hello world!\" }"
+            },
+            "401": {
+              "description": "{success: false, data: {errors: [string]}}"
+            }
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Find out more about volume-backend",
+      "url": "https://github.com/cuappdev/volume-backend"
+    },
+    "servers": [
+      {
+        "url": "https://volume-backend.cornellappdev.com/api/v1"
+      }
+    ],
+    "components": {
+      "schemas": {
+      }
+    }
+  }

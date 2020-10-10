@@ -1,0 +1,21 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+      "target": "es2016",
+      "module": "commonjs",
+      "outDir": "build",
+      "strict": true,
+      "strictNullChecks": false,
+      // "noUnusedLocals": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "allowSyntheticDefaultImports": true,
+      "noImplicitAny": false
+    },
+    "include": [
+      "src/**/*"
+    ]
+  }
