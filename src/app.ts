@@ -1,19 +1,41 @@
+import { ApolloServer } from 'apollo-server-express';
+import { buildSchema } from "type-graphql";
 import dotenv from 'dotenv';
-import API from './API';
+import Express from 'express';
+import 'reflect-metadata';
+import { dbConnection } from './db/DBConnection';
+
+// resolvers
+import { ArticleResolver } from './resolvers/ArticleResolver';
 
 // load the environment variables from the .env file
 dotenv.config({
     path: '.env',
 });
 
-// initialize server app
-const app = new API();
-const server = app.getServer(false);
+const main = async () => {
+    const schema = await buildSchema({
+        resolvers: [ ArticleResolver ],
+        emitSchemaFile: true,
+        validate: false,
+    });
 
-// make server listen on some port
-((port = process.env.APP_PORT || 5000, server_address = '0.0.0.0') => {
-    app.express.listen(port, () => console.log(`App is running on ${server_address}:${port}`));
-    console.log('PRESS CTRL-C to stop\n');
-})();
+    await dbConnection();
 
-export { server };
+    const server = new ApolloServer({schema});
+    const app = Express();
+
+    server.applyMiddleware({app});
+
+    (( port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS ) => {
+        app.listen( port, () =>
+            console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`) 
+        );
+    })();
+   
+    
+};
+
+main().catch((error)=>{
+    console.log(error);
+});
