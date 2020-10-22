@@ -6,7 +6,7 @@ import 'reflect-metadata';
 import { dbConnection } from './db/DBConnection';
 
 // resolvers
-import { ArticleResolver } from './resolvers/ArticleResolver';
+import ArticleResolver from './resolvers/ArticleResolver';
 
 // load the environment variables from the .env file
 dotenv.config({
