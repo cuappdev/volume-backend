@@ -4,27 +4,27 @@ import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 @ObjectType({ description: 'The Article Model' })
 export class Article {
   @Field(() => ID)
-  id: String;
+  id: string;
 
   @Field()
   @Property()
-  title: String;
+  title: string;
 
   @Field()
   @Property()
-  publication: String;
+  publication: string;
 
   @Field()
   @Property()
-  articleURL: String;
+  articleURL: string;
 
   @Field()
   @Property()
-  imageURL: String;
+  imageURL: string;
 
   @Field()
   @Property()
-  date: String;
+  date: string;
 
   @Field()
   @Property()

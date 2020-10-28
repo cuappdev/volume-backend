@@ -1,22 +1,20 @@
-import {
-  Resolver, Mutation, Arg, Query,
-} from 'type-graphql';
+import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { Article, ArticleModel } from '../entities/Article';
 
 @Resolver((_of) => Article)
 export default class ArticleResolver {
   @Query((_returns) => Article, { nullable: false })
-  async getArticleById(@Arg('id') id: String) {
+  async getArticleById(@Arg('id') id: string) {
     return ArticleModel.findById({ id });
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getAllArticles(@Arg('limit') limit:number) {
+  async getAllArticles(@Arg('limit') limit: number) {
     return ArticleModel.find({}).limit(limit);
   }
 
   @Mutation(() => Boolean)
-  async incrementLike(@Arg('id') id:String) {
+  async incrementLike(@Arg('id') id: string) {
     const article = await ArticleModel.findById({ id });
     article.likes += 1;
     await article.save();

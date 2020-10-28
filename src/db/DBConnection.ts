@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 let database: mongoose.Connection;
 
 /* Creates a connection to database. */
-export const dbConnection = async () :Promise<mongoose.Connection> => {
+export const dbConnection = async (): Promise<mongoose.Connection> => {
   if (database) {
     return database;
   }
