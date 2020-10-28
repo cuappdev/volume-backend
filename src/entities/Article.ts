@@ -24,7 +24,7 @@ export class Article {
 
   @Field()
   @Property()
-  date: String;
+  date: Date;
 
   @Field()
   @Property()
