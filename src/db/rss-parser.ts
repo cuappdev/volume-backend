@@ -1,16 +1,17 @@
-import { Article } from '../entities/Article';
 import Parser from 'rss-parser';
-import publications from '../../publications.json';
+import * as publications from '../../publications.json';
+
+import { Article } from '../entities/Article';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const feedSources = new Array<string>();
-  for (const pc in publications) {
-    if (publications[pc].feed) {
-      feedSources.push(publications[pc].feed);
-    }
-  }
+  const publicationsDB = publications.publications;
+  const nameToSlugMap = {};
+  const feedSources = publicationsDB.map((publication) => {
+    nameToSlugMap[publication.feed] = publication.slug;
+    return publication.feed;
+  });
 
   const feedRequests = feedSources.map((feed) => {
     return parser.parseURL(feed);
@@ -24,12 +25,12 @@ const getRecentArticles = async (): Promise<Article[]> => {
         const article = new Article();
         article.title = item.title;
         article.articleURL = item.link;
-        article.date = new Date(item.pubDate).toISOString();
+        article.date = new Date(item.pubDate);
         article.imageURL = '';
         article.likes = 0;
 
         // Double check if RSS feeds have changed name
-        article.publication = publications[feed.title] ? publications[feed.title].slug : 'unknown';
+        article.publication = nameToSlugMap[feed.title] ? nameToSlugMap[feed.title] : 'unknown';
 
         articles.push(article);
       });

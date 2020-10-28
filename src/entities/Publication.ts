@@ -1,22 +1,22 @@
-import { ObjectType, Field } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType({ description: 'The Publications Model' })
-export class Publication {
+export default class Publication {
   @Field()
-  slug: String;
+  slug: string;
 
   @Field()
-  bio: String;
+  bio: string;
 
   @Field()
-  feed: String;
+  feed: string;
 
   @Field({ nullable: true })
-  img: String;
+  img: string;
 
   @Field()
-  name: String;
+  name: string;
 
   @Field()
-  url: String;
+  url: string;
 }
