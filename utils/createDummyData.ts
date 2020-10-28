@@ -5,40 +5,40 @@ export const createDummyData = async () => {
     {
       title: 'orko and tedi backend ',
       publication: 'g',
-      artilceUrl: 'www.orko.com',
-      imageUrl: 'www.orkopics.com',
+      articleURL: 'www.orko.com',
+      imageURL: 'www.orkopics.com',
       date: '10-14-2020',
       likes: 0,
     },
     {
       title: 'appdev router---> sucks, let me tell you why',
       publication: 'g',
-      articleUrl: 'www.jack.com',
-      imageUrl: 'www.jack.com',
+      articleURL: 'www.jack.com',
+      imageURL: 'www.jack.com',
       date: '10-14-2020',
       likes: 0,
     },
     {
       title: 'Bruh',
       publication: 'g',
-      articleUrl: 'www.ne',
-      imageUrl: 'www.pic',
+      articleURL: 'www.ne',
+      imageURL: 'www.pic',
       date: '10-15-2020',
       likes: 0,
     },
     {
       title: 'Bruh',
       publication: 'g',
-      articleUrl: 'www.ne',
-      imageUrl: 'www.pic',
+      articleURL: 'www.ne',
+      imageURL: 'www.pic',
       date: '10-16-2020',
       likes: 0,
     },
     {
       title: 'Bruh',
       publication: 'g',
-      articleUrl: 'www.ne',
-      imageUrl: 'www.pic',
+      articleURL: 'www.ne',
+      imageURL: 'www.pic',
       date: '10-21-2020',
       likes: 0,
     },
@@ -47,14 +47,14 @@ export const createDummyData = async () => {
   try {
     for (const article of articles) {
       const {
-        title, publication, articleUrl, imageUrl, date, likes,
+        title, publication, articleURL, imageURL, date, likes,
       } = article;
       await ArticleModel.create({
         title,
         publication,
         date,
-        imageURL: imageUrl,
-        articleURL: articleUrl,
+        imageURL: imageURL,
+        articleURL: articleURL,
         likes,
       });
       console.log(`Created article ${article.title}`);

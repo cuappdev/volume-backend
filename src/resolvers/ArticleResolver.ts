@@ -1,4 +1,5 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
+import getRecentArticles from '../db/rss-parser';
 import { Article, ArticleModel } from '../entities/Article';
 
 @Resolver((_of) => Article)
@@ -11,6 +12,17 @@ export default class ArticleResolver {
   @Query((_returns) => [Article], { nullable: false })
   async getAllArticles(@Arg('limit') limit: number) {
     return ArticleModel.find({}).limit(limit);
+  }
+
+  @Mutation((_returns) => [Article])
+  async refresh() {
+    let articles = await getRecentArticles();
+    try {
+      await ArticleModel.insertMany(articles, { ordered: false });
+    } catch (e) {
+      articles = e.insertedDocs;
+    }
+    return articles;
   }
 
   @Mutation(() => Boolean)

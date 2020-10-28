@@ -1,12 +1,11 @@
-import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
-import dotenv from 'dotenv';
-import Express from 'express';
 import 'reflect-metadata';
-import { dbConnection } from './db/DBConnection';
 
-// resolvers
+import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
+import Express from 'express';
+import { buildSchema } from 'type-graphql';
+import { dbConnection } from './db/DBConnection';
+import dotenv from 'dotenv';
 
 // load the environment variables from the .env file
 dotenv.config({

@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from 'type-graphql';
+import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 
 @ObjectType({ description: 'The Article Model' })
@@ -15,7 +15,7 @@ export class Article {
   publication: string;
 
   @Field()
-  @Property()
+  @Property({ unique: true })
   articleURL: string;
 
   @Field()

@@ -34,7 +34,7 @@ export const dbConnection = async (): Promise<mongoose.Connection> => {
 };
 
 /* Disconnects from database. */
-export const disconnectDB = () => {
+export const disconnectDB = (): void => {
   if (!database) {
     return;
   }
