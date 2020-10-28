@@ -33,7 +33,9 @@ class ArticleResolver {
   async getTrendingArticles(@Arg('limit') limit: number) {
     return ArticleModel.find({
       date: { $gte: new Date(Date.now() + 604800000) },
-    }).sort({ likes: 'desc' }).limit(limit);
+    })
+      .sort({ likes: 'desc' })
+      .limit(limit);
   }
 
   @Mutation((_returns) => [Article])
