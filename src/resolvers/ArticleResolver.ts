@@ -29,15 +29,6 @@ class ArticleResolver {
       .limit(limit);
   }
 
-  @Query((_returns) => [Article])
-  async getTrendingArticles(@Arg('limit') limit: number) {
-    return ArticleModel.find({
-      date: { $gte: new Date(Date.now() + 604800000) },
-    })
-      .sort({ likes: 'desc' })
-      .limit(limit);
-  }
-
   @Mutation((_returns) => [Article])
   async refresh() {
     let articles = await getRecentArticles();
@@ -49,7 +40,7 @@ class ArticleResolver {
     return articles;
   }
 
-  @Mutation(() => Article)
+  @Mutation((_returns) => Article)
   async incrementLike(@Arg('id') id: string) {
     const article = await ArticleModel.findById(new ObjectId(id));
     article.likes += 1;

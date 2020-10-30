@@ -9,7 +9,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
   const publicationsDB = publications.publications;
   const nameToSlugMap = {};
   const feedSources = publicationsDB.map((publication) => {
-    nameToSlugMap[publication.feed] = publication.slug;
+    nameToSlugMap[publication['rss-name']] = publication.slug;
     return publication.feed;
   });
 
