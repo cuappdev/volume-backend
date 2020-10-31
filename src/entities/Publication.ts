@@ -3,20 +3,20 @@ import { Field, ObjectType } from 'type-graphql';
 @ObjectType({ description: 'The Publications Model' })
 export default class Publication {
   @Field()
-  slug: string;
+  articlesURL: string;
 
   @Field()
   bio: string;
 
-  @Field()
-  feed: string;
-
   @Field({ nullable: true })
-  img: string;
+  imageURL: string;
 
   @Field()
   name: string;
 
   @Field()
-  url: string;
+  slug: string;
+
+  @Field()
+  websiteURL: string;
 }

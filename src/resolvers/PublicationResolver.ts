@@ -1,8 +1,8 @@
 import { Resolver, Arg, Query } from 'type-graphql';
-import * as publications from '../../publications.json';
+import publicationsJSON from '../../publications.json';
 import Publication from '../entities/Publication';
 
-const publicationsDB = publications.publications;
+const publicationsDB = publicationsJSON.publications;
 
 @Resolver((_of) => Publication)
 class PublicationResolver {
@@ -10,12 +10,12 @@ class PublicationResolver {
   async getAllPublications() {
     const publicationArray = publicationsDB.map((publication) =>
       Object.assign(new Publication(), {
-        slug: publication.slug,
+        articlesURL: publication.feed,
         bio: publication.bio,
-        feed: publication.feed,
-        img: publication.img,
-        url: publication.url,
+        imageURL: publication.img,
         name: publication.name,
+        slug: publication.slug,
+        websiteURL: publication.url,
       }),
     );
     return publicationArray;

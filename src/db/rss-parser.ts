@@ -1,43 +1,39 @@
-import Parser from 'rss-parser';
-import * as publications from '../../publications.json';
-
 import { Article } from '../entities/Article';
+import Parser from 'rss-parser';
+import publicationsJSON from '../../publications.json';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const publicationsDB = publications.publications;
+  const publicationsDB = publicationsJSON.publications;
   const nameToSlugMap = {};
-  const feedSources = publicationsDB.map((publication) => {
+  const articleSources = publicationsDB.map((publication) => {
     nameToSlugMap[publication['rss-name']] = publication.slug;
     return publication.feed;
   });
 
-  const feedRequests = feedSources.map((feed) => {
-    return parser.parseURL(feed);
+  const parsedPublications = articleSources.map((articles) => {
+    return parser.parseURL(articles);
   });
 
-  const articlePromises = Promise.all(feedRequests).then((feeds) => {
-    const articles = new Array<Article>();
-
-    feeds.map((feed) => {
-      feed.items.map((item) => {
-        const article = new Article();
-        article.title = item.title;
-        article.articleURL = item.link;
-        article.date = new Date(item.pubDate);
-        article.imageURL = '';
-        article.likes = 0;
-
-        // Double check if RSS feeds have changed name
-        article.publication = nameToSlugMap[feed.title] ? nameToSlugMap[feed.title] : 'unknown';
-
-        articles.push(article);
-      });
-    });
-
-    return articles;
-  });
+  const articlePromises = Promise.all(parsedPublications).then((publications) =>
+    publications
+      .map((publication) =>
+        publication.items.map((article) =>
+          Object.assign(new Article(), {
+            articleURL: article.link,
+            date: new Date(article.pubDate),
+            imageURL: '',
+            likes: 0,
+            publication: nameToSlugMap[publication.title]
+              ? nameToSlugMap[publication.title]
+              : 'unknown',
+            title: article.title,
+          }),
+        ),
+      )
+      .flat(),
+  );
 
   return articlePromises;
 };
