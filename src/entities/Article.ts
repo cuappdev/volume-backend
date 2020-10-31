@@ -4,7 +4,7 @@ import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 @ObjectType({ description: 'The Article Model' })
 export class Article {
   @Field(() => ID)
-  uuid: string;
+  id: string;
 
   @Field()
   @Property()

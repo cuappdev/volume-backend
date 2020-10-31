@@ -6,7 +6,7 @@ import getRecentArticles from '../db/rss-parser';
 @Resolver((_of) => Article)
 class ArticleResolver {
   @Query((_returns) => Article, { nullable: false })
-  async getArticleById(@Arg('id') id: string) {
+  async getArticleByID(@Arg('id') id: string) {
     return ArticleModel.findById(new ObjectId(id));
   }
 
@@ -33,7 +33,7 @@ class ArticleResolver {
   async refresh() {
     let articles = await getRecentArticles();
     try {
-      await ArticleModel.insertMany(articles, { ordered: false });
+      articles = await ArticleModel.insertMany(articles, { ordered: false });
     } catch (e) {
       articles = e.insertedDocs;
     }
