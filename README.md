@@ -16,7 +16,7 @@ Clone the project with
 
 `git clone https://github.com/cuappdev/volume-backend.git`
 
-After cloning the proejct `cd` into the new directory and install dependencides with 
+After cloning the proejct `cd` into the new directory and install dependencies with 
 
 `npm install`
 
@@ -26,13 +26,13 @@ To run the project, use
 
 ## Setting up the database: 
 
-Make sure `MongoDB` is installed. [See installation guide].(https://docs.mongodb.com/manual/installation/
+Make sure `MongoDB` is installed. [See installation guide](https://docs.mongodb.com/manual/installation/).
 
 To view your database, enter your terminal and run 
 
 `mongo`
 
-From here, you can interact with your database, type `use <db_name>`.
+From here, you can interact with your database by typing `use <db_name>`.
 
 If you are using VSCode, we recommend installing the MongoDB extension to allow you to interact with documents in your database straight through the editor. More information on this [here](https://code.visualstudio.com/docs/azure/mongodb).
 
@@ -48,6 +48,6 @@ We recommend using [`dotenv`](https://www.npmjs.com/package/dotenv). To set up, 
 
 ## Configuration(optional)
 
-We recommend using ESLint and Prettier for linting/formatting. If you are using VSCode, they can be downloaded directly through the Extensions panel. Run ESLint on the codebase with npm run lint and Prettier with npm run format.
+We recommend using ESLint and Prettier for linting/formatting. If you are using VSCode, they can be downloaded directly through the Extensions panel. Run ESLint on the codebase with `npm run lint` and Prettier with  `npm run format`.
   
 
