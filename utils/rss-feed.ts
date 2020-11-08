@@ -1,25 +1,19 @@
 import Parser from 'rss-parser';
 import dotenv from 'dotenv';
 import express from 'express';
+import publicationsJSON from '../publications.json';
 
-const PORT = process.env.APP_PORT || 5000;
+const PORT = 5000;
 
 // load the environment variables from the .env file
 dotenv.config({
     path: '.env',
 });
 
-const FEED_LIST = ['https://cornellsun.com/feed/',
-                   'http://cunooz.com/?feed=rss2',
-                   'http://theadvocatecornell.com/feed/',
-                   'https://medium.com/feed/guac-magazine',
-                   'https://www.cornellclaritas.com/blog?format=rss',
-                   'https://www.culsr.org/?format=rss',
-                   'https://www.cremedecornell.net/blogposts?format=rss',
-                   'https://www.slopemedia.org/all?format=rss',
-                   'https://www.thecornellreview.org/feed/',
-                   'https://www.bigredsportsnetwork.org/feed/'
-];
+const publicationsDB = publicationsJSON.publications;
+const FEED_LIST = publicationsDB.map((publication) => {
+    return publication.feed;
+  });
 
 const app = express();
 
