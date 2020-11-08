@@ -1,6 +1,6 @@
+import { Article } from '../entities/Article';
 import Parser from 'rss-parser';
 import cheerio from 'cheerio';
-import { Article } from '../entities/Article';
 import publicationsJSON from '../../publications.json';
 
 const getRecentArticles = async (): Promise<Article[]> => {
