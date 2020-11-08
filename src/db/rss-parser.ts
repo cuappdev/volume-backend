@@ -1,5 +1,6 @@
-import Parser from 'rss-parser';
 import { Article } from '../entities/Article';
+import Parser from 'rss-parser';
+import cheerio from 'cheerio';
 import publicationsJSON from '../../publications.json';
 
 const getRecentArticles = async (): Promise<Article[]> => {
@@ -16,6 +17,12 @@ const getRecentArticles = async (): Promise<Article[]> => {
     return parser.parseURL(articles);
   });
 
+  const parseImage = function(content) {
+    const $ = cheerio.load(content);
+    const img = $('img').attr('src');
+    return img ? img : '';
+  }
+
   const articlePromises = Promise.all(parsedPublications).then((publications) =>
     publications
       .map((publication) =>
@@ -23,7 +30,9 @@ const getRecentArticles = async (): Promise<Article[]> => {
           Object.assign(new Article(), {
             articleURL: article.link,
             date: new Date(article.pubDate),
-            imageURL: '',
+            imageURL: parseImage(article['content:encoded']
+              ? article['content:encoded']
+              : article.content),
             likes: 0,
             publication: nameToSlugMap[publication.title]
               ? nameToSlugMap[publication.title]
