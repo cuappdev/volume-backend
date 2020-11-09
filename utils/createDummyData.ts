@@ -11,7 +11,7 @@ import { ArticleModel } from '../src/entities/Article';
       artilceURL: 'www.orko.com',
       imageURL: 'www.orkopics.com',
       date: new Date('10-14-2020'),
-      likes: 0,
+      shoutouts: 0,
     },
     {
       title: 'appdev router sucks ---> let me tell you why',
@@ -19,38 +19,38 @@ import { ArticleModel } from '../src/entities/Article';
       articleURL: 'www.jack.com',
       imageURL: 'www.jack.com',
       date: new Date('10-15-2020'),
-      likes: 0,
+      shoutouts: 0,
     },
     {
       title: 'Cooking w Cornell Hotel School',
       publication: 'creme',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
+      articleURL: 'www.new',
+      imageURL: 'www.pic.com',
       date: new Date('10-16-2020'),
-      likes: 5,
+      shoutouts: 5,
     },
     {
       title: 'Conners 3 hats - what each of them mean',
       publication: 'slope',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
+      articleURL: 'www.new.com',
+      imageURL: 'www.pic.com',
       date: new Date('10-17-2020'),
-      likes: 0,
+      shoutouts: 0,
     },
     {
       title: 'We need better articles',
       publication: 'advocate',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
+      articleURL: 'www.newhat.com',
+      imageURL: 'www.pic.com',
       date: new Date('10-21-2020'),
-      likes: 0,
+      shoutouts: 0,
     },
   ];
 
   try {
     for (const article of articles) {
       const {
-        title, publication, articleURL, imageURL, date, likes,
+        title, publication, articleURL, imageURL, date, shoutouts,
       } = article;
       const newArticle = await ArticleModel.create({
         title,
@@ -58,14 +58,14 @@ import { ArticleModel } from '../src/entities/Article';
         date,
         imageURL,
         articleURL,
-        likes,
+        shoutouts,
       });
       console.log(`Created article ${newArticle.title}`);
       console.log(`Created article ${newArticle.id}`);
       console.log(`Created article ${newArticle.id.toString()}`);
     }
   } catch (e) {
-    console.log(e, 'Error creating articles');
+    console.log('Error creating articles.');
   }
   disconnectDB();
 })().catch((e) => console.log(e));

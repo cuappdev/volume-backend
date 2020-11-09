@@ -16,7 +16,7 @@ Clone the project with
 
 `git clone https://github.com/cuappdev/volume-backend.git`
 
-After cloning the proejct `cd` into the new directory and install dependencies with 
+After cloning the project `cd` into the new directory and install dependencies with 
 
 `npm install`
 
@@ -24,7 +24,7 @@ To run the project, use
 
 `npm run start`
 
-## Setting up the database: 
+## Setting up the database
 
 Make sure `MongoDB` is installed. [See installation guide](https://docs.mongodb.com/manual/installation/).
 

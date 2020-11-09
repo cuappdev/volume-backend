@@ -9,7 +9,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
   const nameToSlugMap = {};
   const articleSources = publicationsDB.map((publication) => {
     nameToSlugMap[publication['rss-name']] = publication.slug;
-    return publication.feed;
+    return publication.rssURL;
   });
 
   const parsedPublications = articleSources.map((articles) => {
@@ -24,7 +24,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
             articleURL: article.link,
             date: new Date(article.pubDate),
             imageURL: '',
-            likes: 0,
+            shoutouts: 0,
             publication: nameToSlugMap[publication.title]
               ? nameToSlugMap[publication.title]
               : 'unknown',

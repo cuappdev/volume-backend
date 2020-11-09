@@ -9,14 +9,14 @@ export const dbConnection = async (): Promise<mongoose.Connection> => {
   }
 
   // create mongoose connection
-  if (process.env.MONGO_ADDRESS) {
-    mongoose.connect(process.env.MONGO_ADDRESS, {
-      useNewUrlParser: true,
-      useFindAndModify: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-  }
+  // if ('mongodb://127.0.0.1:27017/volume') {
+  mongoose.connect('mongodb://127.0.0.1:27017/volume', {
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
+  // }
 
   database = mongoose.connection;
 

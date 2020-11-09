@@ -28,7 +28,7 @@ export class Article {
 
   @Field()
   @Property()
-  likes: number;
+  shoutouts: number;
 }
 
 export const ArticleModel = getModelForClass(Article);

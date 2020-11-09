@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
+import { PublicationModel } from '../entities/Publication';
 import getRecentArticles from '../db/rss-parser';
 
 @Resolver((_of) => Article)
@@ -29,6 +30,11 @@ class ArticleResolver {
       .limit(limit);
   }
 
+  @Query((_returns) => [Article], { nullable: false })
+  async getTrendingArticles(@Arg('since') since: string, @Arg('limit') limit: number) {
+    return [];
+  }
+
   @Mutation((_returns) => [Article])
   async refresh() {
     let articles = await getRecentArticles();
@@ -43,7 +49,10 @@ class ArticleResolver {
   @Mutation((_returns) => Article)
   async incrementLike(@Arg('id') id: string) {
     const article = await ArticleModel.findById(new ObjectId(id));
-    article.likes += 1;
+    article.shoutouts += 1;
+    const publication = await PublicationModel.findOne({ slug: article.publication });
+    publication.shoutouts += 1;
+    publication.save();
     return article.save();
   }
 }
