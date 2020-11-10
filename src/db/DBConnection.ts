@@ -10,7 +10,7 @@ export const dbConnection = async (): Promise<mongoose.Connection> => {
 
   // create mongoose connection
   if (process.env.MONGO_ADDRESS) {
-    mongoose.connect('mongodb://127.0.0.1:27017/volume', {
+    mongoose.connect(process.env.MONGO_ADDRESS, {
       useNewUrlParser: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
