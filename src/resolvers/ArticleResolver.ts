@@ -47,7 +47,7 @@ class ArticleResolver {
   }
 
   @Mutation((_returns) => Article)
-  async incrementLike(@Arg('id') id: string) {
+  async incrementShoutouts(@Arg('id') id: string) {
     const article = await ArticleModel.findById(new ObjectId(id));
     article.shoutouts += 1;
     const publication = await PublicationModel.findOne({ slug: article.publication });
