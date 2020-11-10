@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import { PublicationModel } from '../entities/Publication';
 import getRecentArticles from '../db/rss-parser';
+import { compareTrendiness } from '../../utils/compareTrendiness';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
@@ -32,7 +33,11 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], { nullable: false })
   async getTrendingArticles(@Arg('since') since: string, @Arg('limit') limit: number) {
-    return [];
+    const articlesSinceDate = await ArticleModel.find({
+      date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
+    }).exec();
+
+    return articlesSinceDate.sort(compareTrendiness).slice(limit);
   }
 
   @Mutation((_returns) => [Article])

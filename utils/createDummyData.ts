@@ -1,5 +1,4 @@
 import { dbConnection, disconnectDB } from '../src/db/DBConnection';
-
 import { ArticleModel } from '../src/entities/Article';
 
 (async () => {
