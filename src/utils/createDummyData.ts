@@ -1,12 +1,12 @@
-import { dbConnection, disconnectDB } from '../src/db/DBConnection';
-import { ArticleModel } from '../src/entities/Article';
+import { dbConnection, disconnectDB } from '../db/DBConnection';
+import { ArticleModel } from '../entities/Article';
 
 (async () => {
   await dbConnection();
   const articles = [
     {
       title: 'orko and tedi backend ',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: 'dailysun',
       artilceURL: 'www.orko.com',
       imageURL: 'www.orkopics.com',
       date: new Date('10-14-2020'),
@@ -14,7 +14,7 @@ import { ArticleModel } from '../src/entities/Article';
     },
     {
       title: 'appdev router sucks ---> let me tell you why',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: 'nooz',
       articleURL: 'www.jack.com',
       imageURL: 'www.jack.com',
       date: new Date('10-15-2020'),
@@ -22,7 +22,7 @@ import { ArticleModel } from '../src/entities/Article';
     },
     {
       title: 'Cooking w Cornell Hotel School',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: 'creme',
       articleURL: 'www.new',
       imageURL: 'www.pic.com',
       date: new Date('10-16-2020'),
@@ -30,7 +30,7 @@ import { ArticleModel } from '../src/entities/Article';
     },
     {
       title: 'Conners 3 hats - what each of them mean',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: 'slope',
       articleURL: 'www.new.com',
       imageURL: 'www.pic.com',
       date: new Date('10-17-2020'),
@@ -38,7 +38,7 @@ import { ArticleModel } from '../src/entities/Article';
     },
     {
       title: 'We need better articles',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: 'advocate',
       articleURL: 'www.newhat.com',
       imageURL: 'www.pic.com',
       date: new Date('10-21-2020'),
@@ -48,10 +48,10 @@ import { ArticleModel } from '../src/entities/Article';
 
   try {
     for (const article of articles) {
-      const { title, publicationID, articleURL, imageURL, date, shoutouts } = article;
+      const { title, publication, articleURL, imageURL, date, shoutouts } = article;
       const newArticle = await ArticleModel.create({
         title,
-        publicationID,
+        publication,
         date,
         imageURL,
         articleURL,

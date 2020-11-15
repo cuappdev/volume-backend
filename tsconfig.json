@@ -18,6 +18,6 @@
   "include": [
     ".eslintrc.js",
     "src/**/*.ts",
-    "test/**/*.ts", "utils/test.ts",
+    "test/**/*.ts", "src/utils/test.ts",
   ]
 }
