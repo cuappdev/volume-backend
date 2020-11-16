@@ -7,10 +7,6 @@ export class Publication {
   id: string;
 
   @Field()
-  @Property({ unique: true })
-  slug: string;
-
-  @Field()
   @Property()
   bio: string;
 

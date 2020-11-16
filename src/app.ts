@@ -6,8 +6,7 @@ import ArticleResolver from './resolvers/ArticleResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import { buildSchema } from 'type-graphql';
 import { dbConnection } from './db/DBConnection';
-import publicationsJSON from '../publications.json';
-import { PublicationModel } from '../src/entities/Publication';
+import PublicationRepo from './repos/PublicationRepo';
 
 // load the environment variables from the .env file
 dotenv.config({
@@ -23,29 +22,15 @@ const main = async () => {
 
   await dbConnection();
 
-  // Prefill publication data into database
-  const publicationsDB = publicationsJSON.publications;
-  publicationsDB.map(async ({ slug, bio, rssURL, imageURL, name, websiteURL, rssName }) => {
-    await PublicationModel.create({
-      slug,
-      bio,
-      rssURL,
-      imageURL,
-      name,
-      websiteURL,
-      rssName,
-      shoutouts: 0,
-    }).catch((e) => {
-      console.log('Publication already exists in database.');
-    });
-  });
+  //Prefill publication data
+  PublicationRepo.addPublicationsToDB();
 
   const server = new ApolloServer({ schema });
   const app = Express();
 
   server.applyMiddleware({ app });
 
-  ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
+  ((port = 3000, addr = 'https://localhost') => {
     app.listen(port, () =>
       console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
     );

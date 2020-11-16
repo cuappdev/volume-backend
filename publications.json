@@ -1,7 +1,6 @@
 {
    "publications":[
       {
-         "slug":"dailysun",
          "bio":"The Cornell Daily Sun is an independent daily newspaper published in Ithaca, New York by students at Cornell University and hired employees. The Sun features coverage of the university and its environs as well as stories from the Associated Press and UWIRE.",
          "rssURL":"https://cornellsun.com/feed/",
          "imageURL":"https://twitter.com/cornellsun/photo",
@@ -10,7 +9,6 @@
          "rssName":"The Cornell Daily Sun"
       },
       {
-         "slug":"nooz",
          "bio":"Takes fresh from the sticky part of our rejected article pile.",
          "rssURL":"http://cunooz.com/feed/",
          "imageURL":"https://twitter.com/CUNooz/photo",
@@ -19,7 +17,6 @@
          "rssName":"CU Nooz"
       },
       {
-         "slug":"advocate",
          "bio":"The Advocate promotes the dissemination of literature that examines youth-related issues with the goal of encouraging youth advocacy in local and federal politics.",
          "rssURL":"http://theadvocatecornell.com/feed/",
          "imageURL":"",
@@ -28,7 +25,6 @@
          "rssName":"The Advocate"
       },
       {
-         "slug":"guac",
          "bio":"Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
          "rssURL":"https://medium.com/feed/guac-magazine",
          "imageURL":"",
@@ -37,7 +33,6 @@
          "rssName":"Guac Magazine - Medium"
       },
       {
-         "slug":"claritas",
          "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
          "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
          "imageURL":"",
@@ -46,7 +41,6 @@
          "rssName":"Blog - CLARITAS"
       },
       {
-         "slug":"culsr",
          "bio":"We created the review to provide a forum for the exchange of these ideas.",
          "rssURL":"https://www.culsr.org/?format=rss",
          "imageURL":"",
@@ -55,7 +49,6 @@
          "rssName":"The Undergraduate Law & Society Review at Cornell"
       },
       {
-         "slug":"creme",
          "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
          "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
          "imageURL":"",
@@ -64,7 +57,6 @@
          "rssName":"Blog - CRÈME de cornell"
       },
       {
-         "slug":"slope",
          "bio":"As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
          "rssURL":"https://www.slopemedia.org/all?format=rss",
          "imageURL":"",
@@ -73,7 +65,6 @@
          "rssName":"All - Slope Media"
       },
       {
-         "slug":"review",
          "bio":"The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
          "rssURL":"https://www.thecornellreview.org/feed/",
          "imageURL":"",
@@ -82,7 +73,6 @@
          "rssName":"The Cornell Review"
       },
       {
-         "slug":"brsn",
          "bio":"Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
          "rssURL":"https://www.bigredsportsnetwork.org/feed/",
          "imageURL":"",

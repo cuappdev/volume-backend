@@ -12,7 +12,7 @@ export class Article {
 
   @Field()
   @Property()
-  publication: string;
+  publicationID: string;
 
   @Field()
   @Property({ unique: true })

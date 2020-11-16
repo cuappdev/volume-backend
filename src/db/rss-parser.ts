@@ -1,15 +1,14 @@
 import Parser from 'rss-parser';
 import { Article } from '../entities/Article';
-import publicationsJSON from '../../publications.json';
+import { PublicationModel } from '../entities/Publication';
+import PublicationRepo from '../repos/PublicationRepo';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const publicationsDB = publicationsJSON.publications;
-  const nameToSlugMap = {};
-  const articleSources = publicationsDB.map((publication) => {
-    nameToSlugMap[publication['rss-name']] = publication.slug;
-    return publication.rssURL;
+  const publicationsDB = await PublicationRepo.getAllPublications();
+  const articleSources = publicationsDB.map(({ rssURL }) => {
+    return rssURL;
   });
 
   const parsedPublications = articleSources.map((articles) => {
@@ -19,18 +18,17 @@ const getRecentArticles = async (): Promise<Article[]> => {
   const articlePromises = Promise.all(parsedPublications).then((publications) =>
     publications
       .map((publication) =>
-        publication.items.map((article) =>
-          Object.assign(new Article(), {
+        publication.items.map(async (article) => {
+          const pub = await PublicationModel.findOne({ rssName: publication.title }).exec();
+          return Object.assign(new Article(), {
             articleURL: article.link,
             date: new Date(article.pubDate),
             imageURL: '',
             shoutouts: 0,
-            publication: nameToSlugMap[publication.title]
-              ? nameToSlugMap[publication.title]
-              : 'unknown',
+            publicationID: pub.id ? pub.id : 'unknown',
             title: article.title,
-          }),
-        ),
+          });
+        }),
       )
       .flat(),
   );

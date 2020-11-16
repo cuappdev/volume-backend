@@ -1,7 +1,7 @@
 import MockDate from 'mockdate';
-import { compareTrendiness } from '../src/utils/compareTrendiness';
+import { compareTrendiness } from '../src/repos/ArticleRepo';
 
-describe("testing compareTrendiness produces correct trending results", () => {
+describe("testing getTrendingArticles query", () => {
   beforeAll(() => {
     //Set present time to a fixed day to compute trendiness from
     MockDate.set('11-10-2020');
@@ -13,7 +13,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
         {
           id: 'one',
           title: 'Yi Hsin is still meeting with publications',
-          publication: 'dailysun',
+          publicationID: '5fac75af7f68e1f1a4ae8b1b',
           articleURL: 'www.cuappdev.com/yi',
           imageURL: '',
           date: new Date('11-05-2020'),
@@ -22,7 +22,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
         {
           id: 'two',
           title: 'who will the next appdev team lead be',
-          publication: 'dailysun',
+          publicationID: '5fac75af7f68e1f1a4ae8b1b',
           articleURL: 'www.cuappdev.com/lead',
           imageURL: '',
           date: new Date('11-08-2020'),
@@ -31,7 +31,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
         {
           id: 'three',
           title: 'why coffee is better than tea',
-          publication: 'dailysun',
+          publicationID: '5fac75af7f68e1f1a4ae8b1b',
           articleURL: 'www.cuappdev.com/coffee',
           imageURL: '',
           date: new Date('11-07-2020'),
@@ -40,7 +40,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
         {
           id: 'four',
           title: 'orko 3410 ta office hours',
-          publication: 'dailysun',
+          publicationID: '5fac75af7f68e1f1a4ae8b1b',
           articleURL: 'www.cuappdev.com/orko',
           imageURL: '',
           date: new Date('11-02-2020'),
@@ -52,7 +52,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
       {
         id: 'two',
         title: 'who will the next appdev team lead be',
-        publication: 'dailysun',
+        publicationID: '5fac75af7f68e1f1a4ae8b1b',
         articleURL: 'www.cuappdev.com/lead',
         imageURL: '',
         date: new Date('11-08-2020'),
@@ -61,7 +61,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
       {
         id: 'three',
         title: 'why coffee is better than tea',
-        publication: 'dailysun',
+        publicationID: '5fac75af7f68e1f1a4ae8b1b',
         articleURL: 'www.cuappdev.com/coffee',
         imageURL: '',
         date: new Date('11-07-2020'),
@@ -70,7 +70,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
       {
         id: 'four',
         title: 'orko 3410 ta office hours',
-        publication: 'dailysun',
+        publicationID: '5fac75af7f68e1f1a4ae8b1b',
         articleURL: 'www.cuappdev.com/orko',
         imageURL: '',
         date: new Date('11-02-2020'),
@@ -79,7 +79,7 @@ describe("testing compareTrendiness produces correct trending results", () => {
       {
         id: 'one',
         title: 'Yi Hsin is still meeting with publications',
-        publication: 'dailysun',
+        publicationID: '5fac75af7f68e1f1a4ae8b1b',
         articleURL: 'www.cuappdev.com/yi',
         imageURL: '',
         date: new Date('11-05-2020'),

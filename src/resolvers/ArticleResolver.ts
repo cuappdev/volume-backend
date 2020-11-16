@@ -1,64 +1,42 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
-import { ObjectId } from 'mongodb';
-import { Article, ArticleModel } from '../entities/Article';
-import { PublicationModel } from '../entities/Publication';
-import getRecentArticles from '../db/rss-parser';
-import { compareTrendiness } from '../utils/compareTrendiness';
+import { Article } from '../entities/Article';
+import ArticleRepo from '../repos/ArticleRepo';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
   @Query((_returns) => Article, { nullable: false })
   async getArticleByID(@Arg('id') id: string) {
-    return ArticleModel.findById(new ObjectId(id));
+    return ArticleRepo.getArticleById(id);
   }
 
   @Query((_returns) => [Article], { nullable: false })
   async getAllArticles(@Arg('limit') limit: number) {
-    return ArticleModel.find({}).limit(limit);
+    return ArticleRepo.getAllArticles(limit);
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getArticlesByPublisher(@Arg('slug') slug: string) {
-    return ArticleModel.find({ publication: slug });
+  async getArticlesByPublication(@Arg('publicationID') publicationID: string) {
+    return ArticleRepo.getArticlesByPublication(publicationID);
   }
 
   @Query((_returns) => [Article], { nullable: false })
   async getArticlesByOffset(@Arg('since') since: string, @Arg('limit') limit: number) {
-    return ArticleModel.find({
-      date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-    })
-      .sort({ date: 'desc' })
-      .limit(limit);
+    return ArticleRepo.getArticlesByOffset(since, limit);
   }
 
   @Query((_returns) => [Article], { nullable: false })
   async getTrendingArticles(@Arg('since') since: string, @Arg('limit') limit: number) {
-    const articlesSinceDate = await ArticleModel.find({
-      date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-    }).exec();
-
-    return articlesSinceDate.sort(compareTrendiness).slice(limit);
+    return ArticleRepo.getTrendingArticles(since, limit);
   }
 
   @Mutation((_returns) => [Article])
   async refresh() {
-    let articles = await getRecentArticles();
-    try {
-      articles = await ArticleModel.insertMany(articles, { ordered: false });
-    } catch (e) {
-      articles = e.insertedDocs;
-    }
-    return articles;
+    return ArticleRepo.refreshFeed();
   }
 
   @Mutation((_returns) => Article)
   async incrementShoutouts(@Arg('id') id: string) {
-    const article = await ArticleModel.findById(new ObjectId(id));
-    article.shoutouts += 1;
-    const publication = await PublicationModel.findOne({ slug: article.publication });
-    publication.shoutouts += 1;
-    publication.save();
-    return article.save();
+    return ArticleRepo.incrementShoutouts(id);
   }
 }
 
