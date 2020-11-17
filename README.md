@@ -10,7 +10,7 @@ Tech stack:
 
 ## Installation  
 
-To run this project, you must have Node.js [See installation guide](https://nodejs.org/en/download/) and Typescript [See installation guide](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) installed on your machine. 
+To run this project, you must have [Node.js](https://nodejs.org/en/download/) and [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) installed on your machine. 
 
 Clone the project with
 
