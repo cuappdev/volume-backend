@@ -10,7 +10,7 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getAllArticles(@Arg('limit') limit: number) {
+  async getAllArticles(@Arg('limit', { defaultValue: 25 }) limit: number) {
     return ArticleRepo.getAllArticles(limit);
   }
 
@@ -20,12 +20,12 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getArticlesByOffset(@Arg('since') since: string, @Arg('limit') limit: number) {
-    return ArticleRepo.getArticlesByOffset(since, limit);
+  async getArticlesAfterDate(@Arg('since') since: string, @Arg('limit', { defaultValue: 25 }) limit: number) {
+    return ArticleRepo.getArticlesAfterDate(since, limit);
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getTrendingArticles(@Arg('since') since: string, @Arg('limit') limit: number) {
+  async getTrendingArticles(@Arg('since') since: string, @Arg('limit', { defaultValue: 25 }) limit: number) {
     return ArticleRepo.getTrendingArticles(since, limit);
   }
 
