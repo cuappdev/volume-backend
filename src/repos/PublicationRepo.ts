@@ -9,22 +9,26 @@ import publicationsJSON from '../../publications.json';
  */
 const addPublicationsToDB = async (): Promise<void> => {
   const publicationsDB = publicationsJSON.publications;
+
+  let publications = [];
   for (const publication of publicationsDB) {
     const { bio, rssURL, imageURL, name, websiteURL, rssName } = publication;
-    try {
-      PublicationModel.create({
-        _id: new ObjectId().toString(),
-        bio,
-        rssURL,
-        imageURL,
-        name,
-        websiteURL,
-        rssName,
-        shoutouts: 0,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    publications.push(Object.assign(new Publication(), {
+      _id: new ObjectId().toString(),
+      bio,
+      rssURL,
+      imageURL,
+      name,
+      websiteURL,
+      rssName,
+      shoutouts: 0
+    }));
+  }
+
+  try {
+    await PublicationModel.insertMany(publications, { ordered: false });
+  } catch (e) {
+    console.log(`Publications inserted: ${e.insertedDocs}`);
   }
 };
 

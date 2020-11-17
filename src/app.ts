@@ -30,7 +30,7 @@ const main = async () => {
 
   server.applyMiddleware({ app });
 
-  ((port = 3000, addr = 'https://localhost') => {
+  ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
     app.listen(port, () =>
       console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
     );

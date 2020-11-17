@@ -11,6 +11,7 @@ export class Publication {
   bio: string;
 
   @Field()
+  @Property()
   rssURL: string;
 
   @Field()
