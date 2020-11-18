@@ -27,8 +27,8 @@ export class Article {
   date: Date;
 
   @Field()
-  @Property()
-  shoutouts: number;
+  @Property({ default: 0 })
+  shoutouts?: number;
 }
 
 export const ArticleModel = getModelForClass(Article);

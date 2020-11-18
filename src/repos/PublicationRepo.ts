@@ -10,24 +10,27 @@ import publicationsJSON from '../../publications.json';
 const addPublicationsToDB = async (): Promise<void> => {
   const publicationsDB = publicationsJSON.publications;
 
-  let publications = [];
+  const publications = [];
   for (const publication of publicationsDB) {
     const { bio, rssURL, imageURL, name, websiteURL, rssName } = publication;
-    publications.push(Object.assign(new Publication(), {
-      _id: new ObjectId().toString(),
-      bio,
-      rssURL,
-      imageURL,
-      name,
-      websiteURL,
-      rssName,
-      shoutouts: 0
-    }));
+    publications.push(
+      Object.assign(new Publication(), {
+        _id: new ObjectId().toString(),
+        bio,
+        rssURL,
+        imageURL,
+        name,
+        websiteURL,
+        rssName
+      }),
+    );
   }
 
   try {
+    // Attempt to insert publications while validating a duplicate isn't inserted
     await PublicationModel.insertMany(publications, { ordered: false });
   } catch (e) {
+    // Log all publicaitons that were successfully inserted
     console.log(`Publications inserted: ${e.insertedDocs}`);
   }
 };

@@ -1,6 +1,6 @@
 import Parser from 'rss-parser';
 import { Article } from '../entities/Article';
-import { PublicationModel } from '../entities/Publication'
+import { PublicationModel } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
 
 const getRecentArticles = async (): Promise<Article[]> => {
@@ -9,12 +9,14 @@ const getRecentArticles = async (): Promise<Article[]> => {
   const nameToIDMap = {};
   const publicationsDB = await PublicationRepo.getAllPublications();
 
-  let articleSources = [];
+  const articleSources = [];
   for (const publication of publicationsDB) {
-    const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName });
+    const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName }); // eslint-disable-line no-await-in-loop
     nameToIDMap[publication.rssName] = pubDoc.id;
     articleSources.push(publication.rssURL);
   }
+
+  await Promise.all(articleSources);
 
   const parsedPublications = articleSources.map((articles) => {
     return parser.parseURL(articles);
@@ -28,7 +30,6 @@ const getRecentArticles = async (): Promise<Article[]> => {
             articleURL: article.link,
             date: new Date(article.pubDate),
             imageURL: '',
-            shoutouts: 0,
             publicationID: nameToIDMap[publication.title]
               ? nameToIDMap[publication.title]
               : 'unknown',

@@ -31,8 +31,8 @@ export class Publication {
   rssName: string;
 
   @Field()
-  @Property()
-  shoutouts: number;
+  @Property({ default: 0 })
+  shoutouts?: number;
 }
 
 export const PublicationModel = getModelForClass(Publication);
