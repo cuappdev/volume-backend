@@ -1,7 +1,8 @@
-import Parser from 'rss-parser';
 import { Article } from '../entities/Article';
 import { PublicationModel } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
+import Parser from 'rss-parser';
+import cheerio from 'cheerio';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
@@ -22,6 +23,12 @@ const getRecentArticles = async (): Promise<Article[]> => {
     return parser.parseURL(articles);
   });
 
+  const parseImage = function (content) {
+    const $ = cheerio.load(content);
+    const img = $('img').attr('src');
+    return img || '';
+  };
+
   const articlePromises = Promise.all(parsedPublications).then((publications) =>
     publications
       .map((publication) =>
@@ -29,7 +36,9 @@ const getRecentArticles = async (): Promise<Article[]> => {
           Object.assign(new Article(), {
             articleURL: article.link,
             date: new Date(article.pubDate),
-            imageURL: '',
+            imageURL: parseImage(
+              article['content:encoded'] ? article['content:encoded'] : article.content,
+            ),
             publicationID: nameToIDMap[publication.title]
               ? nameToIDMap[publication.title]
               : 'unknown',
