@@ -12,7 +12,7 @@ export class Article {
 
   @Field()
   @Property()
-  publication: string;
+  publicationID: string;
 
   @Field()
   @Property({ unique: true })
@@ -27,8 +27,8 @@ export class Article {
   date: Date;
 
   @Field()
-  @Property()
-  likes: number;
+  @Property({ default: 0 })
+  shoutouts?: number;
 }
 
 export const ArticleModel = getModelForClass(Article);

@@ -1,71 +1,58 @@
+import { ObjectId } from 'mongodb';
 import { dbConnection, disconnectDB } from '../src/db/DBConnection';
+import { ArticleModel, Article } from '../src/entities/Article';
 
-import { ArticleModel } from '../src/entities/Article';
-
-(async () => {
-  await dbConnection();
-  const articles = [
+export const getDummyArticles = (): Article[] => {
+  return [
     {
+      id: new ObjectId().toString(),
       title: 'orko and tedi backend ',
-      publication: 'dailysun',
-      artilceURL: 'www.orko.com',
+      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      articleURL: 'www.orko.com',
       imageURL: 'www.orkopics.com',
-      date: new Date('10-14-2020'),
-      likes: 0,
+      date: new Date('11-05-2020'),
+      shoutouts: 10,
     },
     {
+      id: new ObjectId().toString(),
       title: 'appdev router sucks ---> let me tell you why',
-      publication: 'nooz',
+      publicationID: '5fb35626f753932061906a33',
       articleURL: 'www.jack.com',
       imageURL: 'www.jack.com',
-      date: new Date('10-15-2020'),
-      likes: 0,
+      date: new Date('11-08-2020'),
+      shoutouts: 10,
     },
     {
+      id: new ObjectId().toString(),
       title: 'Cooking w Cornell Hotel School',
-      publication: 'creme',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
-      date: new Date('10-16-2020'),
-      likes: 5,
+      publicationID: '5fb35626f753932061906a30',
+      articleURL: 'www.new.com',
+      imageURL: 'www.pic.com',
+      date: new Date('11-07-2020'),
+      shoutouts: 10,
     },
     {
+      id: new ObjectId().toString(),
       title: 'Conners 3 hats - what each of them mean',
-      publication: 'slope',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
-      date: new Date('10-17-2020'),
-      likes: 0,
-    },
-    {
-      title: 'We need better articles',
-      publication: 'advocate',
-      articleURL: 'www.ne',
-      imageURL: 'www.pic',
-      date: new Date('10-21-2020'),
-      likes: 0,
-    },
+      publicationID: '5fb35626f753932061906a37',
+      articleURL: 'www.newweb.com',
+      imageURL: 'www.pic.com',
+      date: new Date('11-02-2020'),
+      shoutouts: 20,
+    }
   ];
+}
+
+// Insert dummy articles into database for testing
+(async () => {
+  await dbConnection();
+  let articles = getDummyArticles();
 
   try {
-    for (const article of articles) {
-      const {
-        title, publication, articleURL, imageURL, date, likes,
-      } = article;
-      const newArticle = await ArticleModel.create({
-        title,
-        publication,
-        date,
-        imageURL,
-        articleURL,
-        likes,
-      });
-      console.log(`Created article ${newArticle.title}`);
-      console.log(`Created article ${newArticle.id}`);
-      console.log(`Created article ${newArticle.id.toString()}`);
-    }
+    articles = await ArticleModel.insertMany(articles, { ordered: false });
   } catch (e) {
-    console.log(e, 'Error creating articles');
+    articles = e.insertedDocs;
   }
+
   disconnectDB();
 })().catch((e) => console.log(e));

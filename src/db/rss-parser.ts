@@ -1,17 +1,23 @@
 import { Article } from '../entities/Article';
+import { PublicationModel } from '../entities/Publication';
+import PublicationRepo from '../repos/PublicationRepo';
 import Parser from 'rss-parser';
 import cheerio from 'cheerio';
-import publicationsJSON from '../../publications.json';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const publicationsDB = publicationsJSON.publications;
-  const nameToSlugMap = {};
-  const articleSources = publicationsDB.map((publication) => {
-    nameToSlugMap[publication['rss-name']] = publication.slug;
-    return publication.feed;
-  });
+  const nameToIDMap = {};
+  const publicationsDB = await PublicationRepo.getAllPublications();
+
+  const articleSources = [];
+  for (const publication of publicationsDB) {
+    const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName }); // eslint-disable-line no-await-in-loop
+    nameToIDMap[publication.rssName] = pubDoc.id;
+    articleSources.push(publication.rssURL);
+  }
+
+  await Promise.all(articleSources);
 
   const parsedPublications = articleSources.map((articles) => {
     return parser.parseURL(articles);
@@ -33,9 +39,8 @@ const getRecentArticles = async (): Promise<Article[]> => {
             imageURL: parseImage(
               article['content:encoded'] ? article['content:encoded'] : article.content,
             ),
-            likes: 0,
-            publication: nameToSlugMap[publication.title]
-              ? nameToSlugMap[publication.title]
+            publicationID: nameToIDMap[publication.title]
+              ? nameToIDMap[publication.title]
               : 'unknown',
             title: article.title,
           }),

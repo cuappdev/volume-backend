@@ -1,22 +1,38 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ID, ObjectType } from 'type-graphql';
+import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 
-@ObjectType({ description: 'The Publications Model' })
-export default class Publication {
-  @Field()
-  articlesURL: string;
+@ObjectType({ description: 'The Publication Model' })
+export class Publication {
+  @Field(() => ID)
+  id: string;
 
   @Field()
+  @Property()
   bio: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @Property()
+  rssURL: string;
+
+  @Field()
+  @Property()
   imageURL: string;
 
   @Field()
+  @Property()
   name: string;
 
   @Field()
-  slug: string;
+  @Property({ unique: true })
+  websiteURL: string;
 
   @Field()
-  websiteURL: string;
+  @Property({ unique: true })
+  rssName: string;
+
+  @Field()
+  @Property({ default: 0 })
+  shoutouts?: number;
 }
+
+export const PublicationModel = getModelForClass(Publication);

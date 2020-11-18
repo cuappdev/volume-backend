@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-
+import Express from 'express';
+import dotenv from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
-import Express from 'express';
 import PublicationResolver from './resolvers/PublicationResolver';
 import { buildSchema } from 'type-graphql';
 import { dbConnection } from './db/DBConnection';
-import dotenv from 'dotenv';
+import PublicationRepo from './repos/PublicationRepo';
 
 // load the environment variables from the .env file
 dotenv.config({
@@ -21,6 +21,9 @@ const main = async () => {
   });
 
   await dbConnection();
+
+  //Prefill publication data
+  PublicationRepo.addPublicationsToDB();
 
   const server = new ApolloServer({ schema });
   const app = Express();
