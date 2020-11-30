@@ -1,17 +1,11 @@
 import 'reflect-metadata';
 import Express from 'express';
-import dotenv from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import { buildSchema } from 'type-graphql';
 import { dbConnection } from './db/DBConnection';
 import PublicationRepo from './repos/PublicationRepo';
-
-// load the environment variables from the .env file
-dotenv.config({
-  path: '.env',
-});
 
 const main = async () => {
   const schema = await buildSchema({
