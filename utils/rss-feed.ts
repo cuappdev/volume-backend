@@ -1,19 +1,13 @@
 import Parser from 'rss-parser';
-import dotenv from 'dotenv';
 import express from 'express';
 import publicationsJSON from '../publications.json';
 
 const PORT = 5000;
 
-// load the environment variables from the .env file
-dotenv.config({
-    path: '.env',
-});
-
 const publicationsDB = publicationsJSON.publications;
 const FEED_LIST = publicationsDB.map((publication) => {
-    return publication.feed;
-  });
+    return publication.rssURL;
+});
 
 const app = express();
 
