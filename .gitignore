@@ -1,5 +1,5 @@
 *.DS_Store*
-*.env*
+.envrc
 *node_modules*
 *schema.gql*
 *build/*

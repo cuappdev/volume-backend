@@ -38,13 +38,9 @@ If you are using VSCode, we recommend installing the MongoDB extension to allow 
 
 ## Environment variables
 
-We recommend using [`dotenv`](https://www.npmjs.com/package/dotenv). To set up, simply add a `.env` file to your source directory and add the following environment variables.
+We recommend using [`direnv`](https://direnv.net/). To set up, run the following:
 
-`NODE_ENV`  
-`SERVER_ADDRESS`  
-`MONGO_ADDRESS`  
-`APP_PORT`
-
+`cp .envrctemplate .envrc`
 
 ## Configuration(optional)
 
