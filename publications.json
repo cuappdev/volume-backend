@@ -1,14 +1,6 @@
 {
    "publications":[
       {
-         "bio":"The Cornell Daily Sun is an independent daily newspaper published in Ithaca, New York by students at Cornell University and hired employees. The Sun features coverage of the university and its environs as well as stories from the Associated Press and UWIRE.",
-         "rssURL":"https://cornellsun.com/feed/",
-         "imageURL":"https://twitter.com/cornellsun/photo",
-         "name":"Cornell Daily Sun",
-         "websiteURL":"https://cornellsun.com/",
-         "rssName":"The Cornell Daily Sun"
-      },
-      {
          "bio":"Takes fresh from the sticky part of our rejected article pile.",
          "rssURL":"http://cunooz.com/feed/",
          "imageURL":"https://twitter.com/CUNooz/photo",

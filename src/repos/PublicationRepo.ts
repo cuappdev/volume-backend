@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
+
 import publicationsJSON from '../../publications.json';
 
 /**
@@ -21,7 +22,7 @@ const addPublicationsToDB = async (): Promise<void> => {
         imageURL,
         name,
         websiteURL,
-        rssName
+        rssName,
       }),
     );
   }
@@ -29,9 +30,8 @@ const addPublicationsToDB = async (): Promise<void> => {
   try {
     // Attempt to insert publications while validating a duplicate isn't inserted
     await PublicationModel.insertMany(publications, { ordered: false });
-  } catch (e) {
-    // Log all publicaitons that were successfully inserted
-    console.log(`Publications inserted: ${e.insertedDocs}`);
+  } finally {
+    console.log('Publications were refreshed.');
   }
 };
 
