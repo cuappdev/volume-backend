@@ -1,0 +1,25 @@
+version: "3.6"
+
+services:
+  web:
+    container_name: volume
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file: .dockerenvrc
+    ports:
+      - "80:3000"
+    networks:
+      - app-network
+    
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
