@@ -1,4 +1,3 @@
-export NODE_ENV='production'
-export APP_PORT=3000
-export MONGO_ADDRESS='mongodb://mongo:27017/volume'
-export SERVER_ADDRESS='http://localhost'
+NODE_ENV='production'
+MONGO_ADDRESS='mongodb://mongo:27017/volume'
+SERVER_ADDRESS='http://volume-backend.cornellappdev.com'

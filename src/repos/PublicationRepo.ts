@@ -30,8 +30,12 @@ const addPublicationsToDB = async (): Promise<void> => {
   try {
     // Attempt to insert publications while validating a duplicate isn't inserted
     await PublicationModel.insertMany(publications, { ordered: false });
-  } finally {
-    console.log('Publications were refreshed.');
+  } catch (e) {
+    if (e.insertedDocs) {
+      console.log('Publications were refreshed');
+    } else {
+      console.log(e);
+    }
   }
 };
 

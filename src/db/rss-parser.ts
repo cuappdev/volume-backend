@@ -23,7 +23,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
     return parser.parseURL(articles);
   });
 
-  const parseImage = function (content) {
+  const parseImage = function parseImage(content) {
     const $ = cheerio.load(content);
     const img = $('img').attr('src');
     return img || '';
