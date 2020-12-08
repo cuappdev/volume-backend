@@ -3,6 +3,10 @@ import { Publication, PublicationModel } from '../entities/Publication';
 
 import publicationsJSON from '../../publications.json';
 
+function getImageURL(slug: string, type: string): string {
+  return `${process.env.IMAGE_PATH}/${slug}/${type}.png`;
+}
+
 /**
  * Reads publication info from static JSON and stores info in database.
  * @function
@@ -13,16 +17,19 @@ const addPublicationsToDB = async (): Promise<void> => {
 
   const publications = [];
   for (const publication of publicationsDB) {
-    const { bio, rssURL, imageURL, name, websiteURL, rssName } = publication;
+    const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = publication;
     publications.push(
       Object.assign(new Publication(), {
         _id: new ObjectId().toString(),
+        backgroundImageURL: getImageURL(slug, 'background'),
         bio,
-        rssURL,
-        imageURL,
+        bioShort,
         name,
-        websiteURL,
+        profileImageURL: getImageURL(slug, 'profile'),
         rssName,
+        rssURL,
+        slug,
+        websiteURL,
       }),
     );
   }

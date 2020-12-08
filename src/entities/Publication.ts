@@ -8,7 +8,27 @@ export class Publication {
 
   @Field()
   @Property()
+  backgroundImageURL: string;
+
+  @Field()
+  @Property()
   bio: string;
+
+  @Field()
+  @Property()
+  bioShort: string;
+
+  @Field()
+  @Property()
+  name: string;
+
+  @Field()
+  @Property()
+  profileImageURL: string;
+
+  @Field()
+  @Property({ unique: true })
+  rssName: string;
 
   @Field()
   @Property()
@@ -16,23 +36,15 @@ export class Publication {
 
   @Field()
   @Property()
-  imageURL: string;
-
-  @Field()
-  @Property()
-  name: string;
-
-  @Field()
-  @Property({ unique: true })
-  websiteURL: string;
-
-  @Field()
-  @Property({ unique: true })
-  rssName: string;
+  slug: string;
 
   @Field()
   @Property({ default: 0 })
   shoutouts?: number;
+
+  @Field()
+  @Property()
+  websiteURL: string;
 }
 
 export const PublicationModel = getModelForClass(Publication);

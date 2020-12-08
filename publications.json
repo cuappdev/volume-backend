@@ -1,76 +1,85 @@
 {
    "publications":[
       {
-         "bio":"Takes fresh from the sticky part of our rejected article pile.",
-         "rssURL":"http://cunooz.com/feed/",
-         "imageURL":"https://twitter.com/CUNooz/photo",
-         "name":"CU NOOZ",
-         "websiteURL":"http://cunooz.com/",
-         "rssName":"CU Nooz"
-      },
-      {
          "bio":"The Advocate promotes the dissemination of literature that examines youth-related issues with the goal of encouraging youth advocacy in local and federal politics.",
+         "bioShort":"Encouraging political advocacy by examining issues relevant to college students",
+         "rssName":"The Advocate",
          "rssURL":"http://theadvocatecornell.com/feed/",
-         "imageURL":"",
          "name":"The Advocate",
-         "websiteURL":"http://theadvocatecornell.com/",
-         "rssName":"The Advocate"
-      },
-      {
-         "bio":"Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
-         "rssURL":"https://medium.com/feed/guac-magazine",
-         "imageURL":"",
-         "name":"Guac Magazine",
-         "websiteURL":"https://medium.com/guac-magazine",
-         "rssName":"Guac Magazine - Medium"
-      },
-      {
-         "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
-         "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
-         "imageURL":"",
-         "name":"Corrnell Claritas",
-         "websiteURL":"https://www.cornellclaritas.com/",
-         "rssName":"Blog - CLARITAS"
-      },
-      {
-         "bio":"We created the review to provide a forum for the exchange of these ideas.",
-         "rssURL":"https://www.culsr.org/?format=rss",
-         "imageURL":"",
-         "name":"The Undergraduate Law and Society Review at Cornell",
-         "websiteURL":"https://www.culsr.org/",
-         "rssName":"The Undergraduate Law & Society Review at Cornell"
-      },
-      {
-         "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
-         "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
-         "imageURL":"",
-         "name":"crème de cornell",
-         "websiteURL":"https://www.cremedecornell.net/",
-         "rssName":"Blog - CRÈME de cornell"
-      },
-      {
-         "bio":"As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
-         "rssURL":"https://www.slopemedia.org/all?format=rss",
-         "imageURL":"",
-         "name":"Slope Media",
-         "websiteURL":"https://www.slopemedia.org/",
-         "rssName":"All - Slope Media"
-      },
-      {
-         "bio":"The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
-         "rssURL":"https://www.thecornellreview.org/feed/",
-         "imageURL":"",
-         "name":"The Cornell Review",
-         "websiteURL":"https://www.thecornellreview.org/",
-         "rssName":"The Cornell Review"
+         "slug":"advocate",
+         "websiteURL":"http://theadvocatecornell.com/"
       },
       {
          "bio":"Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
+         "bioShort":"Dedicated exclusively to Cornell Athletics",
+         "rssName":"Big Red Sports Network",
          "rssURL":"https://www.bigredsportsnetwork.org/feed/",
-         "imageURL":"",
          "name":"Big Red Sports Network",
-         "websiteURL":"https://www.bigredsportsnetwork.org/",
-         "rssName":"Big Red Sports Network"
+         "slug":"brsn",
+         "websiteURL":"https://www.bigredsportsnetwork.org/"
+      },
+      {
+         "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
+         "bioShort":"A journal of Christian thoughts",
+         "rssName":"Blog - CLARITAS",
+         "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
+         "name":"Cornell Claritas",
+         "slug":"claritas",
+         "websiteURL":"https://www.cornellclaritas.com/"
+      },
+      {
+         "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
+         "bioShort":"Recipes, stories, and articles from group of passionate food enthusiasts",
+         "rssName":"Blog - CRÈME de cornell",
+         "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
+         "name":"Crème de Cornell",
+         "slug":"creme",
+         "websiteURL":"https://www.cremedecornell.net/"
+      },
+      {
+         "bio":"Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
+         "bioShort":"Celebrating cultural diversity and view the world with an open mind",
+         "rssName":"Guac Magazine - Medium",
+         "rssURL":"https://medium.com/feed/guac-magazine",
+         "name":"Guac Magazine",
+         "slug":"guac",
+         "websiteURL":"https://medium.com/guac-magazine" 
+      },
+      {
+         "bio":"Takes fresh from the sticky part of our rejected article pile.",
+         "bioShort":"News published with the utmost regard for veracity and originality",
+         "rssName":"CU Nooz",
+         "rssURL":"http://cunooz.com/feed/",
+         "name":"CU Nooz",
+         "slug":"nooz",
+         "websiteURL":"http://cunooz.com/"
+      },
+      {
+         "bio":"The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
+         "bioShort":"One of the leading college conservative publications in the United States",
+         "rssName":"The Cornell Review",
+         "rssURL":"https://www.thecornellreview.org/feed/",
+         "name":"The Cornell Review",
+         "slug":"review",
+         "websiteURL":"https://www.thecornellreview.org/"
+      },
+      {
+         "bio":"As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
+         "bioShort":"Your daily fix of Cornell buzz",
+         "rssName":"All - Slope Media",
+         "rssURL":"https://www.slopemedia.org/all?format=rss",
+         "name":"Slope Media",
+         "slug":"slope",
+         "websiteURL":"https://www.slopemedia.org/"
+      },
+      {
+         "bio":"We created the review to provide a forum for the exchange of these ideas.",
+         "bioShort":"An open platform for scholarly writing, critical thinking, and reasoned debate",
+         "rssName":"The Undergraduate Law & Society Review at Cornell",
+         "rssURL":"https://www.culsr.org/?format=rss",
+         "name":"The Undergraduate Law and Society Review at Cornell",
+         "slug":"ulsr",
+         "websiteURL":"https://www.culsr.org/"
       }
    ]
 }
