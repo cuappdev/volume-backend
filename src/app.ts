@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-import Express from 'express';
+
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
+import Express from 'express';
+import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
 import { buildSchema } from 'type-graphql';
 import { dbConnection } from './db/DBConnection';
-import PublicationRepo from './repos/PublicationRepo';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -26,7 +27,9 @@ const main = async () => {
 
   ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
     app.listen(port, () =>
-      console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
+      process.env.NODE_ENV == 'production'
+        ? console.log('volume-backend ready at http://volume-backend.cornellappdev.com')
+        : console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
     );
   })();
 };

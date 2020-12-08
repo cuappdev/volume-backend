@@ -2,6 +2,7 @@ module.exports = {
     extends: 'airbnb-typescript-prettier',
     "rules": {
       'class-methods-use-this': 0,
+      'no-console': 0,
       'no-plusplus': 0,
       'no-restricted-syntax': 0,
       'array-callback-return': 0,

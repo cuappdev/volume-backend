@@ -16,17 +16,19 @@ const getArticlesByPublication = async (publicationID: string): Promise<Article[
 };
 
 const getArticlesAfterDate = async (since: string, limit = 25): Promise<Article[]> => {
-  return ArticleModel.find({
-    // Get all articles after or on the desired date
-    date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-  })
-    // Sort dates in order of most recent to least
-    .sort({ date: 'desc' })
-    .limit(limit);
+  return (
+    ArticleModel.find({
+      // Get all articles after or on the desired date
+      date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
+    })
+      // Sort dates in order of most recent to least
+      .sort({ date: 'desc' })
+      .limit(limit)
+  );
 };
 
 /** A function to compare the trendiness of articles.
- * 
+ *
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
  *

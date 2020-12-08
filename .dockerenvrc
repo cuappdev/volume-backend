@@ -1,0 +1,3 @@
+NODE_ENV='production'
+MONGO_ADDRESS='mongodb://mongo:27017/volume'
+SERVER_ADDRESS='http://volume-backend.cornellappdev.com'
