@@ -3,8 +3,12 @@ import { Article, ArticleModel } from '../entities/Article';
 import { PublicationModel } from '../entities/Publication';
 import getRecentArticles from '../db/rss-parser';
 
-const getArticleById = async (id: string): Promise<Article> => {
+const getArticleByID = async (id: string): Promise<Article> => {
   return ArticleModel.findById(new ObjectId(id));
+};
+
+const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
+  return Promise.all(ids.map(id => ArticleModel.findById(new ObjectId(id)))).then(articles => { return articles });
 };
 
 const getAllArticles = async (limit = 25): Promise<Article[]> => {
@@ -85,7 +89,8 @@ const incrementShoutouts = async (id: string): Promise<Article> => {
 };
 
 export default {
-  getArticleById,
+  getArticleByID,
+  getArticlesByIDs,
   getAllArticles,
   getArticlesByPublication,
   getArticlesAfterDate,

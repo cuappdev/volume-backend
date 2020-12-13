@@ -6,7 +6,12 @@ import ArticleRepo from '../repos/ArticleRepo';
 class ArticleResolver {
   @Query((_returns) => Article, { nullable: false })
   async getArticleByID(@Arg('id') id: string) {
-    return ArticleRepo.getArticleById(id);
+    return ArticleRepo.getArticleByID(id);
+  }
+
+  @Query((_returns) => [Article], { nullable: false })
+  async getArticlesByIDs(@Arg('ids', type => [String]) ids: string[]) {
+    return ArticleRepo.getArticlesByIDs(ids);
   }
 
   @Query((_returns) => [Article], { nullable: false })
