@@ -78,7 +78,7 @@ const refreshFeed = async (): Promise<Article[]> => {
 const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
   article.shoutouts += 1;
-  const publication = await PublicationModel.findOne({ publicationID: article.publicationID });
+  const publication = await PublicationModel.findOne({ publicationID: article.publication.id });
   publication.shoutouts += 1;
   publication.save();
   return article.save();
