@@ -28,7 +28,7 @@ const main = async () => {
   ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
     app.listen(port, () =>
       process.env.NODE_ENV == 'production'
-        ? console.log('volume-backend ready at http://volume-backend.cornellappdev.com')
+        ? console.log('volume-backend ready at http://volume-backend.cornellappdev.com/graphql')
         : console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
     );
   })();

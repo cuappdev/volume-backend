@@ -34,7 +34,7 @@
     "mongoose": "^5.10.9",
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.9.0",
-    "type-graphql": "^1.1.0"
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.22",
