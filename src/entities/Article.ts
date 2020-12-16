@@ -7,16 +7,12 @@ export class Article {
   id: string;
 
   @Field()
-  @Property()
-  title: string;
-
-  @Field()
-  @Property()
-  publicationID: string;
-
-  @Field()
   @Property({ unique: true })
   articleURL: string;
+
+  @Field()
+  @Property()
+  date: Date;
 
   @Field()
   @Property()
@@ -24,11 +20,19 @@ export class Article {
 
   @Field()
   @Property()
-  date: Date;
+  publicationID: string;
+
+  @Field()
+  @Property()
+  publicationSlug: string;
 
   @Field()
   @Property({ default: 0 })
   shoutouts?: number;
+
+  @Field()
+  @Property()
+  title: string;
 }
 
 export const ArticleModel = getModelForClass(Article);
