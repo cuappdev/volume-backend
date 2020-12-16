@@ -3,8 +3,11 @@ import { Publication, PublicationModel } from '../entities/Publication';
 
 import publicationsJSON from '../../publications.json';
 
-function getImageURL(slug: string, type: string): string {
-  return `${process.env.IMAGE_PATH}/${slug}/${type}.png`;
+function getImageURLs(slug: string): [string, string] {
+  return [
+    `${process.env.IMAGE_ADDRESS}/${slug}/background.png`,
+    `${process.env.IMAGE_ADDRESS}/${slug}/profile.png`,
+  ];
 }
 
 /**
@@ -18,14 +21,15 @@ const addPublicationsToDB = async (): Promise<void> => {
   const publications = [];
   for (const publication of publicationsDB) {
     const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = publication;
+    const [backgroundImageURL, profileImageURL] = getImageURLs(slug);
     publications.push(
       Object.assign(new Publication(), {
         _id: new ObjectId().toString(),
-        backgroundImageURL: getImageURL(slug, 'background'),
+        backgroundImageURL,
         bio,
         bioShort,
         name,
-        profileImageURL: getImageURL(slug, 'profile'),
+        profileImageURL,
         rssName,
         rssURL,
         slug,

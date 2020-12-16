@@ -27,7 +27,7 @@ export class Publication {
   profileImageURL: string;
 
   @Field()
-  @Property({ unique: true })
+  @Property()
   rssName: string;
 
   @Field()
@@ -35,7 +35,7 @@ export class Publication {
   rssURL: string;
 
   @Field()
-  @Property()
+  @Property({ unique: true })
   slug: string;
 
   @Field()
