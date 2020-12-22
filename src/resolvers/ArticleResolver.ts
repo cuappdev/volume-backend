@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Query } from 'type-graphql';
+import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
 
@@ -38,6 +38,15 @@ class ArticleResolver {
     @Arg('limit', { defaultValue: 25 }) limit: number,
   ) {
     return ArticleRepo.getTrendingArticles(since, limit);
+  }
+
+  @FieldResolver((_returns) => Number)
+  async trendiness(@Root() article: Article): Promise<number> {
+    const presentDate = new Date().getTime();
+    // Due to the way Mongo interprets 'article' object,
+    // article['_doc'] must be used to access fields of a article object
+    // prettier - ignore
+    return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line no-underscore-dangle
   }
 
   @Mutation((_returns) => [Article])

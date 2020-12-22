@@ -66,9 +66,12 @@ const getAllPublications = async (): Promise<Publication[]> => {
 const getMostRecentArticle = async (publication: Publication): Promise<Article> => {
   // Due to the way Mongo interprets 'publication' object,
   // publication['_doc'] must be used to access fields of a publication object
-  const articlesSinceDate = await ArticleModel.find({
-    publicationSlug: publication['_doc'].slug, // eslint-disable-line no-underscore-dangle // prettier-ignore
-  }).sort({ date: 'desc' });
+
+  const articlesSinceDate =
+    // prettier-ignore
+    await ArticleModel.find({
+      publicationSlug: publication._doc.slug, // eslint-disable-line no-underscore-dangle
+    }).sort({ date: 'desc' });
   return articlesSinceDate[0];
 };
 

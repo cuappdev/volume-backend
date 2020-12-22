@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
+
 import { PublicationModel } from '../entities/Publication';
 import getRecentArticles from '../db/rss-parser';
 
@@ -33,19 +34,6 @@ const getArticlesAfterDate = async (since: string, limit = 25): Promise<Article[
   );
 };
 
-/** A function to compare the trendiness of articles.
- *
- * Trendiness is computed by taking the number of total shoutouts an article
- * has received and dividing it by the number of days since its been published.
- *
- */
-export const compareTrendiness = (a1: Article, a2: Article) => {
-  const presentDate = new Date().getTime();
-  const a1Score = a1.shoutouts / (presentDate - a1.date.getTime());
-  const a2Score = a2.shoutouts / (presentDate - a2.date.getTime());
-  return a2Score - a1Score;
-};
-
 /**
  * Computes and returns the trending articles in the database.
  *
@@ -54,11 +42,12 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @param {string} since - retrieve articles after this date.
  */
 const getTrendingArticles = async (since: string, limit = 25): Promise<Article[]> => {
-  const articlesSinceDate = await ArticleModel.find({
+  const trendinArticles = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-  }).exec();
-
-  return articlesSinceDate.sort(compareTrendiness).slice(0, limit);
+  })
+    .sort({ trendiness: 'desc' })
+    .exec();
+  return trendinArticles.slice(0, limit);
 };
 
 /**
