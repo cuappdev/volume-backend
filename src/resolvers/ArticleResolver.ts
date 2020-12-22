@@ -10,7 +10,7 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getArticlesByIDs(@Arg('ids', type => [String]) ids: string[]) {
+  async getArticlesByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
     return ArticleRepo.getArticlesByIDs(ids);
   }
 

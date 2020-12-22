@@ -8,7 +8,9 @@ const getArticleByID = async (id: string): Promise<Article> => {
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
-  return Promise.all(ids.map(id => ArticleModel.findById(new ObjectId(id)))).then(articles => { return articles });
+  return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
+    return articles;
+  });
 };
 
 const getAllArticles = async (limit = 25): Promise<Article[]> => {
@@ -38,10 +40,10 @@ const getArticlesAfterDate = async (since: string, limit = 25): Promise<Article[
  *
  */
 export const compareTrendiness = (a1: Article, a2: Article) => {
-  const presentDate = new Date().getTime();
-  const a1Score = a1.shoutouts / (presentDate - a1.date.getTime());
-  const a2Score = a2.shoutouts / (presentDate - a2.date.getTime());
-  return a2Score - a1Score;
+  // const presentDate = new Date().getTime();
+  // const a1Score = a1.shoutouts / (presentDate - a1.date.getTime());
+  // const a2Score = a2.shoutouts / (presentDate - a2.date.getTime());
+  return a2.trendiness - a1.trendiness;
 };
 
 /**
@@ -56,7 +58,7 @@ const getTrendingArticles = async (since: string, limit = 25): Promise<Article[]
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   }).exec();
 
-  return articlesSinceDate.sort(compareTrendiness).slice(0, limit);
+  return articlesSinceDate.sort({ trendiness: 'desc' }).slice(0, limit);
 };
 
 /**

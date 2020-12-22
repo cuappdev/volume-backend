@@ -7,7 +7,7 @@ export const getDummyArticles = (): Article[] => {
     {
       id: new ObjectId().toString(),
       title: 'orko and tedi backend ',
-      publicationID: '5fac75af7f68e1f1a4ae8b1b',
+      publication: null,
       articleURL: 'www.orko.com',
       imageURL: 'www.orkopics.com',
       date: new Date('11-05-2020'),
@@ -16,7 +16,7 @@ export const getDummyArticles = (): Article[] => {
     {
       id: new ObjectId().toString(),
       title: 'appdev router sucks ---> let me tell you why',
-      publicationID: '5fb35626f753932061906a33',
+      publication: null,
       articleURL: 'www.jack.com',
       imageURL: 'www.jack.com',
       date: new Date('11-08-2020'),
@@ -25,7 +25,7 @@ export const getDummyArticles = (): Article[] => {
     {
       id: new ObjectId().toString(),
       title: 'Cooking w Cornell Hotel School',
-      publicationID: '5fb35626f753932061906a30',
+      publication: null,
       articleURL: 'www.new.com',
       imageURL: 'www.pic.com',
       date: new Date('11-07-2020'),
@@ -34,7 +34,7 @@ export const getDummyArticles = (): Article[] => {
     {
       id: new ObjectId().toString(),
       title: 'Conners 3 hats - what each of them mean',
-      publicationID: '5fb35626f753932061906a37',
+      publication: null,
       articleURL: 'www.newweb.com',
       imageURL: 'www.pic.com',
       date: new Date('11-02-2020'),

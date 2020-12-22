@@ -30,6 +30,12 @@ export class Article {
   @Field()
   @Property({ default: 0 })
   shoutouts?: number;
+
+  @Field(type => Number, { nullable: true })
+  trendiness(): number | null {
+    const presentDate = new Date().getTime();
+    return this.shoutouts / (presentDate - this.date.getTime());
+  }
 }
 
 export const ArticleModel = getModelForClass(Article);
