@@ -8,16 +8,12 @@ export class Article {
   id: string;
 
   @Field()
-  @Property()
-  title: string;
-
-  @Field()
-  @Property()
-  publication: Publication | null;
-
-  @Field()
   @Property({ unique: true })
   articleURL: string;
+
+  @Field()
+  @Property()
+  date: Date;
 
   @Field()
   @Property()
@@ -25,17 +21,19 @@ export class Article {
 
   @Field()
   @Property()
-  date: Date;
+  publication: Publication | null;
+
+  @Field()
+  @Property()
+  publicationSlug: string;
 
   @Field()
   @Property({ default: 0 })
   shoutouts?: number;
 
-  @Field(type => Number, { nullable: true })
-  trendiness(): number | null {
-    const presentDate = new Date().getTime();
-    return this.shoutouts / (presentDate - this.date.getTime());
-  }
+  @Field()
+  @Property()
+  title: string;
 }
 
 export const ArticleModel = getModelForClass(Article);

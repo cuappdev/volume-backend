@@ -8,12 +8,14 @@ const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
   const nameToPubMap = {};
+  const nameToSlugMap = {};
   const publicationsDB = await PublicationRepo.getAllPublications();
 
   const articleSources = [];
   for (const publication of publicationsDB) {
     const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName }); // eslint-disable-line no-await-in-loop
     nameToPubMap[publication.rssName] = pubDoc;
+    nameToSlugMap[publication.rssName] = pubDoc.slug;
     articleSources.push(publication.rssURL);
   }
 
@@ -40,6 +42,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
               article['content:encoded'] ? article['content:encoded'] : article.content,
             ),
             publication: nameToPubMap[publication.title] ? nameToPubMap[publication.title] : null,
+            publicationSlug: nameToSlugMap[publication.title] || 'none',
             title: article.title,
           }),
         ),

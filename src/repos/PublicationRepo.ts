@@ -1,7 +1,14 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
-
+import { Article, ArticleModel } from '../entities/Article';
 import publicationsJSON from '../../publications.json';
+
+function getImageURLs(slug: string): [string, string] {
+  return [
+    `${process.env.IMAGE_ADDRESS}/${slug}/background.png`,
+    `${process.env.IMAGE_ADDRESS}/${slug}/profile.png`,
+  ];
+}
 
 /**
  * Reads publication info from static JSON and stores info in database.
@@ -13,16 +20,20 @@ const addPublicationsToDB = async (): Promise<void> => {
 
   const publications = [];
   for (const publication of publicationsDB) {
-    const { bio, rssURL, imageURL, name, websiteURL, rssName } = publication;
+    const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = publication;
+    const [backgroundImageURL, profileImageURL] = getImageURLs(slug);
     publications.push(
       Object.assign(new Publication(), {
         _id: new ObjectId().toString(),
+        backgroundImageURL,
         bio,
-        rssURL,
-        imageURL,
+        bioShort,
         name,
-        websiteURL,
+        profileImageURL,
         rssName,
+        rssURL,
+        slug,
+        websiteURL,
       }),
     );
   }
@@ -47,8 +58,22 @@ const getAllPublications = async (): Promise<Publication[]> => {
   return PublicationModel.find({});
 };
 
+/**
+ * Retrieves the Article object corresponding to the most recent article published
+ * by a publication.
+ * @param {Publication} publication 
+ */
+const getMostRecentArticle = async (publication: Publication): Promise<Article> => {
+  // Due to the way Mongo interprets 'publication' object, 
+  // publication['_doc'] must be used to access fields of a publication object
+  const articlesSinceDate = await ArticleModel.find({ publicationSlug: publication['_doc'].slug })
+    .sort({ date: 'desc' });
+  return articlesSinceDate[0];
+};
+
 export default {
   addPublicationsToDB,
   getPublicationByID,
   getAllPublications,
+  getMostRecentArticle
 };
