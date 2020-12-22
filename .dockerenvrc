@@ -1,4 +1,5 @@
 NODE_ENV='dev'
 APP_PORT='3000'
 MONGO_ADDRESS='mongodb://mongo:27017/volume'
-SERVER_ADDRESS='https://localhost'
+SERVER_ADDRESS='http://localhost'
+IMAGE_ADDRESS='https://raw.githubusercontent.com/cuappdev/assets/master/volume'

@@ -8,31 +8,43 @@ export class Publication {
 
   @Field()
   @Property()
+  backgroundImageURL: string;
+
+  @Field()
+  @Property()
   bio: string;
 
   @Field()
   @Property()
-  rssURL: string;
-
-  @Field()
-  @Property()
-  imageURL: string;
+  bioShort: string;
 
   @Field()
   @Property()
   name: string;
 
   @Field()
-  @Property({ unique: true })
-  websiteURL: string;
+  @Property()
+  profileImageURL: string;
+
+  @Field()
+  @Property()
+  rssName: string;
+
+  @Field()
+  @Property()
+  rssURL: string;
 
   @Field()
   @Property({ unique: true })
-  rssName: string;
+  slug: string;
 
   @Field()
   @Property({ default: 0 })
   shoutouts?: number;
+
+  @Field()
+  @Property()
+  websiteURL: string;
 }
 
 export const PublicationModel = getModelForClass(Publication);
