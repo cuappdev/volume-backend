@@ -45,8 +45,7 @@ class ArticleResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
-    // prettier - ignore
-    return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line no-underscore-dangle
+    return article['doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
   }
 
   @Mutation((_returns) => [Article])
