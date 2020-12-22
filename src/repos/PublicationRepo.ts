@@ -61,13 +61,14 @@ const getAllPublications = async (): Promise<Publication[]> => {
 /**
  * Retrieves the Article object corresponding to the most recent article published
  * by a publication.
- * @param {Publication} publication 
+ * @param {Publication} publication
  */
 const getMostRecentArticle = async (publication: Publication): Promise<Article> => {
-  // Due to the way Mongo interprets 'publication' object, 
+  // Due to the way Mongo interprets 'publication' object,
   // publication['_doc'] must be used to access fields of a publication object
-  const articlesSinceDate = await ArticleModel.find({ publicationSlug: publication['_doc'].slug })
-    .sort({ date: 'desc' });
+  const articlesSinceDate = await ArticleModel.find({
+    publicationSlug: publication['_doc'].slug, // eslint-disable-line no-underscore-dangle // prettier-ignore
+  }).sort({ date: 'desc' });
   return articlesSinceDate[0];
 };
 
@@ -75,5 +76,5 @@ export default {
   addPublicationsToDB,
   getPublicationByID,
   getAllPublications,
-  getMostRecentArticle
+  getMostRecentArticle,
 };
