@@ -40,12 +40,12 @@ const getArticlesAfterDate = async (since: string, limit = 25): Promise<Article[
  * @param {string} since - retrieve articles after this date.
  */
 const getTrendingArticles = async (since: string, limit = 25): Promise<Article[]> => {
-  const trendinArticles = await ArticleModel.find({
+  const trendingArticles = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   })
     .sort({ trendiness: 'desc' })
     .exec();
-  return trendinArticles.slice(0, limit);
+  return trendingArticles.slice(0, limit);
 };
 
 /**
