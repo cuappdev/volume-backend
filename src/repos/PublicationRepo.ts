@@ -62,6 +62,7 @@ const getAllPublications = async (): Promise<Publication[]> => {
  * Retrieves the Article object corresponding to the most recent article published
  * by a publication.
  * @param {Publication} publication
+ * @returns {Article}
  */
 const getMostRecentArticle = async (publication: Publication): Promise<Article> => {
   // Due to the way Mongo interprets 'publication' object,
@@ -72,9 +73,29 @@ const getMostRecentArticle = async (publication: Publication): Promise<Article> 
   return articlesSinceDate[0];
 };
 
+/**
+ * Retrieves the number of shoutouts a Publication has by summing the shoutouts
+ * of all of its articles.
+ * @param {Publication} publication
+ * @returns {Number}
+ */
+const getShoutouts = async (publication: Publication): Promise<Number> => {
+  // Due to the way Mongo interprets 'publication' object,
+  // publication['_doc'] must be used to access fields of a publication object
+  const pubArticles = await ArticleModel.find({
+    publicationSlug: publication['_doc'].slug, // eslint-disable-line
+  });
+
+  return pubArticles.reduce((acc, article) => {
+    return acc + article.shoutouts;
+  }, 0);
+
+};
+
 export default {
   addPublicationsToDB,
   getPublicationByID,
   getAllPublications,
   getMostRecentArticle,
+  getShoutouts
 };

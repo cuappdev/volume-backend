@@ -19,6 +19,11 @@ class PublicationResolver {
   async mostRecentArticle(@Root() publication: Publication): Promise<Article> {
     return PublicationRepo.getMostRecentArticle(publication);
   }
+
+  @FieldResolver((_returns) => Number)
+  async shoutouts(@Root() publication: Publication): Promise<Number> {
+    return PublicationRepo.getShoutouts(publication);
+  }
 }
 
 export default PublicationResolver;
