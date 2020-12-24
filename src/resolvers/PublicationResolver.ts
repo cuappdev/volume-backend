@@ -1,6 +1,6 @@
-import { Resolver, Arg, Query, FieldResolver, Root } from 'type-graphql';
-import { Publication } from '../entities/Publication';
+import { Arg, Resolver, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
+import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
 
 @Resolver((_of) => Publication)
@@ -21,7 +21,7 @@ class PublicationResolver {
   }
 
   @FieldResolver((_returns) => Number)
-  async shoutouts(@Root() publication: Publication): Promise<Number> {
+  async shoutouts(@Root() publication: Publication): Promise<number> {
     return PublicationRepo.getShoutouts(publication);
   }
 }

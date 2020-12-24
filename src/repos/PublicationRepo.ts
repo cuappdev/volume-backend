@@ -79,7 +79,7 @@ const getMostRecentArticle = async (publication: Publication): Promise<Article> 
  * @param {Publication} publication
  * @returns {Number}
  */
-const getShoutouts = async (publication: Publication): Promise<Number> => {
+const getShoutouts = async (publication: Publication): Promise<number> => {
   // Due to the way Mongo interprets 'publication' object,
   // publication['_doc'] must be used to access fields of a publication object
   const pubArticles = await ArticleModel.find({
@@ -89,13 +89,12 @@ const getShoutouts = async (publication: Publication): Promise<Number> => {
   return pubArticles.reduce((acc, article) => {
     return acc + article.shoutouts;
   }, 0);
-
 };
 
 export default {
   addPublicationsToDB,
-  getPublicationByID,
   getAllPublications,
   getMostRecentArticle,
+  getPublicationByID,
   getShoutouts
 };

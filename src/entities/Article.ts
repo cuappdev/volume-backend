@@ -22,6 +22,7 @@ export class Article {
   @Field()
   @Property()
   publication: Publication | null;
+  //Field will only be null if rss does not parse a publication name
 
   @Field()
   @Property()

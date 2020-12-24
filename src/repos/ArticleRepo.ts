@@ -75,12 +75,12 @@ const incrementShoutouts = async (id: string): Promise<Article> => {
 };
 
 export default {
-  getArticleByID,
-  getArticlesByIDs,
   getAllArticles,
-  getArticlesByPublication,
+  getArticleByID,
   getArticlesAfterDate,
+  getArticlesByIDs,
+  getArticlesByPublication,
   getTrendingArticles,
-  refreshFeed,
   incrementShoutouts,
+  refreshFeed
 };
