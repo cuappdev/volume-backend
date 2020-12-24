@@ -1,5 +1,5 @@
-const DEFAULT_LIMIT: number = 25.0;
+const DEFAULT_LIMIT = 25.0;
 
 export default {
-  DEFAULT_LIMIT
-}
+  DEFAULT_LIMIT,
+};
