@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { Publication } from './Publication';
 
 @ObjectType({ description: 'The Article Model' })
 export class Article {
@@ -20,7 +21,8 @@ export class Article {
 
   @Field()
   @Property()
-  publicationID: string;
+  publication: Publication | null;
+  //Field will only be null if rss does not parse a publication name
 
   @Field()
   @Property()
