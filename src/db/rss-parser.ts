@@ -7,14 +7,14 @@ import PublicationRepo from '../repos/PublicationRepo';
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const nameToIDMap = {};
+  const nameToPubMap = {};
   const nameToSlugMap = {};
   const publicationsDB = await PublicationRepo.getAllPublications();
 
   const articleSources = [];
   for (const publication of publicationsDB) {
     const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName }); // eslint-disable-line no-await-in-loop
-    nameToIDMap[publication.rssName] = pubDoc.id;
+    nameToPubMap[publication.rssName] = pubDoc;
     nameToSlugMap[publication.rssName] = pubDoc.slug;
     articleSources.push(publication.rssURL);
   }
@@ -41,7 +41,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
             imageURL: parseImage(
               article['content:encoded'] ? article['content:encoded'] : article.content,
             ),
-            publicationID: nameToIDMap[publication.title] || 'none',
+            publication: nameToPubMap[publication.title] ? nameToPubMap[publication.title] : null,
             publicationSlug: nameToSlugMap[publication.title] || 'none',
             title: article.title,
           }),

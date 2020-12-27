@@ -1,16 +1,22 @@
-import { Resolver, Mutation, Arg, Query } from 'type-graphql';
+import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
+import Constants from '../common/constants';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
   @Query((_returns) => Article, { nullable: false })
   async getArticleByID(@Arg('id') id: string) {
-    return ArticleRepo.getArticleById(id);
+    return ArticleRepo.getArticleByID(id);
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getAllArticles(@Arg('limit', { defaultValue: 25 }) limit: number) {
+  async getArticlesByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
+    return ArticleRepo.getArticlesByIDs(ids);
+  }
+
+  @Query((_returns) => [Article], { nullable: false })
+  async getAllArticles(@Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number) {
     return ArticleRepo.getAllArticles(limit);
   }
 
@@ -22,7 +28,7 @@ class ArticleResolver {
   @Query((_returns) => [Article], { nullable: false })
   async getArticlesAfterDate(
     @Arg('since') since: string,
-    @Arg('limit', { defaultValue: 25 }) limit: number,
+    @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
   ) {
     return ArticleRepo.getArticlesAfterDate(since, limit);
   }
@@ -30,9 +36,17 @@ class ArticleResolver {
   @Query((_returns) => [Article], { nullable: false })
   async getTrendingArticles(
     @Arg('since') since: string,
-    @Arg('limit', { defaultValue: 25 }) limit: number,
+    @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
   ) {
     return ArticleRepo.getTrendingArticles(since, limit);
+  }
+
+  @FieldResolver((_returns) => Number)
+  async trendiness(@Root() article: Article): Promise<number> {
+    const presentDate = new Date().getTime();
+    // Due to the way Mongo interprets 'article' object,
+    // article['_doc'] must be used to access fields of a article object
+    return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
   }
 
   @Mutation((_returns) => [Article])
