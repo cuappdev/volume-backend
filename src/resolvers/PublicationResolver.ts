@@ -15,7 +15,7 @@ class PublicationResolver {
     return PublicationRepo.getPublicationByID(id);
   }
 
-  @FieldResolver((_returns) => Article)
+  @FieldResolver((_returns) => Article, { nullable: true })
   async mostRecentArticle(@Root() publication: Publication): Promise<Article> {
     return PublicationRepo.getMostRecentArticle(publication);
   }
