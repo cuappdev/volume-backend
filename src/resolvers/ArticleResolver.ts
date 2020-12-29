@@ -5,7 +5,7 @@ import Constants from '../common/constants';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
-  @Query((_returns) => Article, { nullable: false })
+  @Query((_returns) => Article, { nullable: true })
   async getArticleByID(@Arg('id') id: string) {
     return ArticleRepo.getArticleByID(id);
   }

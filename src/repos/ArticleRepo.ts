@@ -2,17 +2,18 @@ import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import Constants from '../common/constants';
 import getRecentArticles from '../db/rss-parser';
+import { PublicationModel } from '../entities/Publication';
 
 const getArticleByID = async (id: string): Promise<Article> => {
   return ArticleModel.findById(new ObjectId(id));
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
-  return Promise.
-    all(
+  return Promise
+    .all(
       ids.map((id) => ArticleModel.findById(new ObjectId(id)))
     ).then((articles) => {
-      return articles;
+      return articles.length === 0 ? articles : [];
     });
 };
 
@@ -21,10 +22,14 @@ const getAllArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[
 };
 
 const getArticlesByPublication = async (publicationID: string): Promise<Article[]> => {
-  return ArticleModel.find({ publicationID });
+  const publication = await PublicationModel.findById(new ObjectId(publicationID));
+  return ArticleModel.find({ publicationSlug: publication.slug });
 };
 
-const getArticlesAfterDate = async (since: string, limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
+const getArticlesAfterDate = async (
+  since: string,
+  limit = Constants.DEFAULT_LIMIT,
+): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date
@@ -43,7 +48,10 @@ const getArticlesAfterDate = async (since: string, limit = Constants.DEFAULT_LIM
  * @param {number} limit - number of articles to retrieve.
  * @param {string} since - retrieve articles after this date.
  */
-const getTrendingArticles = async (since: string, limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
+const getTrendingArticles = async (
+  since: string,
+  limit = Constants.DEFAULT_LIMIT,
+): Promise<Article[]> => {
   const trendingArticles = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   })
