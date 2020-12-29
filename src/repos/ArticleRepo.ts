@@ -9,12 +9,9 @@ const getArticleByID = async (id: string): Promise<Article> => {
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
-  return Promise
-    .all(
-      ids.map((id) => ArticleModel.findById(new ObjectId(id)))
-    ).then((articles) => {
-      return articles.length === 0 ? articles : [];
-    });
+  return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
+    return articles[0] != null ? articles : [];
+  });
 };
 
 const getAllArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
