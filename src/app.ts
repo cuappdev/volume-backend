@@ -20,7 +20,7 @@ const main = async () => {
   //Prefill publication data
   PublicationRepo.addPublicationsToDB();
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({ schema, playground: true });
   const app = Express();
 
   server.applyMiddleware({ app });
