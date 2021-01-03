@@ -24,6 +24,11 @@ class PublicationResolver {
   async shoutouts(@Root() publication: Publication): Promise<number> {
     return PublicationRepo.getShoutouts(publication);
   }
+
+  @FieldResolver((_returns) => Number)
+  async numArticles(@Root() publication: Publication): Promise<number> {
+    return PublicationRepo.getNumArticles(publication);
+  }
 }
 
 export default PublicationResolver;
