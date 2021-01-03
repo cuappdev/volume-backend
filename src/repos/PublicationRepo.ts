@@ -54,6 +54,10 @@ const getPublicationByID = async (id: string): Promise<Publication> => {
   return PublicationModel.findById(new ObjectId(id));
 };
 
+const getPublicationBySlug = async (slug: string): Promise<Publication> => {
+  return PublicationModel.findOne({ slug });
+};
+
 const getAllPublications = async (): Promise<Publication[]> => {
   return PublicationModel.find({});
 };
@@ -95,5 +99,6 @@ export default {
   getAllPublications,
   getMostRecentArticle,
   getPublicationByID,
+  getPublicationBySlug,
   getShoutouts,
 };

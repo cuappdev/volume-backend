@@ -2,6 +2,8 @@ import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphq
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
 import Constants from '../common/constants';
+import { Publication } from '../entities/Publication';
+import PublicationRepo from '../repos/PublicationRepo';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
@@ -39,6 +41,11 @@ class ArticleResolver {
     @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
   ) {
     return ArticleRepo.getTrendingArticles(since, limit);
+  }
+
+  @FieldResolver((_returns) => Publication)
+  async publication(@Root() article: Article): Promise<Publication> {
+    return PublicationRepo.getPublicationBySlug(article['_doc'].publicationSlug); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Number)
