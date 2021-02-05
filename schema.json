@@ -34,13 +34,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Article",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Article",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -395,22 +391,6 @@
             "deprecationReason": null
           },
           {
-            "name": "publication",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Publication",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "publicationSlug",
             "description": null,
             "args": [],
@@ -452,6 +432,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publication",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Publication",
                 "ofType": null
               }
             },
@@ -504,6 +500,16 @@
         "kind": "SCALAR",
         "name": "DateTime",
         "description": "The javascript `Date` as string. Type represents date and time as the ISO Date string.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Float",
+        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -696,11 +702,23 @@
             "description": null,
             "args": [],
             "type": {
+              "kind": "OBJECT",
+              "name": "Article",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numArticles",
+            "description": null,
+            "args": [],
+            "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "Article",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               }
             },
@@ -710,16 +728,6 @@
         ],
         "inputFields": null,
         "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Float",
-        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
