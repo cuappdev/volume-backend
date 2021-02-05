@@ -39,7 +39,7 @@ const getArticlesAfterDate = async (
 };
 
 /** A function to compare the trendiness of articles.
- * 
+ *
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
  *
