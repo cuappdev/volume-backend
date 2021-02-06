@@ -12,5 +12,5 @@ env:
 - APP_PORT=3000
 
 script:
-- nohup npm run start &
 - npm run test
+- npm run start
