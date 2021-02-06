@@ -12,7 +12,7 @@ env:
 - APP_PORT=3000
 
 before_script:
-- nohup npm run start
+- nohup npm run start &
 - sleep 10s
 
 script:
