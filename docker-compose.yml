@@ -18,7 +18,7 @@ services:
     volumes: 
       - ~/MongoDB/data:/data/db
     ports:
-      - "27017:27017"
+      - "27888:27017"
     networks:
       - app-network
   
