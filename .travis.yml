@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- "14.15.4"
+- "14"
 
 services:
 - mongodb
@@ -8,8 +8,12 @@ services:
 install:
 - npm install
 
+env:
+- APP_PORT=3000
+
 before_script:
-- npm run start
+- nohup npm run start
+- sleep 10s
 
 script:
 - node_modules/.bin/newman run tests/volume.postman_collection.json -e tests/volume.postman_environment.json
