@@ -11,6 +11,7 @@ install:
 env:
 - APP_PORT=3000
 
+
+
 script:
-- npm run test
 - npm run start
