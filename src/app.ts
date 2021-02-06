@@ -18,7 +18,7 @@ const main = async () => {
   await dbConnection();
 
   //Prefill publication data
-  PublicationRepo.addPublicationsToDB();
+  await PublicationRepo.addPublicationsToDB();
 
   const server = new ApolloServer({ schema, playground: true });
   const app = Express();
@@ -30,7 +30,7 @@ const main = async () => {
   server.applyMiddleware({ app });
 
   ((port = process.env.APP_PORT) => {
-    app.listen(port, () => console.log(`🔊 volume-backend running on port ${port}`));
+    app.listen(port, () => console.log(`\n🔊 volume-backend running on port ${port}`));
   })();
 };
 
