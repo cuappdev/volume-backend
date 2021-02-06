@@ -23,6 +23,10 @@ const main = async () => {
   const server = new ApolloServer({ schema, playground: true });
   const app = Express();
 
+  app.get('/', (req, res) => {
+    res.send('Welcome to volume-backend.');
+  });
+
   server.applyMiddleware({ app });
 
   ((port = process.env.APP_PORT) => {
