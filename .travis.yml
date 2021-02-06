@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- "8.2.1"
+- "14.15.4"
 
 services:
 - mongodb
@@ -9,9 +9,7 @@ install:
 - npm install
 
 before_script:
-- node --version
-- npm --version
-- node_modules/.bin/newman --version
+- npm run start
 
 script:
 - node_modules/.bin/newman run tests/volume.postman_collection.json -e tests/volume.postman_environment.json
