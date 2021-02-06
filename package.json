@@ -32,6 +32,7 @@
     "moment": "^2.29.1",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.9",
+    "newman": "^5.2.2",
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.9.0",
     "type-graphql": "^1.1.1"
