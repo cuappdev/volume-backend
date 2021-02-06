@@ -1,13 +1,11 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
+import { IMAGE_ADDRESS } from '../common/constants';
 import publicationsJSON from '../../publications.json';
 
 function getImageURLs(slug: string): [string, string] {
-  return [
-    `${process.env.IMAGE_ADDRESS}/${slug}/background.png`,
-    `${process.env.IMAGE_ADDRESS}/${slug}/profile.png`,
-  ];
+  return [`${IMAGE_ADDRESS}/${slug}/background.png`, `${IMAGE_ADDRESS}/${slug}/profile.png`];
 }
 
 /**
@@ -95,7 +93,7 @@ const getShoutouts = async (publication: Publication): Promise<number> => {
 };
 
 /**
- * Retrieves the number of articles in the database associated with this 
+ * Retrieves the number of articles in the database associated with this
  * publication.
  * @param {Publication} publication
  * @returns {Number}

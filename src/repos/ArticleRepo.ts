@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
-import Constants from '../common/constants';
+import { DEFAULT_LIMIT } from '../common/constants';
 import getRecentArticles from '../db/rss-parser';
 import { PublicationModel } from '../entities/Publication';
 
@@ -14,7 +14,7 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-const getAllArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
+const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return ArticleModel.find({}).limit(limit);
 };
 
@@ -23,10 +23,7 @@ const getArticlesByPublication = async (publicationID: string): Promise<Article[
   return ArticleModel.find({ publicationSlug: publication.slug });
 };
 
-const getArticlesAfterDate = async (
-  since: string,
-  limit = Constants.DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date
@@ -39,7 +36,7 @@ const getArticlesAfterDate = async (
 };
 
 /** A function to compare the trendiness of articles.
- * 
+ *
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
  *
@@ -58,10 +55,7 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @param {number} limit - number of articles to retrieve.
  * @param {string} since - retrieve articles after this date.
  */
-const getTrendingArticles = async (
-  since: string,
-  limit = Constants.DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getTrendingArticles = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articlesSinceDate = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   }).exec();

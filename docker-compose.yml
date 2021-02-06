@@ -2,7 +2,7 @@ version: "3.6"
 
 services:
   web:
-    container_name: volume
+    container_name: "volume"
     build: 
       context: .
       dockerfile: Dockerfile
@@ -11,13 +11,17 @@ services:
       - "80:3000"
     networks:
       - app-network
-    
-  mongo:
-    container_name: mongo
+  
+  db:
+    container_name: "volume-db"
     image: mongo
+    volumes: 
+      - ~/MongoDB/data:/data/db
+    ports:
+      - "27017:27017"
     networks:
       - app-network
-
+  
 networks:
   app-network:
     driver: bridge

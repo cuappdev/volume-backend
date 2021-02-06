@@ -1,9 +1,9 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-import Constants from '../common/constants';
 import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
+import { DEFAULT_LIMIT } from '../common/constants';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
@@ -18,7 +18,7 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getAllArticles(@Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number) {
+  async getAllArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
     return ArticleRepo.getAllArticles(limit);
   }
 
@@ -30,7 +30,7 @@ class ArticleResolver {
   @Query((_returns) => [Article], { nullable: false })
   async getArticlesAfterDate(
     @Arg('since') since: string,
-    @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
   ) {
     return ArticleRepo.getArticlesAfterDate(since, limit);
   }
@@ -38,7 +38,7 @@ class ArticleResolver {
   @Query((_returns) => [Article], { nullable: false })
   async getTrendingArticles(
     @Arg('since') since: string,
-    @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
   ) {
     return ArticleRepo.getTrendingArticles(since, limit);
   }
