@@ -10,7 +10,9 @@ const getArticleByID = async (id: string): Promise<Article> => {
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
-    return articles[0] != null ? articles : [];
+    // Filter out all null values that were returned by ObjectIds not associated
+    // with articles in database
+    return articles.filter(article => article !== null);
   });
 };
 
@@ -42,6 +44,8 @@ const getArticlesAfterDate = async (
  * 
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
+ * 
+ * Sorts in order of most trendy to least trendy.
  *
  */
 export const compareTrendiness = (a1: Article, a2: Article) => {
