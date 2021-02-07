@@ -12,7 +12,7 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
     // Filter out all null values that were returned by ObjectIds not associated
     // with articles in database
-    return articles.filter(article => article !== null);
+    return articles.filter((article) => article !== null);
   });
 };
 
@@ -41,17 +41,17 @@ const getArticlesAfterDate = async (
 };
 
 /** A function to compare the trendiness of articles.
- * 
+ *
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
- * 
+ *
  * Sorts in order of most trendy to least trendy.
  *
  */
 export const compareTrendiness = (a1: Article, a2: Article) => {
   const presentDate = new Date().getTime();
-  const a1Score = a1.shoutouts / (presentDate - a1.date.getTime());
-  const a2Score = a2.shoutouts / (presentDate - a2.date.getTime());
+  const a1Score = (a1 != null) ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
+  const a2Score = (a2 != null) ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
   return a2Score - a1Score;
 };
 
