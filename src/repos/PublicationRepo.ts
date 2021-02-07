@@ -54,6 +54,10 @@ const getPublicationByID = async (id: string): Promise<Publication> => {
   return PublicationModel.findById(new ObjectId(id));
 };
 
+const getPublicationBySlug = async (slug: string): Promise<Publication> => {
+  return PublicationModel.findOne({ slug });
+};
+
 const getAllPublications = async (): Promise<Publication[]> => {
   return PublicationModel.find({});
 };
@@ -90,10 +94,28 @@ const getShoutouts = async (publication: Publication): Promise<number> => {
   }, 0);
 };
 
+/**
+ * Retrieves the number of articles in the database associated with this 
+ * publication.
+ * @param {Publication} publication
+ * @returns {Number}
+ */
+const getNumArticles = async (publication: Publication): Promise<number> => {
+  // Due to the way Mongo interprets 'publication' object,
+  // publication['_doc'] must be used to access fields of a publication object
+  const pubArticles = await ArticleModel.find({
+    publicationSlug: publication['_doc'].slug, // eslint-disable-line
+  });
+
+  return pubArticles.length;
+};
+
 export default {
   addPublicationsToDB,
   getAllPublications,
   getMostRecentArticle,
+  getNumArticles,
   getPublicationByID,
+  getPublicationBySlug,
   getShoutouts,
 };
