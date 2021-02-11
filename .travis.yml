@@ -13,6 +13,8 @@ env:
 
 before_script:
 - nohup npm run start &
+- sleep 15
+- mongo volume --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 
 script:
 - npm run test

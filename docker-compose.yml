@@ -7,21 +7,14 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .dockerenvrc
-    ports:
-      - "80:3000"
-    networks:
-      - app-network
-  
-  db:
-    container_name: "volume-db"
-    image: mongo
     volumes: 
       - ~/MongoDB/data:/data/db
     ports:
+      - "80:3000"
+    links:
+      - db
+  db:
+    container_name: "volume-db"
+    image: mongo
+    ports:
       - "27888:27017"
-    networks:
-      - app-network
-  
-networks:
-  app-network:
-    driver: bridge
