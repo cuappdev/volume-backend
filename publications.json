@@ -7,6 +7,10 @@
          "rssURL":"http://theadvocatecornell.com/feed/",
          "name":"The Advocate",
          "slug":"advocate",
+         "socialURLs":{ 
+            "insta":"https://www.instagram.com/theadvocateatcornelluniversity/",
+            "facebook":"https://www.facebook.com/The-Advocate-at-Cornell-University-109632540936869/"
+         },
          "websiteURL":"http://theadvocatecornell.com/"
       },
       {
@@ -16,7 +20,14 @@
          "rssURL":"https://www.bigredsportsnetwork.org/feed/",
          "name":"Big Red Sports Network",
          "slug":"brsn",
-         "websiteURL":"https://www.bigredsportsnetwork.org/"
+         "socialURLs":{ 
+            "insta": "https://www.instagram.com/cornellbrsn/",
+            "facebook": "https://www.facebook.com/CornellBRSN",
+            "twitter": "https://twitter.com/CornellBRSN",
+            "youtube": "https://www.youtube.com/channel/UCXl9QF-FaKPR3ldQ9zkG0jg/videos",
+            "spotify": "https://www.linkedin.com/company/bigredsportsnetwork/"
+         },
+         "websiteURL":"https://www.bigredsportsnetwork.org/",
       },
       {
          "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
@@ -25,6 +36,11 @@
          "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
          "name":"Cornell Claritas",
          "slug":"claritas",
+         "socialURLs":{ 
+            "insta":"https://www.instagram.com/cornellclaritas/",
+            "facebook":"https://www.facebook.com/CornellClaritas/",
+
+         },
          "websiteURL":"https://www.cornellclaritas.com/"
       },
       {
@@ -34,6 +50,10 @@
          "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
          "name":"Crème de Cornell",
          "slug":"creme",
+         "socialURLs":{ 
+            "insta":"https://www.instagram.com/cremedecornell/?hl=en",
+            "facebook":"https://www.facebook.com/CremedeCornell"
+         },
          "websiteURL":"https://www.cremedecornell.net/"
       },
       {
@@ -43,7 +63,12 @@
          "rssURL":"https://medium.com/feed/guac-magazine",
          "name":"Guac Magazine",
          "slug":"guac",
-         "websiteURL":"https://medium.com/guac-magazine" 
+         "socialURLs":{ 
+            "insta":"https://www.instagram.com/guacmag/?hl=en",
+            "facebook":"https://www.facebook.com/guacmag/",
+            "linkedin":"https://www.linkedin.com/company/guac-magazine/about/"
+         },
+         "websiteURL":"https://medium.com/guac-magazine"
       },
       {
          "bio":"Takes fresh from the sticky part of our rejected article pile.",
@@ -52,6 +77,11 @@
          "rssURL":"http://cunooz.com/feed/",
          "name":"CU Nooz",
          "slug":"nooz",
+         "socialURLs":{ 
+            "instaURL":"https://www.instagram.com/theadvocateatcornelluniversity/",
+            "facebook":"https://www.facebook.com/cunoozzz/",
+            "twitter":"https://twitter.com/cunooz?lang=en"
+         },
          "websiteURL":"http://cunooz.com/"
       },
       {
@@ -61,6 +91,10 @@
          "rssURL":"https://www.thecornellreview.org/feed/",
          "name":"The Cornell Review",
          "slug":"review",
+         "socialURLs":{ 
+            "facebook":"https://www.facebook.com/thecornellreview/",
+            "twitter": "https://twitter.com/cornellreview?lang=en"
+         },
          "websiteURL":"https://www.thecornellreview.org/"
       },
       {
@@ -70,6 +104,12 @@
          "rssURL":"https://www.slopemedia.org/all?format=rss",
          "name":"Slope Media",
          "slug":"slope",
+         "socialURLs":{ 
+            "insta":"https://www.instagram.com/slopemedia/",
+            "facebook":"https://www.facebook.com/slopemedia/",
+            "youtube": "https://www.youtube.com/user/SlopeMediaTV",
+            "spotify":"https://open.spotify.com/user/slopemedia?si=2_IbqlxtTP6O0fFkVp2GWA&nd=1"
+         },
          "websiteURL":"https://www.slopemedia.org/"
       },
       {
@@ -79,6 +119,10 @@
          "rssURL":"https://www.culsr.org/?format=rss",
          "name":"The Undergraduate Law and Society Review at Cornell",
          "slug":"ulsr",
+         "socialURLs":{ 
+            "facebook":"https://www.facebook.com/CULSReview",
+            "linkedin":"https://www.linkedin.com/company/cornellundergraduatelawandsocietyreview/"
+         },
          "websiteURL":"https://www.culsr.org/"
       }
    ]
