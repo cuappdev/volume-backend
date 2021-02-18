@@ -9,8 +9,8 @@ install:
 - npm install
 
 env:
-- APP_PORT=3000
-- MONGO_ADDRESS=mongodb://localhost:27017/volume
+- APP_PORT="3000"
+- MONGO_ADDRESS="mongodb://localhost:27017/volume"
 
 script:
 - npm test
