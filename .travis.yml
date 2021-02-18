@@ -15,5 +15,5 @@ before_script:
 - sleep 15
 
 script:
-- npm run start
+- npm start
 - wait-on http://localhost:3000
