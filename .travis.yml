@@ -9,7 +9,7 @@ install:
 - npm install
 
 env:
-- NODE_ENV=production
+- NODE_ENV=dev
 - APP_PORT=3000
 - MONGO_ADDRESS=mongodb://localhost:27017/volume
 
