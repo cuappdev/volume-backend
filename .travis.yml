@@ -12,9 +12,8 @@ env:
 - APP_PORT=3000
 
 before_script:
-- nohup npm run start &
 - sleep 15
-- mongo volume --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+- nohup npm run start &
 
 script:
 - npm run test
