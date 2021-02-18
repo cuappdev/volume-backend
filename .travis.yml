@@ -13,7 +13,6 @@ env:
 
 before_script:
 - sleep 15
-- npm run start
 
 script:
-- npm run test
+- npm run start
