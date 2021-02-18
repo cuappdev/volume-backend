@@ -11,9 +11,5 @@ install:
 env:
 - APP_PORT=3000
 
-before_script:
-- sleep 15
-
 script:
-- npm start
-- wait-on http://localhost:3000
+- npm test
