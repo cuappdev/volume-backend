@@ -12,8 +12,5 @@ env:
 - APP_PORT=3000
 - MONGO_ADDRESS=mongodb://localhost:27017/volume
 
-before_script:
-- sleep 15
-
 script:
 - npm test
