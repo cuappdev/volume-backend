@@ -56,11 +56,13 @@ const getPublicationByID = async (id: string): Promise<Publication> => {
 };
 
 const getPublicationsByIDs = async (ids: string[]): Promise<Publication[]> => {
-  return Promise.all(ids.map((id) => PublicationModel.findById(new ObjectId(id)))).then((publications) => {
-    // Filter out all null values that were returned by ObjectIds not associated
-    // with publications in database
-    return publications.filter((article) => article !== null);
-  });
+  return Promise.all(ids.map((id) => PublicationModel.findById(new ObjectId(id)))).then(
+    (publications) => {
+      // Filter out all null values that were returned by ObjectIds not associated
+      // with publications in database
+      return publications.filter((article) => article !== null);
+    },
+  );
 };
 
 const getPublicationBySlug = async (slug: string): Promise<Publication> => {
@@ -137,7 +139,7 @@ function getSocialURLsHelper(socialsList) {
  * @returns {SocialURLTuple[]}
  */
 const getSocialURLs = async (publication: Publication): Promise<SocialURLTuple[]> => {
-  const pubSlug = publication['_doc'].slug // eslint-disable-line
+  const pubSlug = publication['_doc'].slug; // eslint-disable-line
   // Reference publications json for social information
   const publicationsDB = publicationsJSON.publications;
   // Find publication in json associated with slug
