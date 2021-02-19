@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ secrets.DEV_SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_KEY }}
+          key: ${{ secrets.DEV_SERVER_KEY }}
           script: |
             cd docker-compose
             docker stack deploy -c docker-compose.yml the-stack
