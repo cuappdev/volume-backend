@@ -2,7 +2,7 @@ import { Arg, Resolver, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
-import { SocialURLTuple } from '../common/types'; // es-lint disable import/prefer-default-export
+import { SocialURLTuple } from '../common/types';
 
 @Resolver((_of) => Publication)
 class PublicationResolver {
@@ -14,6 +14,11 @@ class PublicationResolver {
   @Query((_returns) => Publication, { nullable: true })
   async getPublicationByID(@Arg('id') id: string) {
     return PublicationRepo.getPublicationByID(id);
+  }
+
+  @Query((_returns) => [Publication])
+  async getPublicationsByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
+    return PublicationRepo.getPublicationsByIDs(ids);
   }
 
   @FieldResolver((_returns) => Article, { nullable: true })

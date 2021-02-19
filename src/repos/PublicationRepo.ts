@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
-import { SocialURLTuple } from '../common/types'; // es-lint disable import/prefer-default-export
+import { SocialURLTuple } from '../common/types';
 import publicationsJSON from '../../publications.json';
 
 function getImageURLs(slug: string): [string, string] {
@@ -53,6 +53,14 @@ const addPublicationsToDB = async (): Promise<void> => {
 
 const getPublicationByID = async (id: string): Promise<Publication> => {
   return PublicationModel.findById(new ObjectId(id));
+};
+
+const getPublicationsByIDs = async (ids: string[]): Promise<Publication[]> => {
+  return Promise.all(ids.map((id) => PublicationModel.findById(new ObjectId(id)))).then((publications) => {
+    // Filter out all null values that were returned by ObjectIds not associated
+    // with publications in database
+    return publications.filter((article) => article !== null);
+  });
 };
 
 const getPublicationBySlug = async (slug: string): Promise<Publication> => {
@@ -145,6 +153,7 @@ export default {
   getNumArticles,
   getPublicationByID,
   getPublicationBySlug,
+  getPublicationsByIDs,
   getShoutouts,
   getSocialURLs,
 };
