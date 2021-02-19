@@ -60,17 +60,12 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  *
  * @function
  * @param {number} limit - number of articles to retrieve.
- * @param {string} since - retrieve articles after this date.
  */
 const getTrendingArticles = async (
-  since: string,
   limit = Constants.DEFAULT_LIMIT,
 ): Promise<Article[]> => {
-  const articlesSinceDate = await ArticleModel.find({
-    date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-  }).exec();
-
-  return articlesSinceDate.sort(compareTrendiness).slice(0, limit);
+  const articles = await ArticleModel.find({}).exec();
+  return articles.sort(compareTrendiness).slice(0, limit);
 };
 
 /**

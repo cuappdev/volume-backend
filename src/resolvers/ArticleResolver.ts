@@ -37,10 +37,9 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], { nullable: false })
   async getTrendingArticles(
-    @Arg('since') since: string,
     @Arg('limit', { defaultValue: Constants.DEFAULT_LIMIT }) limit: number,
   ) {
-    return ArticleRepo.getTrendingArticles(since, limit);
+    return ArticleRepo.getTrendingArticles(limit);
   }
 
   @FieldResolver((_returns) => Publication)
