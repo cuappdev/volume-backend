@@ -50,8 +50,8 @@ const getArticlesAfterDate = async (
  */
 export const compareTrendiness = (a1: Article, a2: Article) => {
   const presentDate = new Date().getTime();
-  const a1Score = (a1 != null) ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
-  const a2Score = (a2 != null) ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
+  const a1Score = a1 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
+  const a2Score = a2 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
   return a2Score - a1Score;
 };
 

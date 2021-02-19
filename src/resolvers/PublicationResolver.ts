@@ -2,6 +2,7 @@ import { Arg, Resolver, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
+import { SocialURLTuple } from '../common/types'; // es-lint disable import/prefer-default-export
 
 @Resolver((_of) => Publication)
 class PublicationResolver {
@@ -28,6 +29,11 @@ class PublicationResolver {
   @FieldResolver((_returns) => Number)
   async numArticles(@Root() publication: Publication): Promise<number> {
     return PublicationRepo.getNumArticles(publication);
+  }
+
+  @FieldResolver((_returns) => [SocialURLTuple])
+  async socialURLs(@Root() publication: Publication): Promise<SocialURLTuple[]> {
+    return PublicationRepo.getSocialURLs(publication);
   }
 }
 
