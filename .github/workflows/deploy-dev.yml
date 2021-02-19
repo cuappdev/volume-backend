@@ -2,9 +2,9 @@ name: Docker Build & Push and Deploy to volume-dev
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   path-context:
