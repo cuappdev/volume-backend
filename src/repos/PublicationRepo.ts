@@ -85,7 +85,7 @@ const getShoutouts = async (publication: Publication): Promise<number> => {
 };
 
 /**
- * Retrieves the number of articles in the database associated with this
+ * Retrieves the number of articles in the database associated with this 
  * publication.
  * @param {Publication} publication
  * @returns {Number}
