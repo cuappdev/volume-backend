@@ -28,7 +28,7 @@ const main = async () => {
   const app = Express();
 
   app.get('/', (req, res) => {
-    res.send('Welcome to volume-backend.');
+    res.sendFile('index.html', { root: __dirname });
   });
 
   server.applyMiddleware({ app });
