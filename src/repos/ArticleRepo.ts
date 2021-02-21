@@ -27,7 +27,7 @@ const getArticlesByPublication = async (publicationID: string): Promise<Article[
 
 const getArticlesAfterDate = async (
   since: string,
-  limit = Constants.DEFAULT_LIMIT,
+  limit = DEFAULT_LIMIT,
 ): Promise<Article[]> => {
   return (
     ArticleModel.find({
@@ -64,7 +64,7 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  */
 const getTrendingArticles = async (
   since: string,
-  limit = Constants.DEFAULT_LIMIT,
+  limit = DEFAULT_LIMIT,
 ): Promise<Article[]> => {
   const articlesSinceDate = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
