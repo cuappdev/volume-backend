@@ -2,7 +2,6 @@ version: "3.6"
 
 services:
   web:
-    container_name: "volume"
     build: 
       context: .
       dockerfile: Dockerfile
