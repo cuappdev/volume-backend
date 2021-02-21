@@ -10,7 +10,9 @@ const getArticleByID = async (id: string): Promise<Article> => {
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
-    return articles[0] != null ? articles : [];
+    // Filter out all null values that were returned by ObjectIds not associated
+    // with articles in database
+    return articles.filter((article) => article !== null);
   });
 };
 
@@ -23,7 +25,10 @@ const getArticlesByPublication = async (publicationID: string): Promise<Article[
   return ArticleModel.find({ publicationSlug: publication.slug });
 };
 
-const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
+const getArticlesAfterDate = async (
+  since: string,
+  limit = Constants.DEFAULT_LIMIT,
+): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date
@@ -40,11 +45,13 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  * Trendiness is computed by taking the number of total shoutouts an article
  * has received and dividing it by the number of days since its been published.
  *
+ * Sorts in order of most trendy to least trendy.
+ *
  */
 export const compareTrendiness = (a1: Article, a2: Article) => {
   const presentDate = new Date().getTime();
-  const a1Score = a1.shoutouts / (presentDate - a1.date.getTime());
-  const a2Score = a2.shoutouts / (presentDate - a2.date.getTime());
+  const a1Score = a1 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
+  const a2Score = a2 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
   return a2Score - a1Score;
 };
 
@@ -55,7 +62,10 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @param {number} limit - number of articles to retrieve.
  * @param {string} since - retrieve articles after this date.
  */
-const getTrendingArticles = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
+const getTrendingArticles = async (
+  since: string,
+  limit = Constants.DEFAULT_LIMIT,
+): Promise<Article[]> => {
   const articlesSinceDate = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   }).exec();

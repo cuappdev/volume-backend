@@ -10,7 +10,7 @@ class PublicationResolver {
     return PublicationRepo.getAllPublications();
   }
 
-  @Query((_returns) => Publication, { nullable: false })
+  @Query((_returns) => Publication, { nullable: true })
   async getPublicationByID(@Arg('id') id: string) {
     return PublicationRepo.getPublicationByID(id);
   }
