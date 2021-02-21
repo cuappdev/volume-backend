@@ -25,10 +25,7 @@ const getArticlesByPublication = async (publicationID: string): Promise<Article[
   return ArticleModel.find({ publicationSlug: publication.slug });
 };
 
-const getArticlesAfterDate = async (
-  since: string,
-  limit = DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date
@@ -62,10 +59,7 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @param {number} limit - number of articles to retrieve.
  * @param {string} since - retrieve articles after this date.
  */
-const getTrendingArticles = async (
-  since: string,
-  limit = DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getTrendingArticles = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articlesSinceDate = await ArticleModel.find({
     date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
   }).exec();
