@@ -25,10 +25,10 @@ jobs:
       - name: Docker Build & Push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/volume:${{ steps.vars.outputs.sha_short }}
+          tags: cornellappdev/volume:${{ steps.vars.outputs.sha_short }}
       - name: Remote SSH and Deploy
         uses: appleboy/ssh-action@master
         env:
@@ -38,6 +38,10 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.DEV_SERVER_KEY }}
           script: |
+            export IMAGE_TAG=${{ steps.vars.outputs.sha_short }}
             cd docker-compose
+            docker stack rm the-stack
+            sleep 20s
+            sudo systemctl stop nginx
+            sudo systemctl restart nginx
             docker stack deploy -c docker-compose.yml the-stack
-          envs: IMAGE_TAG
