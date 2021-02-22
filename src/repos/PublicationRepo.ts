@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
 import { IMAGE_ADDRESS } from '../common/constants';
+import { SocialURLTuple } from '../common/types';
 import publicationsJSON from '../../publications.json';
 
 function getImageURLs(slug: string): [string, string] {
@@ -42,6 +43,16 @@ const addPublicationsToDB = async (): Promise<void> => {
 
 const getPublicationByID = async (id: string): Promise<Publication> => {
   return PublicationModel.findById(new ObjectId(id));
+};
+
+const getPublicationsByIDs = async (ids: string[]): Promise<Publication[]> => {
+  return Promise.all(ids.map((id) => PublicationModel.findById(new ObjectId(id)))).then(
+    (publications) => {
+      // Filter out all null values that were returned by ObjectIds not associated
+      // with publications in database
+      return publications.filter((article) => article !== null);
+    },
+  );
 };
 
 const getPublicationBySlug = async (slug: string): Promise<Publication> => {
@@ -100,6 +111,32 @@ const getNumArticles = async (publication: Publication): Promise<number> => {
   return pubArticles.length;
 };
 
+/**
+ * Maps list of dictionaries containing social platform with URL information to
+ * list of SocialURLTuple types.
+ */
+function getSocialURLsHelper(socialsList) {
+  const socialsTupleList = socialsList.map(({ social, URL }) => {
+    return Object.assign(new SocialURLTuple(), { social, URL });
+  });
+  return socialsTupleList;
+}
+
+/**
+ * Retrieves informations about a publications social platforms.
+ * @param {Publication} publication
+ * @returns {SocialURLTuple[]}
+ */
+const getSocialURLs = async (publication: Publication): Promise<SocialURLTuple[]> => {
+  const pubSlug = publication['_doc'].slug; // eslint-disable-line
+  // Reference publications json for social information
+  const publicationsDB = publicationsJSON.publications;
+  // Find publication in json associated with slug
+  const pub = publicationsDB.filter((p) => p.slug === pubSlug)[0];
+  const socialsURLs = getSocialURLsHelper(pub.socialURLs);
+  return socialsURLs;
+};
+
 export default {
   addPublicationsToDB,
   getAllPublications,
@@ -107,5 +144,7 @@ export default {
   getNumArticles,
   getPublicationByID,
   getPublicationBySlug,
+  getPublicationsByIDs,
   getShoutouts,
+  getSocialURLs,
 };

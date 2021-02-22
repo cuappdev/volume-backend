@@ -23,8 +23,15 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getArticlesByPublication(@Arg('publicationID') publicationID: string) {
-    return ArticleRepo.getArticlesByPublication(publicationID);
+  async getArticlesByPublicationID(@Arg('publicationID') publicationID: string) {
+    return ArticleRepo.getArticlesByPublicationID(publicationID);
+  }
+
+  @Query((_returns) => [Article], { nullable: false })
+  async getArticlesByPublicationIDs(
+    @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
+  ) {
+    return ArticleRepo.getArticlesByPublicationIDs(publicationIDs);
   }
 
   @Query((_returns) => [Article], { nullable: false })
@@ -36,11 +43,8 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getTrendingArticles(
-    @Arg('since') since: string,
-    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-  ) {
-    return ArticleRepo.getTrendingArticles(since, limit);
+  async getTrendingArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
+    return ArticleRepo.getTrendingArticles(limit);
   }
 
   @FieldResolver((_returns) => Publication)

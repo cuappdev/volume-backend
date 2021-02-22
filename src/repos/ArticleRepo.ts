@@ -20,9 +20,19 @@ const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return ArticleModel.find({}).limit(limit);
 };
 
-const getArticlesByPublication = async (publicationID: string): Promise<Article[]> => {
+const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
   const publication = await PublicationModel.findById(new ObjectId(publicationID));
   return ArticleModel.find({ publicationSlug: publication.slug });
+};
+
+const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
+  const uniquePubIDs = [...new Set(publicationIDs)];
+  const articles = await Promise.all(
+    uniquePubIDs.map(async (pubID) => {
+      return getArticlesByPublicationID(pubID);
+    }),
+  );
+  return articles.flat();
 };
 
 const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
@@ -57,14 +67,10 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  *
  * @function
  * @param {number} limit - number of articles to retrieve.
- * @param {string} since - retrieve articles after this date.
  */
-const getTrendingArticles = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
-  const articlesSinceDate = await ArticleModel.find({
-    date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-  }).exec();
-
-  return articlesSinceDate.sort(compareTrendiness).slice(0, limit);
+const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
+  const articles = await ArticleModel.find({}).exec();
+  return articles.sort(compareTrendiness).slice(0, limit);
 };
 
 /**
@@ -98,7 +104,8 @@ export default {
   getArticleByID,
   getArticlesAfterDate,
   getArticlesByIDs,
-  getArticlesByPublication,
+  getArticlesByPublicationID,
+  getArticlesByPublicationIDs,
   getTrendingArticles,
   incrementShoutouts,
   refreshFeed,
