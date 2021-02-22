@@ -1,14 +1,12 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
+import { IMAGE_ADDRESS } from '../common/constants';
 import { SocialURLTuple } from '../common/types';
 import publicationsJSON from '../../publications.json';
 
 function getImageURLs(slug: string): [string, string] {
-  return [
-    `${process.env.IMAGE_ADDRESS}/${slug}/background.png`,
-    `${process.env.IMAGE_ADDRESS}/${slug}/profile.png`,
-  ];
+  return [`${IMAGE_ADDRESS}/${slug}/background.png`, `${IMAGE_ADDRESS}/${slug}/profile.png`];
 }
 
 /**
@@ -17,38 +15,30 @@ function getImageURLs(slug: string): [string, string] {
  * @returns {Publication []} An array of Publication objects.
  */
 const addPublicationsToDB = async (): Promise<void> => {
-  const publicationsDB = publicationsJSON.publications;
+  const pubDocUpdates = [];
 
-  const publications = [];
-  for (const publication of publicationsDB) {
+  for (const publication of publicationsJSON.publications) {
     const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = publication;
     const [backgroundImageURL, profileImageURL] = getImageURLs(slug);
-    publications.push(
-      Object.assign(new Publication(), {
-        _id: new ObjectId().toString(),
-        backgroundImageURL,
-        bio,
-        bioShort,
-        name,
-        profileImageURL,
-        rssName,
-        rssURL,
-        slug,
-        websiteURL,
-      }),
+    const pubDoc = Object.assign(new Publication(), {
+      backgroundImageURL,
+      bio,
+      bioShort,
+      name,
+      profileImageURL,
+      rssName,
+      rssURL,
+      slug,
+      websiteURL,
+    });
+
+    // Add or update the publication created from the JSON
+    pubDocUpdates.push(
+      PublicationModel.updateMany({ slug: { $eq: pubDoc.slug } }, pubDoc, { upsert: true }),
     );
   }
 
-  try {
-    // Attempt to insert publications while validating a duplicate isn't inserted
-    await PublicationModel.insertMany(publications, { ordered: false });
-  } catch (e) {
-    if (e.insertedDocs) {
-      console.log('Publications were refreshed');
-    } else {
-      console.log(e);
-    }
-  }
+  await Promise.all(pubDocUpdates);
 };
 
 const getPublicationByID = async (id: string): Promise<Publication> => {

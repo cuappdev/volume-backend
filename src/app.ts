@@ -18,19 +18,23 @@ const main = async () => {
   await dbConnection();
 
   //Prefill publication data
-  PublicationRepo.addPublicationsToDB();
+  await PublicationRepo.addPublicationsToDB();
 
-  const server = new ApolloServer({ schema, playground: true });
+  const server = new ApolloServer({
+    schema,
+    playground: true,
+    introspection: true,
+  });
   const app = Express();
+
+  app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: __dirname });
+  });
 
   server.applyMiddleware({ app });
 
-  ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
-    app.listen(port, () =>
-      process.env.NODE_ENV == 'production'
-        ? console.log('volume-backend ready at http://volume-backend.cornellappdev.com/graphql')
-        : console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
-    );
+  ((port = process.env.APP_PORT) => {
+    app.listen(port, () => console.log(`\n🔊 volume-backend running on port ${port}`));
   })();
 };
 
