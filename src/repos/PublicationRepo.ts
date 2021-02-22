@@ -125,7 +125,6 @@ const getNumArticles = async (publication: Publication): Promise<number> => {
  * Maps list of dictionaries containing social platform with URL information to
  * list of SocialURLTuple types.
  */
-
 function getSocialURLsHelper(socialsList) {
   const socialsTupleList = socialsList.map(({ social, URL }) => {
     return Object.assign(new SocialURLTuple(), { social, URL });

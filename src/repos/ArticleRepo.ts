@@ -20,9 +20,14 @@ const getAllArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[
   return ArticleModel.find({}).limit(limit);
 };
 
-const getArticlesByPublication = async (publicationID: string): Promise<Article[]> => {
+const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
   const publication = await PublicationModel.findById(new ObjectId(publicationID));
   return ArticleModel.find({ publicationSlug: publication.slug });
+};
+
+const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
+  const articles = await Promise.all(publicationIDs.map(async (pubID) => { return await getArticlesByPublicationID(pubID); }));
+  return articles.flat();
 };
 
 const getArticlesAfterDate = async (
@@ -99,7 +104,8 @@ export default {
   getArticleByID,
   getArticlesAfterDate,
   getArticlesByIDs,
-  getArticlesByPublication,
+  getArticlesByPublicationID,
+  getArticlesByPublicationIDs,
   getTrendingArticles,
   incrementShoutouts,
   refreshFeed,
