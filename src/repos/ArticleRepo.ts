@@ -35,10 +35,7 @@ const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Ar
   return articles.flat();
 };
 
-const getArticlesAfterDate = async (
-  since: string,
-  limit = DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date

@@ -43,9 +43,7 @@ class ArticleResolver {
   }
 
   @Query((_returns) => [Article], { nullable: false })
-  async getTrendingArticles(
-    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-  ) {
+  async getTrendingArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
     return ArticleRepo.getTrendingArticles(limit);
   }
 
