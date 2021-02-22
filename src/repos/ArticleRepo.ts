@@ -26,7 +26,12 @@ const getArticlesByPublicationID = async (publicationID: string): Promise<Articl
 };
 
 const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
-  const articles = await Promise.all(publicationIDs.map(async (pubID) => { return await getArticlesByPublicationID(pubID); }));
+  const uniquePubIDs = [...new Set(publicationIDs)];
+  const articles = await Promise.all(
+    uniquePubIDs.map(async (pubID) => {
+      return getArticlesByPublicationID(pubID);
+    }),
+  );
   return articles.flat();
 };
 
@@ -66,9 +71,7 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @function
  * @param {number} limit - number of articles to retrieve.
  */
-const getTrendingArticles = async (
-  limit = Constants.DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getTrendingArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
   const articles = await ArticleModel.find({}).exec();
   return articles.sort(compareTrendiness).slice(0, limit);
 };
