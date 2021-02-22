@@ -108,9 +108,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"pm.environment.set(\"article_3_pubid\", jsonData.data.getAllPublications[1].id);"
 								],
 								"type": "text/javascript"
 							}
@@ -122,7 +126,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getAllPublications {\n    getAllPublications {\n        backgroundImageURL\n        bio\n        bioShort\n        id\n        mostRecentArticle {\n            articleURL\n            date\n            id\n            imageURL\n            publication {\n                backgroundImageURL\n                bio\n                bioShort\n                id\n                mostRecentArticle {\n                    articleURL\n                    date\n                    id\n                    imageURL\n                    publicationSlug\n                    shoutouts\n                    title\n                    trendiness\n                }\n                name\n                numArticles\n                profileImageURL\n                rssName\n                rssURL\n                shoutouts\n                slug\n                websiteURL\n            }\n            publicationSlug\n            shoutouts\n            title\n            trendiness\n        }\n        name\n        numArticles\n        profileImageURL\n        rssName\n        rssURL\n        shoutouts\n        slug\n        websiteURL\n    }\n}",
+								"query": "query getAllPublications {\n    getAllPublications {\n        backgroundImageURL\n        bio\n        bioShort\n        id\n        mostRecentArticle {\n            articleURL\n            date\n            id\n            imageURL\n            publication {\n                backgroundImageURL\n                bio\n                bioShort\n                id\n                mostRecentArticle {\n                    articleURL\n                    date\n                    id\n                    imageURL\n                    publicationSlug\n                    shoutouts\n                    title\n                    trendiness\n                }\n                name\n                numArticles\n                profileImageURL\n                rssName\n                rssURL\n                shoutouts\n                slug\n                websiteURL\n            }\n            publicationSlug\n            shoutouts\n            title\n            trendiness\n        }\n        name\n        numArticles\n        profileImageURL\n        rssName\n        rssURL\n        shoutouts\n        slug\n        socialURLs {\n            social\n            URL\n        }\n        websiteURL\n    }\n}",
 								"variables": "{}"
 							}
 						},
@@ -255,7 +259,47 @@
 					"response": []
 				},
 				{
-					"name": "getArticlesByPublication",
+					"name": "getArticlesByIDs returns valid article",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Only article with valid article id is returned\", function () {",
+									"    pm.expect(jsonData.data.getArticlesByIDs.length).to.equal(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getArticlesByIDs ($ids: [String!]!) {\n    getArticlesByIDs (ids: $ids) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    \"{{article_1_pubid}}\",\n    \"{{article_2_id}}\"\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getArticlesByPublicationID",
 					"event": [
 						{
 							"listen": "test",
@@ -275,8 +319,42 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getArticlesByPublication ($publicationID: String!) {\n    getArticlesByPublication (publicationID: $publicationID) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
+								"query": "query getArticlesByPublicationID ($publicationID: String!) {\n    getArticlesByPublicationID (publicationID: $publicationID) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
 								"variables": "{\n  \"publicationID\": \"{{article_1_pubid}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getArticlesByPublicationIDs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getArticlesByPublicationIDs ($publicationIDs: [String!]!) {\n    getArticlesByPublicationIDs (publicationIDs: $publicationIDs) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
+								"variables": "{\n  \"publicationIDs\": \n  [\"{{article_1_pubid}}\",\n   \"{{article_3_pubid}}\"] \n}"
 							}
 						},
 						"url": {
@@ -309,8 +387,42 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getPublicationByID ($id: String!) {\n    getPublicationByID (id: $id) {\n        backgroundImageURL\n        bio\n        bioShort\n        id\n        mostRecentArticle {\n            articleURL\n            date\n            id\n            imageURL\n            publication {\n                backgroundImageURL\n                bio\n                bioShort\n                id\n                mostRecentArticle {\n                    articleURL\n                    date\n                    id\n                    imageURL\n                    publicationSlug\n                    shoutouts\n                    title\n                    trendiness\n                }\n                name\n                numArticles\n                profileImageURL\n                rssName\n                rssURL\n                shoutouts\n                slug\n                websiteURL\n            }\n            publicationSlug\n            shoutouts\n            title\n            trendiness\n        }\n        name\n        numArticles\n        profileImageURL\n        rssName\n        rssURL\n        shoutouts\n        slug\n        websiteURL\n    }\n}",
+								"query": "query getPublicationByID ($id: String!) {\n    getPublicationByID (id: $id) {\n        backgroundImageURL\n        bio\n        bioShort\n        id\n        mostRecentArticle {\n            articleURL\n            date\n            id\n            imageURL\n            publication {\n                backgroundImageURL\n                bio\n                bioShort\n                id\n                mostRecentArticle {\n                    articleURL\n                    date\n                    id\n                    imageURL\n                    publicationSlug\n                    shoutouts\n                    title\n                    trendiness\n                }\n                name\n                numArticles\n                profileImageURL\n                rssName\n                rssURL\n                shoutouts\n                slug\n                websiteURL\n            }\n            publicationSlug\n            shoutouts\n            title\n            trendiness\n        }\n        name\n        numArticles\n        profileImageURL\n        rssName\n        rssURL\n        shoutouts\n        slug\n        socialURLs {\n            social\n            URL\n        }\n        websiteURL\n    }\n}",
 								"variables": "{\n  \"id\": \"{{article_1_pubid}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPublicationsByIDs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query getPublicationsByIDs ($ids: [String!]!) {\n    getPublicationsByIDs (ids: $ids) {\n        backgroundImageURL\n        bio\n        bioShort\n        id\n        mostRecentArticle {\n            articleURL\n            date\n            id\n            imageURL\n            publication {\n                backgroundImageURL\n                bio\n                bioShort\n                id\n                mostRecentArticle {\n                    articleURL\n                    date\n                    id\n                    imageURL\n                    publicationSlug\n                    shoutouts\n                    title\n                    trendiness\n                }\n                name\n                numArticles\n                profileImageURL\n                rssName\n                rssURL\n                shoutouts\n                slug\n                websiteURL\n            }\n            publicationSlug\n            shoutouts\n            title\n            trendiness\n        }\n        name\n        numArticles\n        profileImageURL\n        rssName\n        rssURL\n        shoutouts\n        slug\n        socialURLs {\n            social\n            URL\n        }\n        websiteURL\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    \"{{article_1_pubid}}\",\n    \"{{article_2_pubid}}\"\n  ]\n}"
 							}
 						},
 						"url": {
@@ -343,8 +455,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query getTrendingArticles ($limit: Float, $since: String!) {\n    getTrendingArticles (limit: $limit, since: $since) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
-								"variables": "{\n  \"limit\": {{limit}},\n  \"since\": \"{{since}}\"\n}"
+								"query": "query getTrendingArticles ($limit: Float) {\n    getTrendingArticles (limit: $limit) {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
+								"variables": "{\n  \"limit\": {{limit}}\n}"
 							}
 						},
 						"url": {
