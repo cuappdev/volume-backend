@@ -29,6 +29,10 @@ export class Article {
   @Field()
   @Property()
   title: string;
+
+  @Field()
+  @Property({ default: false })
+  nsfw: boolean;
 }
 
 export const ArticleModel = getModelForClass(Article);

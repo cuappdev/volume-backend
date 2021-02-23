@@ -1,3 +1,4 @@
+import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import Constants from '../common/constants';
@@ -102,7 +103,18 @@ const incrementShoutouts = async (id: string): Promise<Article> => {
   return article.save();
 };
 
+/**
+ * Checks if an article's title contains profanity.
+ * @function
+ * @param {string} title - article title.
+ */
+const checkProfanity = async (title: string): Promise<boolean> => {
+  const filter = new Filter();
+  return filter.isProfane(title);
+};
+
 export default {
+  checkProfanity,
   getAllArticles,
   getArticleByID,
   getArticlesAfterDate,
