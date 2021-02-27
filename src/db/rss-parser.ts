@@ -41,7 +41,6 @@ const getRecentArticles = async (): Promise<Article[]> => {
             imageURL: parseImage(
               article['content:encoded'] ? article['content:encoded'] : article.content,
             ),
-            publication: nameToPubMap[publication.title] ? nameToPubMap[publication.title] : null,
             publicationSlug: nameToSlugMap[publication.title] || 'none',
             title: article.title,
           }),
