@@ -1,7 +1,8 @@
 import 'reflect-metadata';
-
+import cron from 'node-cron';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
+import ArticleRepo from './repos/ArticleRepo';
 import Express from 'express';
 import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
@@ -24,6 +25,14 @@ const main = async () => {
   const app = Express();
 
   server.applyMiddleware({ app });
+
+  async function setupArticleRefreshCron() {
+    // Refresh articles every 5 minutes (testing purposes - will be 12 hours later)
+    cron.schedule('* * * * *', async () => {
+      ArticleRepo.refreshFeed();
+    });
+  }
+  setupArticleRefreshCron();
 
   ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
     app.listen(port, () =>

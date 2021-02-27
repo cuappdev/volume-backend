@@ -78,9 +78,9 @@ class ArticleResolver {
     @Arg('articleURL') articleURL: string,
     @Arg('pubDate') pubDate: string,
     @Arg('pub') pub: string,
-    @Arg('content') content: string
+    @Arg('content') content: string,
   ) {
-    return await ArticleRepo.createArticle(title, articleURL, pubDate, pub, content);
+    return ArticleRepo.createArticle(title, articleURL, pubDate, pub, content);
   }
 
   @Mutation((_returns) => Article)
