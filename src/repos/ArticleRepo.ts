@@ -1,5 +1,4 @@
 import Filter from 'bad-words';
-import cheerio from 'cheerio';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import Constants from '../common/constants';
@@ -93,12 +92,6 @@ const refreshFeed = async (): Promise<Article[]> => {
   return articles;
 };
 
-const parseImage = function parseImage(content) {
-  const $ = cheerio.load(content);
-  const img = $('img').attr('src');
-  return img || '';
-};
-
 /**
  * Creates a new article object and inserts it into database.
  */
@@ -110,11 +103,11 @@ const createArticle = async (
   content: string,
 ): Promise<Article> => {
   const articleObject = Object.assign(new Article(), {
-    articleURL: articleURL,
+    articleURL,
     date: new Date(pubDate),
-    imageURL: parseImage(content),
+    imageURL: content,
     publicationSlug: pub,
-    title: title,
+    title,
   });
   const articleDoc = await ArticleModel.insertMany(articleObject, { ordered: false });
   return articleDoc;

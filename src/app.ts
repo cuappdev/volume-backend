@@ -34,7 +34,6 @@ const main = async () => {
   // }
   // setupArticleRefreshCron();
 
-
   ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
     app.listen(port, () =>
       process.env.NODE_ENV == 'production'
