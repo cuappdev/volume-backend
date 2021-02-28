@@ -1,8 +1,8 @@
 import 'reflect-metadata';
-// import cron from 'node-cron';
+import cron from 'node-cron';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
-// import ArticleRepo from './repos/ArticleRepo';
+import ArticleRepo from './repos/ArticleRepo';
 import Express from 'express';
 import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
@@ -19,27 +19,31 @@ const main = async () => {
   await dbConnection();
 
   //Prefill publication data
-  PublicationRepo.addPublicationsToDB();
+  await PublicationRepo.addPublicationsToDB();
 
-  const server = new ApolloServer({ schema, playground: true });
+  const server = new ApolloServer({
+    schema,
+    playground: true,
+    introspection: true,
+  });
   const app = Express();
+
+  app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: __dirname });
+  });
 
   server.applyMiddleware({ app });
 
-  // async function setupArticleRefreshCron() {
-  //   // Refresh articles every minute (testing purposes - will be 12 hours later)
-  //   cron.schedule('* * * * *', async () => {
-  //     ArticleRepo.refreshFeed();
-  //   });
-  // }
-  // setupArticleRefreshCron();
+  async function setupArticleRefreshCron() {
+    // Refresh articles every minute (testing purposes - will be 12 hours later)
+    cron.schedule('* * * * *', async () => {
+      ArticleRepo.refreshFeed();
+    });
+  }
+  setupArticleRefreshCron();
 
-  ((port = process.env.APP_PORT, addr = process.env.SERVER_ADDRESS) => {
-    app.listen(port, () =>
-      process.env.NODE_ENV == 'production'
-        ? console.log('volume-backend ready at http://volume-backend.cornellappdev.com/graphql')
-        : console.log(`volume-backend ready and listening at ${addr}:${port}${server.graphqlPath}`),
-    );
+  ((port = process.env.APP_PORT) => {
+    app.listen(port, () => console.log(`\n🔊 volume-backend running on port ${port}`));
   })();
 };
 

@@ -45,10 +45,3 @@ We recommend using [`direnv`](https://direnv.net/). To set up, run the following
 ## Configuration(optional)
 
 We recommend using ESLint and Prettier for linting/formatting. If you are using VSCode, they can be downloaded directly through the Extensions panel. Run ESLint on the codebase with `npm run lint` and Prettier with  `npm run format`.
-
-
-### Tools
-
-We also have a collection of tools in the `utils` folder.
-
-These include `createDummyData.ts` which populates the MongoDB table with some dummy data to run queries on and `rss-feed.ts` which combines the feeds from the publications listed in `publications.json`. Both scripts can be run with `ts-node <file>.ts`. 
