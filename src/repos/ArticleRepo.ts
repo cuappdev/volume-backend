@@ -109,16 +109,15 @@ const createArticle = async (
   pub: string,
   content: string,
 ): Promise<Article> => {
-  const article = Object.assign(new Article(), {
-    articleURL,
+  const articleObject = Object.assign(new Article(), {
+    articleURL: articleURL,
     date: new Date(pubDate),
     imageURL: parseImage(content),
     publicationSlug: pub,
-    title,
+    title: title,
   });
-  console.log(article);
-  const dbArticle = await ArticleModel.insertMany(article, { ordered: false });
-  return dbArticle;
+  const articleDoc = await ArticleModel.insertMany(articleObject, { ordered: false });
+  return articleDoc;
 };
 
 /**

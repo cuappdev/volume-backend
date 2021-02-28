@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
-import { SocialURLTuple } from '../common/types';
+import { Social } from '../common/types';
 import publicationsJSON from '../../publications.json';
 
 function getImageURLs(slug: string): [string, string] {
@@ -127,7 +127,7 @@ const getNumArticles = async (publication: Publication): Promise<number> => {
  */
 function getSocialURLsHelper(socialsList) {
   const socialsTupleList = socialsList.map(({ social, URL }) => {
-    return Object.assign(new SocialURLTuple(), { social, URL });
+    return Object.assign(new Social(), { social, URL });
   });
   return socialsTupleList;
 }
@@ -135,9 +135,9 @@ function getSocialURLsHelper(socialsList) {
 /**
  * Retrieves informations about a publications social platforms.
  * @param {Publication} publication
- * @returns {SocialURLTuple[]}
+ * @returns {Social[]}
  */
-const getSocialURLs = async (publication: Publication): Promise<SocialURLTuple[]> => {
+const getSocialURLs = async (publication: Publication): Promise<Social[]> => {
   const pubSlug = publication['_doc'].slug; // eslint-disable-line
   // Reference publications json for social information
   const publicationsDB = publicationsJSON.publications;

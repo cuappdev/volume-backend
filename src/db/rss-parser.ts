@@ -48,7 +48,6 @@ const getRecentArticles = async (): Promise<Article[]> => {
       )
       .flat(),
   );
-
   return articlePromises;
 };
 
