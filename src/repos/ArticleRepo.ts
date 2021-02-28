@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
-import Constants from '../common/constants';
+import { DEFAULT_LIMIT } from '../common/constants';
 import getRecentArticles from '../db/rss-parser';
 import { PublicationModel } from '../entities/Publication';
 
@@ -16,7 +16,7 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-const getAllArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
+const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return ArticleModel.find({}).limit(limit);
 };
 
@@ -35,10 +35,7 @@ const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Ar
   return articles.flat();
 };
 
-const getArticlesAfterDate = async (
-  since: string,
-  limit = Constants.DEFAULT_LIMIT,
-): Promise<Article[]> => {
+const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
       // Get all articles after or on the desired date
@@ -71,7 +68,7 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @function
  * @param {number} limit - number of articles to retrieve.
  */
-const getTrendingArticles = async (limit = Constants.DEFAULT_LIMIT): Promise<Article[]> => {
+const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articles = await ArticleModel.find({}).exec();
   return articles.sort(compareTrendiness).slice(0, limit);
 };
