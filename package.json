@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "dev": "nodemon src/app.ts",
-    "newman": "node_modules/.bin/newman run tests/volume.postman_collection.json -e tests/volume.postman_environment.json",
+    "newman": "node_modules/.bin/newman run tests/Volume\\ Testing.postman_collection.json",
     "test": "npm start & wait-on http://localhost:$APP_PORT && npm run newman && kill $(lsof -t -i:$APP_PORT)",
     "lint": "eslint src/**/*.ts --fix",
     "check-format": "prettier --check \"src/**/*.ts\"",
