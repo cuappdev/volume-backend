@@ -54,7 +54,6 @@ class ArticleResolver {
 
   @FieldResolver((_returns) => Number)
   async trendiness(@Root() article: Article): Promise<number> {
-    console.log(article);
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
