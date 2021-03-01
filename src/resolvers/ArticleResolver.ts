@@ -54,15 +54,16 @@ class ArticleResolver {
 
   @FieldResolver((_returns) => Number)
   async trendiness(@Root() article: Article): Promise<number> {
+    console.log(article);
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
     return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
   }
 
-  @FieldResolver((_returns) => Number)
+  @FieldResolver((_returns) => Boolean)
   async nsfw(@Root() article: Article): Promise<boolean> {
-    return ArticleRepo.checkProfanity(article['doc'].title); //eslint-disable-line
+    return ArticleRepo.checkProfanity(article['_doc'].title); //eslint-disable-line
   }
 
   @Mutation((_returns) => [Article])
