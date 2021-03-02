@@ -35,8 +35,8 @@ const main = async () => {
   server.applyMiddleware({ app });
 
   async function setupArticleRefreshCron() {
-    // Refresh articles every minute (testing purposes - will be 12 hours later)
-    cron.schedule('* * * * *', async () => {
+    // Refresh articles every 12 hours
+    cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshFeed();
     });
   }

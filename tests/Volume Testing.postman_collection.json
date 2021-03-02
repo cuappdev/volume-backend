@@ -513,27 +513,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "createArticle",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation createArticle ($articleURL: String!, $content: String!, $pub: String!, $pubDate: String!, $title: String!) {\n    createArticle (articleURL: $articleURL, content: $content, pub: $pub, pubDate: $pubDate, title: $title) {\n        articleURL\n        date\n        id\n        imageURL\n        nsfw\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                nsfw\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    socials {\n                        social\n                        URL\n                    }\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n    }\n}",
-								"variables": "{\n  \"title\": {{title}},\n  \"articleURL\":{{articleURL}},\n  \"pubDate\":{{pubDate}}, \n  \"pub\":{{pub}},\n  \"content\":{{content}}\n}"
-							}
-						},
-						"url": {
-							"raw": "{{url}}",
-							"host": [
-								"{{url}}"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		}

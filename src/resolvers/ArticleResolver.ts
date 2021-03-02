@@ -70,16 +70,16 @@ class ArticleResolver {
     return ArticleRepo.refreshFeed();
   }
 
-  @Mutation((_returns) => Article)
-  async createArticle(
-    @Arg('title') title: string,
-    @Arg('articleURL') articleURL: string,
-    @Arg('pubDate') pubDate: string,
-    @Arg('pub') pub: string,
-    @Arg('content') content: string,
-  ) {
-    return ArticleRepo.createArticle(title, articleURL, pubDate, pub, content);
-  }
+  // @Mutation((_returns) => Article)
+  // async createArticle(
+  //   @Arg('title') title: string,
+  //   @Arg('articleURL') articleURL: string,
+  //   @Arg('pubDate') pubDate: string,
+  //   @Arg('pub') pub: string,
+  //   @Arg('content') content: string,
+  // ) {
+  //   return ArticleRepo.createArticle(title, articleURL, pubDate, pub, content);
+  // }
 
   @Mutation((_returns) => Article)
   async incrementShoutouts(@Arg('id') id: string) {
