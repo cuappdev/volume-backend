@@ -198,7 +198,7 @@
       {
          "bio":"Publication for the Cornell Hotel Administration Community.",
          "bioShort":"Publication for the Cornell Hotel Administration Community.",
-         "rssName":"The 180",
+         "rssName":"The 180 Blog - The 180",
          "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
          "name":"The 180 at Cornell",
          "slug":"180",
@@ -219,20 +219,9 @@
          "websiteURL":"https://www.the180print.org/"
       },
       {
-         "bio":"Resolved -----",
-         "bioShort":"Resolved ----",
-         "rssName":"Resolved",
-         "rssURL":"https://www.ilr.cornell.edu/blog/14/feed",
-         "name":"Resolved",
-         "slug":"reso",
-         "socialURLs":[
-         ],
-         "websiteURL":"https://www.ilr.cornell.edu/scheinman-institute/blog/student-activities"
-      },
-      {
          "bio":"We are a community of Cornell students who love creating.",
          "bioShort":"We are a community of Cornell students who love creating.",
-         "rssName":"Cornell Creatives",
+         "rssName":"Cornell Creatives Newsletter",
          "rssURL":"https://cornell.substack.com/feed",
          "name":"Cornell Creatives Blog",
          "slug":"creat",
@@ -255,7 +244,7 @@
       {
          "bio":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
          "bioShort":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
-         "rssName":"Cornell Lunatic",
+         "rssName":"The Cornell Lunatic",
          "rssURL":"http://cornelllunatic.com/?feed=rss2",
          "name":"Cornell Lunatic",
          "slug":"lunatic",
@@ -276,9 +265,9 @@
          "websiteURL":"http://cornelllunatic.com/"
       },
       {
-         "bio":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
-         "bioShort":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
-         "rssName":"Cornell Business Review",
+         "bio":"<placeholder>",
+         "bioShort":"<placeholder>",
+         "rssName":"CBRnow - Cornell Business Review",
          "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
          "name":"Cornell Business Review",
          "slug":"cbr",
