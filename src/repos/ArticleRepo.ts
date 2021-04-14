@@ -1,4 +1,5 @@
 import Filter from 'bad-words';
+import moment from 'moment';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import { DEFAULT_LIMIT } from '../common/constants';
@@ -56,12 +57,12 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  * Sorts in order of most trendy to least trendy.
  *
  */
-export const compareTrendiness = (a1: Article, a2: Article) => {
-  const presentDate = new Date().getTime();
-  const a1Score = a1 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
-  const a2Score = a2 != null ? a2.shoutouts / (presentDate - a2.date.getTime()) : 0;
-  return a2Score - a1Score;
-};
+// export const compareTrendiness = (a1: Article, a2: Article) => {
+//   const presentDate = new Date().getTime();
+//   const a1Score = a1 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
+//   const a2Score = a2 != null ? a2.shoutouts / (presentDate - a2.date.getTime()) : 0;
+//   return a2Score - a1Score;
+// };
 
 /**
  * Computes and returns the trending articles in the database.
@@ -70,8 +71,24 @@ export const compareTrendiness = (a1: Article, a2: Article) => {
  * @param {number} limit - number of articles to retrieve.
  */
 const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
-  const articles = await ArticleModel.find({}).exec();
-  return articles.sort(compareTrendiness).slice(0, limit);
+  const articles = await ArticleModel.find({ isTrending: true }).exec();
+  return articles.slice(0, limit);
+};
+
+/**
+ * Refreshes trending articles.
+ */
+const refreshTrendingArticles = async (): Promise<Article[]> => {
+  const articles = await ArticleModel.aggregate()
+    // Get a sample of random articles
+    .sample(100)
+    // Get articles after 30 days ago
+    .match({ date: { $gte: moment().subtract(30, 'days') } });
+
+  // set isTrending to true 
+  articles.map((a) => { a.isTrending = true });
+  console.log(articles);
+  return articles;
 };
 
 /**
@@ -112,7 +129,6 @@ const checkProfanity = async (title: string): Promise<boolean> => {
 
 export default {
   checkProfanity,
-  // createArticle,
   getAllArticles,
   getArticleByID,
   getArticlesAfterDate,
@@ -122,4 +138,5 @@ export default {
   getTrendingArticles,
   incrementShoutouts,
   refreshFeed,
+  refreshTrendingArticles
 };

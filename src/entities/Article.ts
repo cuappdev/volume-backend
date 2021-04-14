@@ -33,6 +33,10 @@ export class Article {
   @Field()
   @Property({ default: false })
   nsfw: boolean;
+
+  @Field()
+  @Property({ default: false })
+  isTrending: boolean;
 }
 
 export const ArticleModel = getModelForClass(Article);

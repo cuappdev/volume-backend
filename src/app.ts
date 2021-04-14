@@ -40,7 +40,16 @@ const main = async () => {
       ArticleRepo.refreshFeed();
     });
   }
+
+  async function setupTrendingArticleRefreshCron() {
+    // Refresh trending articles every day(0 1 * * *)(1 minute for testing)
+    cron.schedule('* * * * *', async () => {
+      ArticleRepo.refreshTrendingArticles();
+    });
+  }
+
   setupArticleRefreshCron();
+  setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {
     app.listen(port, () => console.log(`\n🔊 volume-backend running on port ${port}`));
