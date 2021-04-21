@@ -89,27 +89,6 @@ const refreshFeed = async (): Promise<Article[]> => {
   return articles;
 };
 
-// /**
-//  * Creates a new article object and inserts it into database.
-//  */
-// const createArticle = async (
-//   title: string,
-//   articleURL: string,
-//   pubDate: string,
-//   pub: string,
-//   content: string,
-// ): Promise<Article> => {
-//   const articleObject = Object.assign(new Article(), {
-//     articleURL,
-//     date: new Date(pubDate),
-//     imageURL: content,
-//     publicationSlug: pub,
-//     title,
-//   });
-//   const articleDoc = await ArticleModel.insertMany(articleObject, { ordered: false });
-//   return articleDoc;
-// };
-
 /**
  * Increments number of shoutouts on an article and publication by one.
  * @function

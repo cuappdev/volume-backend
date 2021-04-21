@@ -72,7 +72,7 @@
       {
          "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
          "bioShort":"Recipes, stories, and articles from group of passionate food enthusiasts",
-         "rssName":"Blog - CRÈME de cornell",
+         "rssName":"Blog - Crème De Cornell",
          "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
          "name":"Crème de Cornell",
          "slug":"creme",
@@ -194,6 +194,48 @@
             }
          ],
          "websiteURL":"https://www.culsr.org/"
+      },
+      {
+         "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
+         "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
+         "rssName":"Cornell Data Journal",
+         "rssURL":"https://cdj-git-add-rss-ashpil.vercel.app/rss.xml",
+         "name":"Cornell Data Journal",
+         "slug":"cdj",
+         "socialURLs":[
+            {
+               "social":"twitter",
+               "URL":"https://cornelldatajourn.al/socials/twitter.svg"
+            },
+            {
+               "social":"linkedin",
+               "URL":"https://www.linkedin.com/company/cornell-data-journal/"
+            },
+            {
+               "social":"facebook",
+               "URL":"https://www.facebook.com/cornelldatajournal/"
+            },
+            {
+               "social":"insta",
+               "URL":"https://www.instagram.com/cornelldatajournal/"
+            }
+         ],
+         "websiteURL":"https://cornelldatajourn.al/"
+      },
+      {
+         "bio":"A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
+         "bioShort":"Cornell Business Review is the premier business publication at Cornell University.",
+         "rssName":"CBRnow - Cornell Business Review",
+         "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
+         "name":"Cornell Business Review",
+         "slug":"cbr",
+         "socialURLs":[
+            {
+               "social":"linkedin",
+               "URL":"https://www.linkedin.com/company/cornell-business-review/"
+            }
+         ],
+         "websiteURL":"http://www.thecornellbusinessreview.com/cbr-now"
       }
    ]
 }
