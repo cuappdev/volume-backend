@@ -72,7 +72,7 @@
       {
          "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
          "bioShort":"Recipes, stories, and articles from group of passionate food enthusiasts",
-         "rssName":"Blog - CRÈME de cornell",
+         "rssName":"Blog - Crème De Cornell",
          "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
          "name":"Crème de Cornell",
          "slug":"creme",
@@ -244,18 +244,6 @@
             }
          ],
          "websiteURL":"https://cornelldatajourn.al/"
-      },
-      {
-
-         "bio":"The Scheinman Conflict Resolution Club (SCRC) connects undergraduates, graduate students, alumni, faculty, and current practioners to learn more about the world of alternative dispute resolution.  Partnering with the Scheinman Institute, SCRC collaborates with world-renowned neutrals to teach students about mediation, arbitration, negotiations, and other forms of conflict resolution.",
-         "bioShort":"Exploring alternative dispute resolution through student-led research.",
-         "rssName":"Scheinman Institute Blog",
-         "rssURL":"https://www.ilr.cornell.edu/blog/14/feed",
-         "name":"Resolved",
-         "slug":"reso",
-         "socialURLs":[
-         ],
-         "websiteURL":"https://www.ilr.cornell.edu/scheinman-institute/blog/student-activities"
-         }
+      }
    ]
 }
