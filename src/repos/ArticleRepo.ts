@@ -66,11 +66,11 @@ const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> =>
 const refreshTrendingArticles = async (): Promise<Article[]> => {
   // Set previous trending articles to not trending
   const oldTrendingArticles = await ArticleModel.find({ isTrending: true }).exec();
-  oldTrendingArticles.forEach(async a => {
+  oldTrendingArticles.forEach(async (a) => {
     try {
-      const article = await ArticleModel.findById(new ObjectId(a._id));
+      const article = await ArticleModel.findById(new ObjectId(a._id)); //eslint-disable-line
       article.isTrending = false;
-      await article.save()
+      await article.save();
     } catch (err) {
       console.log(err);
     }
@@ -84,11 +84,11 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
     .match({ date: { $gte: moment().subtract(30, 'days').toDate() } });
 
   // Set isTrending to true
-  articles.forEach(async a => {
+  articles.forEach(async (a) => {
     try {
-      const article = await ArticleModel.findById(new ObjectId(a._id));
+      const article = await ArticleModel.findById(new ObjectId(a._id)); //eslint-disable-line
       article.isTrending = true;
-      await article.save()
+      await article.save();
     } catch (err) {
       console.log(err);
     }
