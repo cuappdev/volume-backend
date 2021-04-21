@@ -49,21 +49,6 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
   );
 };
 
-/** A function to compare the trendiness of articles.
- *
- * Trendiness is computed by taking the number of total shoutouts an article
- * has received and dividing it by the number of days since its been published.
- *
- * Sorts in order of most trendy to least trendy.
- *
- */
-// export const compareTrendiness = (a1: Article, a2: Article) => {
-//   const presentDate = new Date().getTime();
-//   const a1Score = a1 != null ? a1.shoutouts / (presentDate - a1.date.getTime()) : 0;
-//   const a2Score = a2 != null ? a2.shoutouts / (presentDate - a2.date.getTime()) : 0;
-//   return a2Score - a1Score;
-// };
-
 /**
  * Computes and returns the trending articles in the database.
  *
@@ -79,15 +64,36 @@ const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> =>
  * Refreshes trending articles.
  */
 const refreshTrendingArticles = async (): Promise<Article[]> => {
+  // Set previous trending articles to not trending
+  const oldTrendingArticles = await ArticleModel.find({ isTrending: true }).exec();
+  oldTrendingArticles.forEach(async a => {
+    try {
+      const article = await ArticleModel.findById(new ObjectId(a._id));
+      article.isTrending = false;
+      await article.save()
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  // Get new trending articles
   const articles = await ArticleModel.aggregate()
     // Get a sample of random articles
     .sample(100)
     // Get articles after 30 days ago
-    .match({ date: { $gte: moment().subtract(30, 'days') } });
+    .match({ date: { $gte: moment().subtract(30, 'days').toDate() } });
 
-  // set isTrending to true 
-  articles.map((a) => { a.isTrending = true });
-  console.log(articles);
+  // Set isTrending to true
+  articles.forEach(async a => {
+    try {
+      const article = await ArticleModel.findById(new ObjectId(a._id));
+      article.isTrending = true;
+      await article.save()
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
   return articles;
 };
 
@@ -138,5 +144,5 @@ export default {
   getTrendingArticles,
   incrementShoutouts,
   refreshFeed,
-  refreshTrendingArticles
+  refreshTrendingArticles,
 };
