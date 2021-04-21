@@ -196,8 +196,8 @@
          "websiteURL":"https://www.culsr.org/"
       },
       {
-         "bio":"Publication for the Cornell Hotel Administration Community.",
-         "bioShort":"Publication for the Cornell Hotel Administration Community.",
+         "bio":"The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
+         "bioShort":"The 180 is a publication by Hotelies for Hotelies.",
          "rssName":"The 180 Blog - The 180",
          "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
          "name":"The 180 at Cornell",
@@ -219,69 +219,8 @@
          "websiteURL":"https://www.the180print.org/"
       },
       {
-         "bio":"We are a community of Cornell students who love creating.",
-         "bioShort":"We are a community of Cornell students who love creating.",
-         "rssName":"Cornell Creatives Newsletter",
-         "rssURL":"https://cornell.substack.com/feed",
-         "name":"Cornell Creatives Blog",
-         "slug":"creat",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cornellcreatives/"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/cornellcreatives/"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/30581251/"
-            }
-         ],
-         "websiteURL":"https://cornellcreatives.com/"
-      },
-      {
-         "bio":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
-         "bioShort":"A silly, not altogether normal dream about two state senators from Missouri and a jar of spicy dijon mustard.",
-         "rssName":"The Cornell Lunatic",
-         "rssURL":"http://cornelllunatic.com/?feed=rss2",
-         "name":"Cornell Lunatic",
-         "slug":"lunatic",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"http://instagram.com/thecornelllunatic"
-            },
-            {
-               "social":"twitter",
-               "URL":"https://twitter.com/cornelllunatic"
-            },
-            {
-               "social":"facebook",
-               "URL":"http://facebook.com/thecornelllunatic"
-            }
-         ],
-         "websiteURL":"http://cornelllunatic.com/"
-      },
-      {
-         "bio":"<placeholder>",
-         "bioShort":"<placeholder>",
-         "rssName":"CBRnow - Cornell Business Review",
-         "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
-         "name":"Cornell Business Review",
-         "slug":"cbr",
-         "socialURLs":[
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornell-business-review/"
-            }
-         ],
-         "websiteURL":"http://www.thecornellbusinessreview.com/cbr-now"
-      },
-      {
          "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
-         "bioShort":"offering data-driven perspectives on current events, academics, politics, and beyond.",
+         "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
          "rssName":"Cornell Data Journal",
          "rssURL":"https://cdj-git-add-rss-ashpil.vercel.app/rss.xml",
          "name":"Cornell Data Journal",
@@ -305,6 +244,18 @@
             }
          ],
          "websiteURL":"https://cornelldatajourn.al/"
-      }
+      },
+      {
+
+         "bio":"The Scheinman Conflict Resolution Club (SCRC) connects undergraduates, graduate students, alumni, faculty, and current practioners to learn more about the world of alternative dispute resolution.  Partnering with the Scheinman Institute, SCRC collaborates with world-renowned neutrals to teach students about mediation, arbitration, negotiations, and other forms of conflict resolution.",
+         "bioShort":"Exploring alternative dispute resolution through student-led research.",
+         "rssName":"Scheinman Institute Blog",
+         "rssURL":"https://www.ilr.cornell.edu/blog/14/feed",
+         "name":"Resolved",
+         "slug":"reso",
+         "socialURLs":[
+         ],
+         "websiteURL":"https://www.ilr.cornell.edu/scheinman-institute/blog/student-activities"
+         }
    ]
 }
