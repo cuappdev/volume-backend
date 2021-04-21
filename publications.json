@@ -196,29 +196,6 @@
          "websiteURL":"https://www.culsr.org/"
       },
       {
-         "bio":"The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
-         "bioShort":"The 180 is a publication by Hotelies for Hotelies.",
-         "rssName":"The 180 Blog - The 180",
-         "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
-         "name":"The 180 at Cornell",
-         "slug":"180",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/the_180_cornell/?hl=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/Cornell.the180/"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornell-the180/"
-            }
-         ],
-         "websiteURL":"https://www.the180print.org/"
-      },
-      {
          "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
          "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
          "rssName":"Cornell Data Journal",
