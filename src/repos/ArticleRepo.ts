@@ -76,7 +76,13 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
     // Get a sample of random articles
     .sample(100)
     // Get articles after 30 days ago
-    .match({ date: { $gte: new Date(new Date().setDate(new Date().getDate() - MAX_NUM_DAYS_OF_TRENDING_ARTICLES)) } });
+    .match({
+      date: {
+        $gte: new Date(
+          new Date().setDate(new Date().getDate() - MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
+        ),
+      },
+    });
 
   articles.forEach(async (a) => {
     const article = await ArticleModel.findById(new ObjectId(a._id)); // eslint-disable-line
