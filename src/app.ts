@@ -42,8 +42,8 @@ const main = async () => {
   }
 
   async function setupTrendingArticleRefreshCron() {
-    // Refresh trending articles every day(0 1 * * *)(1 minute for testing)
-    cron.schedule('* * * * *', async () => {
+    // Refresh trending articles 12 hours
+    cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
     });
   }
