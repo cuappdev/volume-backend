@@ -32,7 +32,6 @@
     "express": "^4.17.1",
     "graphql": "^15.5.0",
     "mockdate": "^3.0.2",
-    "moment": "^2.29.1",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.9",
     "newman": "^5.2.2",
