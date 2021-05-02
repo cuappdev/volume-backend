@@ -4,7 +4,6 @@ import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import Express from 'express';
-import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
 import { buildSchema } from 'type-graphql';
 import { dbConnection } from './db/DBConnection';
@@ -17,9 +16,6 @@ const main = async () => {
   });
 
   await dbConnection();
-
-  //Prefill publication data
-  await PublicationRepo.addPublicationsToDB();
 
   const server = new ApolloServer({
     schema,
@@ -34,13 +30,6 @@ const main = async () => {
 
   server.applyMiddleware({ app });
 
-  async function setupArticleRefreshCron() {
-    // Refresh articles every 12 hours
-    cron.schedule('0 */12 * * *', async () => {
-      ArticleRepo.refreshFeed();
-    });
-  }
-
   async function setupTrendingArticleRefreshCron() {
     // Refresh trending articles 12 hours
     cron.schedule('0 */12 * * *', async () => {
@@ -48,7 +37,6 @@ const main = async () => {
     });
   }
 
-  setupArticleRefreshCron();
   setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {

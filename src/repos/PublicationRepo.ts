@@ -2,44 +2,7 @@ import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
 import { Social } from '../common/types';
-import { IMAGE_ADDRESS } from '../common/constants';
 import publicationsJSON from '../../publications.json';
-
-function getImageURLs(slug: string): [string, string] {
-  return [`${IMAGE_ADDRESS}/${slug}/background.png`, `${IMAGE_ADDRESS}/${slug}/profile.png`];
-}
-
-/**
- * Reads publication info from static JSON and stores info in database.
- * @function
- * @returns {Publication []} An array of Publication objects.
- */
-const addPublicationsToDB = async (): Promise<void> => {
-  const pubDocUpdates = [];
-
-  for (const publication of publicationsJSON.publications) {
-    const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = publication;
-    const [backgroundImageURL, profileImageURL] = getImageURLs(slug);
-    const pubDoc = Object.assign(new Publication(), {
-      backgroundImageURL,
-      bio,
-      bioShort,
-      name,
-      profileImageURL,
-      rssName,
-      rssURL,
-      slug,
-      websiteURL,
-    });
-
-    // Add or update the publication created from the JSON
-    pubDocUpdates.push(
-      PublicationModel.updateMany({ slug: { $eq: pubDoc.slug } }, pubDoc, { upsert: true }),
-    );
-  }
-
-  await Promise.all(pubDocUpdates);
-};
 
 const getPublicationByID = async (id: string): Promise<Publication> => {
   return PublicationModel.findById(new ObjectId(id));
@@ -138,7 +101,6 @@ const getSocialURLs = async (publication: Publication): Promise<Social[]> => {
 };
 
 export default {
-  addPublicationsToDB,
   getAllPublications,
   getMostRecentArticle,
   getNumArticles,

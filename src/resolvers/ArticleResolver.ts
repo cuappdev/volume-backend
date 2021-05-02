@@ -65,11 +65,6 @@ class ArticleResolver {
     return ArticleRepo.checkProfanity(article['_doc'].title); //eslint-disable-line
   }
 
-  @Mutation((_returns) => [Article])
-  async refresh() {
-    return ArticleRepo.refreshFeed();
-  }
-
   @Mutation((_returns) => Article)
   async incrementShoutouts(@Arg('id') id: string) {
     return ArticleRepo.incrementShoutouts(id);
