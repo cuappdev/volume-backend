@@ -9,42 +9,6 @@
 			"name": "setup",
 			"item": [
 				{
-					"name": "refresh",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"postman.setNextRequest(\"getAllArticles\");"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "mutation refresh {\n    refresh {\n        articleURL\n        date\n        id\n        imageURL\n        publication {\n            backgroundImageURL\n            bio\n            bioShort\n            id\n            mostRecentArticle {\n                articleURL\n                date\n                id\n                imageURL\n                publication {\n                    backgroundImageURL\n                    bio\n                    bioShort\n                    id\n                    name\n                    numArticles\n                    profileImageURL\n                    rssName\n                    rssURL\n                    shoutouts\n                    slug\n                    websiteURL\n                }\n                publicationSlug\n                shoutouts\n                title\n                trendiness\n            }\n            name\n            numArticles\n            profileImageURL\n            rssName\n            rssURL\n            shoutouts\n            slug\n            websiteURL\n        }\n        publicationSlug\n        shoutouts\n        title\n        trendiness\n        nsfw\n    }\n}",
-								"variables": "{}"
-							}
-						},
-						"url": {
-							"raw": "{{url}}",
-							"host": [
-								"{{url}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "getAllArticles",
 					"event": [
 						{

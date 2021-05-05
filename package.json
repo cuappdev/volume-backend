@@ -37,7 +37,6 @@
     "newman": "^5.2.2",
     "node-cron": "^2.0.3",
     "reflect-metadata": "^0.1.13",
-    "rss-parser": "^3.9.0",
     "type-graphql": "^1.1.1",
     "wait-on": "^5.2.1"
   },

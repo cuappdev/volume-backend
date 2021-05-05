@@ -22,8 +22,8 @@ class PublicationResolver {
   }
 
   @FieldResolver((_returns) => Article, { nullable: true })
-  async mostRecentArticle(@Root() publication: Publication): Promise<Article> {
-    return PublicationRepo.getMostRecentArticle(publication);
+  async mostRecentArticle(@Root() id: string): Promise<Article> {
+    return PublicationRepo.getMostRecentArticle(id);
   }
 
   @FieldResolver((_returns) => Number)

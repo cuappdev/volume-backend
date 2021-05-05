@@ -1,25 +1,18 @@
-import { ObjectId } from 'mongodb';
 import { Publication, PublicationModel } from '../entities/Publication';
 import { Article, ArticleModel } from '../entities/Article';
 import { Social } from '../common/types';
 import publicationsJSON from '../../publications.json';
 
 const getPublicationByID = async (id: string): Promise<Publication> => {
-  return PublicationModel.findById(new ObjectId(id));
+  return PublicationModel.findById(id);
 };
 
 const getPublicationsByIDs = async (ids: string[]): Promise<Publication[]> => {
-  return Promise.all(ids.map((id) => PublicationModel.findById(new ObjectId(id)))).then(
-    (publications) => {
-      // Filter out all null values that were returned by ObjectIds not associated
-      // with publications in database
-      return publications.filter((article) => article !== null);
-    },
-  );
-};
-
-const getPublicationBySlug = async (slug: string): Promise<Publication> => {
-  return PublicationModel.findOne({ slug });
+  return Promise.all(ids.map((id) => PublicationModel.findById(id))).then((publications) => {
+    // Filter out all null values that were returned by ids not associated
+    // with publications in database
+    return publications.filter((article) => article !== null);
+  });
 };
 
 const getAllPublications = async (): Promise<Publication[]> => {
@@ -32,11 +25,11 @@ const getAllPublications = async (): Promise<Publication[]> => {
  * @param {Publication} publication
  * @returns {Article}
  */
-const getMostRecentArticle = async (publication: Publication): Promise<Article> => {
+const getMostRecentArticle = async (id: string): Promise<Article> => {
   // Due to the way Mongo interprets 'publication' object,
   // publication['_doc'] must be used to access fields of a publication object
   return ArticleModel.findOne({
-    publicationSlug: publication['_doc'].slug, // eslint-disable-line
+    publicationID: id, // eslint-disable-line
   }).sort({ date: 'desc' });
 };
 
@@ -105,7 +98,6 @@ export default {
   getMostRecentArticle,
   getNumArticles,
   getPublicationByID,
-  getPublicationBySlug,
   getPublicationsByIDs,
   getShoutouts,
   getSocialURLs,

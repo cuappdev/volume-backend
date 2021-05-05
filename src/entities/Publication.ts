@@ -35,10 +35,6 @@ export class Publication {
   rssURL: string;
 
   @Field()
-  @Property({ unique: true })
-  slug: string;
-
-  @Field()
   @Property({ default: 0 })
   shoutouts?: number;
 

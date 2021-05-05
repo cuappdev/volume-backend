@@ -49,7 +49,7 @@ class ArticleResolver {
 
   @FieldResolver((_returns) => Publication)
   async publication(@Root() article: Article): Promise<Publication> {
-    return PublicationRepo.getPublicationBySlug(article['_doc'].publicationSlug); // eslint-disable-line
+    return PublicationRepo.getPublicationByID(article['_doc'].publicationID); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Number)
