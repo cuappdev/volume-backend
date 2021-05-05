@@ -1,7 +1,8 @@
 import 'reflect-metadata';
-
+import cron from 'node-cron';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
+import ArticleRepo from './repos/ArticleRepo';
 import Express from 'express';
 import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
@@ -32,6 +33,23 @@ const main = async () => {
   });
 
   server.applyMiddleware({ app });
+
+  async function setupArticleRefreshCron() {
+    // Refresh articles every 12 hours
+    cron.schedule('0 */12 * * *', async () => {
+      ArticleRepo.refreshFeed();
+    });
+  }
+
+  async function setupTrendingArticleRefreshCron() {
+    // Refresh trending articles 12 hours
+    cron.schedule('0 */12 * * *', async () => {
+      ArticleRepo.refreshTrendingArticles();
+    });
+  }
+
+  setupArticleRefreshCron();
+  setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {
     app.listen(port, () => console.log(`\n🔊 volume-backend running on port ${port}`));

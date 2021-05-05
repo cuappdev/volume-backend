@@ -60,6 +60,11 @@ class ArticleResolver {
     return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
   }
 
+  @FieldResolver((_returns) => Boolean)
+  async nsfw(@Root() article: Article): Promise<boolean> {
+    return ArticleRepo.checkProfanity(article['_doc'].title); //eslint-disable-line
+  }
+
   @Mutation((_returns) => [Article])
   async refresh() {
     return ArticleRepo.refreshFeed();

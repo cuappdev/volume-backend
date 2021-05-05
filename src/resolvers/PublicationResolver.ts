@@ -2,7 +2,7 @@ import { Arg, Resolver, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
-import { SocialURLTuple } from '../common/types';
+import { Social } from '../common/types';
 
 @Resolver((_of) => Publication)
 class PublicationResolver {
@@ -36,8 +36,8 @@ class PublicationResolver {
     return PublicationRepo.getNumArticles(publication);
   }
 
-  @FieldResolver((_returns) => [SocialURLTuple])
-  async socialURLs(@Root() publication: Publication): Promise<SocialURLTuple[]> {
+  @FieldResolver((_returns) => [Social])
+  async socials(@Root() publication: Publication): Promise<Social[]> {
     return PublicationRepo.getSocialURLs(publication);
   }
 }
