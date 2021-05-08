@@ -13,6 +13,10 @@ export class User {
   @Field()
   @Property()
   followedPublications: [string];
+
+  @Field()
+  @Property()
+  notification: string; // Android, IOS, etc...
 }
 
 export const UserModel = getModelForClass(User);
