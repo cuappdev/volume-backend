@@ -8,7 +8,7 @@ class UserResolver {
   async createUser(
     @Arg('id') id: string,
     @Arg('deviceToken') deviceToken: string,
-    @Arg('followedPublications', (type) => [String]) followedPublications: string[]
+    @Arg('followedPublications', (type) => [String]) followedPublications: string[],
   ) {
     return UserRepo.createUser(id, deviceToken, followedPublications);
   }
