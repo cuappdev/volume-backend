@@ -3,6 +3,8 @@ name: Docker Build & Push and Deploy to volume-backend
 on:
   push:
     branches: [release]
+  pull_request:
+    branches: [release]
 
 jobs:
   path-context:
