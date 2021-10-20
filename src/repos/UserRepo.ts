@@ -2,24 +2,25 @@ import { ObjectId } from 'mongodb';
 import { User, UserModel } from '../entities/User';
 
 /**
- * Create new user.
+ * Create new pseudo suser.
  */
 const createUser = async (
-  id: string,
   deviceToken: string,
   followedPublications: string[],
-  notification,
+  notification: string,
 ): Promise<User> => {
+  // generate a uuid
+  const uuid = '';
   const newUser = Object.assign(new User(), {
-    id,
+    uuid,
     deviceToken,
     followedPublications,
     notification,
   });
 
   // Add or update the user in the database
-  // make sure that this 1. updates device_token if it changes, 2. updates following publication if it changes(check definition of upsert)
-  const user = await UserModel.updateMany({ id: { $eq: newUser.id } }, newUser, {
+  // make sure that this 1. updates device_token if it changes, 2. updates following publication if it changes
+  const user = await UserModel.updateMany({ uuid: { $eq: newUser.uuid } }, newUser, {
     upsert: true,
   }).exec();
 

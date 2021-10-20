@@ -4,7 +4,7 @@ import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 @ObjectType({ description: 'The User Model' })
 export class User {
   @Field(() => ID)
-  id: string;
+  uuid: string;
 
   @Field()
   @Property()
@@ -16,7 +16,7 @@ export class User {
 
   @Field()
   @Property()
-  notification: string; // Android, IOS, etc...
+  notification: string; // ANDROID, IOS
 }
 
 export const UserModel = getModelForClass(User);
