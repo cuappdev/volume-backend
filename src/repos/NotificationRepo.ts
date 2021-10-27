@@ -1,9 +1,14 @@
 import apn from 'apn';
 import * as admin from 'firebase-admin';
+import { User } from '../entities/User';
+import { Publication } from '../entities/Publication';
+import { Article } from '../entities/Article';
 import UserRepo from './UserRepo';
 import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
-import { ANDROID, IOS } from '../common/constants';
+import { IOS } from '../common/constants';
+
+// WARNING: TODO CLEAN UP DOCUMENTATION
 
 /**
  * Send IOS push notification when a publications that a user follows posts a new article.
@@ -12,29 +17,26 @@ import { ANDROID, IOS } from '../common/constants';
  * @param publicationSlug
  */
 const sendIOSNotification = async (
-  uuid: string,
-  articleID: string,
-  publicationSlug: string,
+  user: User,
+  article: Article,
+  publication: Publication,
 ): Promise<void> => {
+  console.log('Sending IOS Notification...');
   // Get device token of user
-  const user = await UserRepo.getUserByUUID(uuid);
   const { deviceToken } = user;
 
-  // Get information about article and publication
-  const article = await ArticleRepo.getArticleByID(articleID);
-  const publication = await PublicationRepo.getPublicationBySlug(publicationSlug);
-
-  // Setup notification information
+  // Setup IOS Admin
+  console.log('IOS Setting up Admin...');
   const options = {
     token: {
       key: process.env.APNS_AUTH_KEY_PATH,
       keyId: process.env.APNS_KEY_ID,
       teamId: process.env.APNS_TEAM_ID,
     },
-    production: false,
+    production: false, // send to dev server for testing
   };
-
   const apnProvider = new apn.Provider(options);
+  console.log('IOS Admin set up...');
 
   const note = new apn.Notification({
     alert: {
@@ -46,14 +48,16 @@ const sendIOSNotification = async (
   note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
   note.badge = 3;
   note.sound = 'ping.aiff';
-  note.payload = { messageFrom: 'John Appleseed' };
+  note.payload = { messageFrom: 'Tedi Mitiku' };
   note.topic = process.env.APNS_BUNDLE_ID;
 
+  console.log('IOS About to send payload');
   // Send notification to APN servers
   apnProvider.send(note, deviceToken).then((result) => {
     console.log(result.sent);
     console.log(result.failed);
   });
+  console.log('IOS Payload sent');
 };
 
 /**
@@ -63,23 +67,13 @@ const sendIOSNotification = async (
  * @param publicationSlug
  */
 const sendAndroidNotification = async (
-  uuid: string,
-  articleID: string,
-  publicationSlug: string,
+  user: User,
+  article: Article,
+  publication: Publication,
 ): Promise<void> => {
   // Get device token of user
-  const user = await UserRepo.getUserByUUID(uuid);
+  console.log('Sending Android Notification...');
   const { deviceToken } = user;
-
-  // Get information about article and publication
-  const article = await ArticleRepo.getArticleByID(articleID);
-  const publication = await PublicationRepo.getPublicationBySlug(publicationSlug);
-
-  // Setup notification information
-  admin.initializeApp({
-    credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
-    databaseURL: 'https://sample-project-e1a84.firebaseio.com',
-  });
 
   const message = {
     notification: {
@@ -93,6 +87,7 @@ const sendAndroidNotification = async (
     timeToLive: 60 * 60 * 24,
   };
 
+  console.log('ANDROID About to send payload');
   // Send notification to FCM servers
   admin
     .messaging()
@@ -103,6 +98,7 @@ const sendAndroidNotification = async (
     .catch((error) => {
       console.log(error);
     });
+  console.log('ANDROID Payload sent');
 };
 
 /**
@@ -112,12 +108,21 @@ const notify = async (articleIDs: string[]): Promise<void> => {
   // Send notifications to everyone following the publication associated with this article
   articleIDs.forEach(async (a) => {
     const article = await ArticleRepo.getArticleByID(a); // eslint-disable-line
+    const publication = await PublicationRepo.getPublicationBySlug(article.publicationSlug); // eslint-disable-line
+    console.log('Article to nofity:');
+    console.log(article);
+    console.log('Publication who made article:');
+    console.log(publication);
     const followers = await UserRepo.getUsersFollowingPublication(article.publicationSlug);
+    console.log('Followers of publication:');
     followers.forEach(async (follower) => {
-      if (follower.notification === ANDROID)
-        sendIOSNotification(follower.uuid, article.id, article.publicationSlug);
-      if (follower.notification === IOS)
-        sendAndroidNotification(follower.uuid, article.id, article.publicationSlug);
+      console.log(follower);
+      // if (follower.notification === ANDROID) {
+      //   sendAndroidNotification(follower, article, publication);
+      // }
+      if (follower.notification === IOS) {
+        sendIOSNotification(follower, article, publication);
+      }
     });
   });
 };
