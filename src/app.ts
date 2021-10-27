@@ -7,11 +7,12 @@ import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
+import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [ArticleResolver, PublicationResolver],
+    resolvers: [ArticleResolver, PublicationResolver, UserResolver],
     emitSchemaFile: true,
     validate: false,
   });

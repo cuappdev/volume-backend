@@ -7,10 +7,23 @@ class UserResolver {
   @Mutation((_returns) => User)
   async createUser(
     @Arg('deviceToken') deviceToken: string,
-    @Arg('followedPublications', (type) => [String]) followedPublications: string[],
+    @Arg('followedPublications', (type) => [String]) followedPublicationsIDs: string[],
     @Arg('notification') notification: string,
   ) {
-    return UserRepo.createUser(deviceToken, followedPublications, notification);
+    const user = await UserRepo.createUser(deviceToken, followedPublicationsIDs, notification);
+    return user;
+  }
+
+  @Mutation((_returns) => User)
+  async followPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
+    const user = await UserRepo.followPublication(uuid, pubID);
+    return user;
+  }
+
+  @Mutation((_returns) => User)
+  async unfollowPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
+    const user = await UserRepo.unfollowPublication(uuid, pubID);
+    return user;
   }
 }
 
