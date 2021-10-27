@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User, UserModel } from '../entities/User';
+import PublicationRepo from './PublicationRepo';
 import { PublicationID } from '../common/types';
 
 /**
@@ -57,10 +58,11 @@ const getUserByUUID = async (uuid: string): Promise<User> => {
 /**
  * Return all users who follow a publication.
  */
-const getUsersFollowingPublication = async (pubID: PublicationID): Promise<User[]> => {
+const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> => {
+  const publication = await PublicationRepo.getPublicationBySlug(pubSlug);
   const users = await UserModel.find(); // linear scan on DB, inefficient
   users.filter((u) => {
-    u.followedPublications.map((id) => id.id).includes(pubID.id);
+    u.followedPublications.map((id) => id.id).includes(publication.id);
   });
   return users;
 };

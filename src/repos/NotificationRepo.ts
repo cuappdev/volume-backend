@@ -3,25 +3,26 @@ import * as admin from 'firebase-admin';
 import UserRepo from './UserRepo';
 import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
+import { ANDROID, IOS } from '../common/constants';
 
 /**
  * Send IOS push notification when a publications that a user follows posts a new article.
  * @param userID
  * @param articleID
- * @param publicationID
+ * @param publicationSlug
  */
 const sendIOSNotification = async (
-  userID: string,
+  uuid: string,
   articleID: string,
-  publicationID: string,
+  publicationSlug: string,
 ): Promise<void> => {
   // Get device token of user
-  const user = await UserRepo.getUserByID(userID);
+  const user = await UserRepo.getUserByUUID(uuid);
   const { deviceToken } = user;
 
   // Get information about article and publication
   const article = await ArticleRepo.getArticleByID(articleID);
-  const publication = await PublicationRepo.getPublicationByID(publicationID);
+  const publication = await PublicationRepo.getPublicationBySlug(publicationSlug);
 
   // Setup notification information
   const options = {
@@ -57,22 +58,22 @@ const sendIOSNotification = async (
 
 /**
  * Send Android push notification when a publications that a user follows posts a new article.
- * @param userID
+ * @param uuid
  * @param articleID
- * @param publicationID
+ * @param publicationSlug
  */
 const sendAndroidNotification = async (
-  userID: string,
+  uuid: string,
   articleID: string,
-  publicationID: string,
+  publicationSlug: string,
 ): Promise<void> => {
   // Get device token of user
-  const user = await UserRepo.getUserByID(userID);
+  const user = await UserRepo.getUserByUUID(uuid);
   const { deviceToken } = user;
 
   // Get information about article and publication
   const article = await ArticleRepo.getArticleByID(articleID);
-  const publication = await PublicationRepo.getPublicationByID(publicationID);
+  const publication = await PublicationRepo.getPublicationBySlug(publicationSlug);
 
   // Setup notification information
   admin.initializeApp({
@@ -104,7 +105,25 @@ const sendAndroidNotification = async (
     });
 };
 
+/**
+ * Send notifications for new articles have been posted by publications.
+ */
+const notify = async (articleIDs: string[]): Promise<void> => {
+  // Send notifications to everyone following the publication associated with this article
+  articleIDs.forEach(async (a) => {
+    const article = await ArticleRepo.getArticleByID(a); // eslint-disable-line
+    const followers = await UserRepo.getUsersFollowingPublication(article.publicationSlug);
+    followers.forEach(async (follower) => {
+      if (follower.notification === ANDROID)
+        sendIOSNotification(follower.uuid, article.id, article.publicationSlug);
+      if (follower.notification === IOS)
+        sendAndroidNotification(follower.uuid, article.id, article.publicationSlug);
+    });
+  });
+};
+
 export default {
   sendIOSNotification,
   sendAndroidNotification,
+  notify,
 };

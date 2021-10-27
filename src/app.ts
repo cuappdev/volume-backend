@@ -7,6 +7,7 @@ import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import PublicationRepo from './repos/PublicationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
+import NotificationRepo from './repos/NotificationRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
@@ -29,8 +30,15 @@ const main = async () => {
   });
   const app = Express();
 
+  app.use(Express.json());
   app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
+  });
+
+  app.post('/collect', (req, res) => {
+    const { articleIDs } = req.body;
+    console.log(articleIDs);
+    NotificationRepo.notify(articleIDs);
   });
 
   server.applyMiddleware({ app });
