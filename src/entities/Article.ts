@@ -20,9 +20,13 @@ export class Article {
   @Property()
   imageURL: string;
 
-  @Field((type) => Publication, { nullable: true })
+  @Field((type) => Publication)
   @Property({ type: () => Publication })
   publication: Publication;
+
+  @Field()
+  @Property()
+  publicationSlug: string;
 
   @Field()
   @Property({ default: 0 })

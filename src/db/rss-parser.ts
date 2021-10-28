@@ -36,6 +36,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
               rssURL: publicationsDB[i].rssURL,
               websiteURL: publicationsDB[i].websiteURL,
             }),
+            publicationSlug: publicationsDB[i].slug,
             title: article.title,
           }),
         ),
