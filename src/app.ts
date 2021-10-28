@@ -18,7 +18,7 @@ const main = async () => {
 
   await dbConnection();
 
-  //Prefill publication data
+  // Prefill publication data
   await PublicationRepo.addPublicationsToDB();
 
   const server = new ApolloServer({

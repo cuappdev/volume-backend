@@ -1,37 +1,23 @@
 import Parser from 'rss-parser';
 import cheerio from 'cheerio';
 import { Article } from '../entities/Article';
-import { PublicationModel } from '../entities/Publication';
+import { Publication } from '../entities/Publication';
 import PublicationRepo from '../repos/PublicationRepo';
 
 const getRecentArticles = async (): Promise<Article[]> => {
   const parser = new Parser();
 
-  const nameToSlugMap = {};
   const publicationsDB = await PublicationRepo.getAllPublications();
+  const parsedPublications = publicationsDB.map((pub) => parser.parseURL(pub.rssURL));
 
-  const articleSources = [];
-  for (const publication of publicationsDB) {
-    const pubDoc = await PublicationModel.findOne({ rssName: publication.rssName }); // eslint-disable-line no-await-in-loop
-    nameToSlugMap[publication.rssName] = pubDoc.slug;
-    articleSources.push(publication.rssURL);
-  }
-
-  await Promise.all(articleSources);
-
-  const parsedPublications = articleSources.map((articles) => {
-    return parser.parseURL(articles);
-  });
-
-  const parseImage = function parseImage(content) {
+  const parseImage = function sparseImage(content) {
     const $ = cheerio.load(content);
     const img = $('img').attr('src');
     return img || '';
   };
-
-  const articlePromises = Promise.all(parsedPublications).then((publications) =>
-    publications
-      .map((publication) =>
+  const articlePromises = Promise.all(parsedPublications).then((publications) => {
+    return publications
+      .map((publication, i) =>
         publication.items.map((article) =>
           Object.assign(new Article(), {
             articleURL: article.link,
@@ -39,13 +25,24 @@ const getRecentArticles = async (): Promise<Article[]> => {
             imageURL: parseImage(
               article['content:encoded'] ? article['content:encoded'] : article.content,
             ),
-            publicationSlug: nameToSlugMap[publication.title] || 'none',
+            publication: Object.assign(new Publication(), {
+              slug: publicationsDB[i].slug,
+              backgroundImageURL: publicationsDB[i].backgroundImageURL,
+              bio: publicationsDB[i].bio,
+              bioShort: publicationsDB[i].bioShort,
+              name: publicationsDB[i].name,
+              profileImageURL: publicationsDB[i].profileImageURL,
+              rssName: publicationsDB[i].rssName,
+              rssURL: publicationsDB[i].rssURL,
+              websiteURL: publicationsDB[i].websiteURL,
+            }),
             title: article.title,
           }),
         ),
       )
-      .flat(),
-  );
+      .flat();
+  });
+
   return articlePromises;
 };
 

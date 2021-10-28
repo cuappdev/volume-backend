@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+// import * as mongoose from 'mongoose';
+import { Publication } from './Publication';
 
 @ObjectType({ description: 'The Article Model' })
 export class Article {
@@ -18,9 +20,9 @@ export class Article {
   @Property()
   imageURL: string;
 
-  @Field()
-  @Property()
-  publicationSlug: string;
+  @Field((type) => Publication, { nullable: true })
+  @Property({ type: () => Publication })
+  publication: Publication;
 
   @Field()
   @Property({ default: 0 })
