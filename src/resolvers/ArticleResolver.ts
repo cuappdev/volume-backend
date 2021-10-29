@@ -48,7 +48,7 @@ class ArticleResolver {
     return ArticleRepo.getTrendingArticles(limit);
   }
 
- /* @FieldResolver((_returns) => Publication)
+  /* @FieldResolver((_returns) => Publication)
   async publication(@Root() article: Article): Promise<Publication> {
     return Object.assign(new Publication(),article['_doc'].publication); // eslint-disable-line
   } */
