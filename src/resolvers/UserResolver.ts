@@ -8,9 +8,9 @@ class UserResolver {
   async createUser(
     @Arg('deviceToken') deviceToken: string,
     @Arg('followedPublications', (type) => [String]) followedPublicationsIDs: string[],
-    @Arg('notification') notification: string,
+    @Arg('deviceType') deviceType: string,
   ) {
-    const user = await UserRepo.createUser(deviceToken, followedPublicationsIDs, notification);
+    const user = await UserRepo.createUser(deviceToken, followedPublicationsIDs, deviceType);
     return user;
   }
 

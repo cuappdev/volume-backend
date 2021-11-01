@@ -37,10 +37,6 @@ export class Article {
   @Field()
   @Property({ default: false })
   isTrending: boolean;
-
-  @Field()
-  @Property({ default: false })
-  notificationSent: boolean;
 }
 
 export const ArticleModel = getModelForClass(Article);
