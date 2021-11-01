@@ -6,7 +6,7 @@ import { Article } from '../entities/Article';
 import UserRepo from './UserRepo';
 import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
-import { IOS } from '../common/constants';
+import { ANDROID, IOS } from '../common/constants';
 
 // WARNING: TODO CLEAN UP DOCUMENTATION
 
@@ -94,6 +94,7 @@ const sendAndroidNotification = async (
     .sendToDevice(deviceToken, message, options)
     .then((response) => {
       console.log(response);
+      console.log(response.results[0].error);
     })
     .catch((error) => {
       console.log(error);
@@ -117,10 +118,10 @@ const notify = async (articleIDs: string[]): Promise<void> => {
     console.log('Followers of publication:');
     followers.forEach(async (follower) => {
       console.log(follower);
-      // if (follower.notification === ANDROID) {
-      //   sendAndroidNotification(follower, article, publication);
-      // }
-      if (follower.notification === IOS) {
+      if (follower.deviceType === ANDROID) {
+        sendAndroidNotification(follower, article, publication);
+      }
+      if (follower.deviceType === IOS) {
         sendIOSNotification(follower, article, publication);
       }
     });

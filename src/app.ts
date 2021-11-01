@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import cron from 'node-cron';
+import admin from 'firebase-admin';
 import Express from 'express';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
@@ -49,19 +50,20 @@ const main = async () => {
   // export const apnProvider = new apn.Provider(options);
   // console.log('IOS Admin set up...');
   // Setup Android Admin
-  // console.log('ANDROID Setting up Admin...');
-  // console.log(process.env.FCM_AUTH_KEY_PATH);
-  // admin.initializeApp({
-  //   credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH.replace(/\\n/g, '\n')),
-  //   databaseURL: 'https://sample-project-e1a84.firebaseio.com',
-  // });
-  // console.log('ANDROID Admin set up...');
+  console.log('ANDROID Setting up Admin...');
+  console.log(process.env.FCM_AUTH_KEY_PATH);
+  admin.initializeApp({
+    credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
+    databaseURL: 'https://sample-project-e1a84.firebaseio.com',
+  });
+  console.log('ANDROID Admin set up...');
 
   app.post('/collect', (req, res) => {
     const { articleIDs } = req.body;
     console.log(articleIDs);
     console.log('Sending Notifications:');
     NotificationRepo.notify(articleIDs);
+    res.json({ success: 'true' });
   });
 
   server.applyMiddleware({ app });
