@@ -10,7 +10,7 @@ import { PublicationID } from '../common/types';
 const createUser = async (
   deviceToken: string,
   followedPublicationsIDs: string[],
-  notification: string,
+  deviceType: string,
 ): Promise<User> => {
   // create PublicationID obejcts from string of followed publications
   const followedPublications = followedPublicationsIDs.map((id) => {
@@ -22,7 +22,7 @@ const createUser = async (
     uuid,
     deviceToken,
     followedPublications,
-    notification,
+    deviceType,
   });
 
   return UserModel.create(newUser);

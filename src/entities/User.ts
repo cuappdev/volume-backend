@@ -24,7 +24,7 @@ export class User {
 
   @Field()
   @Property()
-  notification: string; // ANDROID, IOS
+  deviceType: string; // ANDROID, IOS
 }
 
 export const UserModel = getModelForClass(User);
