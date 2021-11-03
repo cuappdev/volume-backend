@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
-// import * as mongoose from 'mongoose';
 import { Publication } from './Publication';
 
 @ObjectType({ description: 'The Article Model' })

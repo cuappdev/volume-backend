@@ -1,8 +1,6 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-// import { Publication } from '../entities/Publication';
-// import PublicationRepo from '../repos/PublicationRepo';
 import { DEFAULT_LIMIT } from '../common/constants';
 
 @Resolver((_of) => Article)
@@ -47,11 +45,6 @@ class ArticleResolver {
   async getTrendingArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
     return ArticleRepo.getTrendingArticles(limit);
   }
-
-  /* @FieldResolver((_returns) => Publication)
-  async publication(@Root() article: Article): Promise<Publication> {
-    return Object.assign(new Publication(),article['_doc'].publication); // eslint-disable-line
-  } */
 
   @FieldResolver((_returns) => Number)
   async trendiness(@Root() article: Article): Promise<number> {

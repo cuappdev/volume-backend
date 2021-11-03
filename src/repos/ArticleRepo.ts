@@ -22,8 +22,6 @@ const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
 
 const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
   return ArticleModel.find({ 'publication.id': publicationID });
-  // return all articles with article.publication.id = publicationID
-  // return ArticleModel.find( { where: article.publication.id = publicationID });
 };
 
 const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {

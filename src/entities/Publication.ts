@@ -35,7 +35,7 @@ export class Publication {
   rssURL: string;
 
   @Field()
-  @Property()
+  @Property({ unique: true })
   slug: string;
 
   @Field()

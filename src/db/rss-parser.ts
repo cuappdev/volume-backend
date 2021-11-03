@@ -16,7 +16,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
     return img || '';
   };
   const articlePromises = Promise.all(parsedPublications).then((publications) => {
-    return publications
+    const output = publications
       .map((publication, i) =>
         publication.items.map((article) =>
           Object.assign(new Article(), {
@@ -42,6 +42,7 @@ const getRecentArticles = async (): Promise<Article[]> => {
         ),
       )
       .flat();
+    return output;
   });
 
   return articlePromises;
