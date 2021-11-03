@@ -28,11 +28,7 @@ const sendIOSNotification = async (
   // Setup IOS Admin
   console.log('IOS Setting up Admin...');
   const options = {
-    token: {
-      key: process.env.APNS_AUTH_KEY_PATH,
-      keyId: process.env.APNS_KEY_ID,
-      teamId: process.env.APNS_TEAM_ID,
-    },
+    cert: process.env.APNS_CERT_PATH,
     production: false, // send to dev server for testing
   };
   const apnProvider = new apn.Provider(options);
