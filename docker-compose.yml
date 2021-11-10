@@ -6,5 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .dockerenvrc
+    volumes:
+      - ./certs/:/usr/src/app/certs/
     ports:
       - "80:3000"
