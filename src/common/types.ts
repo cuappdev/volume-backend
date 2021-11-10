@@ -12,3 +12,10 @@ export class Social {
   @Property()
   URL: string;
 }
+
+@ObjectType({ description: 'ID of a Publication' })
+export class PublicationID {
+  @Field()
+  @Property()
+  id: string;
+}
