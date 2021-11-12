@@ -36,25 +36,11 @@ const main = async () => {
     res.sendFile('index.html', { root: __dirname });
   });
 
-  // SETUP FOR NOTIFICATIONS
-  // // Setup IOS Admin
-  // console.log('IOS Setting up Admin...');
-  // const options = {
-  //   token: {
-  //     key: process.env.APNS_AUTH_KEY_PATH,
-  //     keyId: process.env.APNS_KEY_ID,
-  //     teamId: process.env.APNS_TEAM_ID,
-  //   },
-  //   production: false, // send to dev server for testing
-  // };
-  // export const apnProvider = new apn.Provider(options);
-  // console.log('IOS Admin set up...');
   // Setup Android Admin
   console.log('ANDROID Setting up Admin...');
   console.log(process.env.FCM_AUTH_KEY_PATH);
   admin.initializeApp({
     credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
-    databaseURL: 'https://sample-project-e1a84.firebaseio.com',
   });
   console.log('ANDROID Admin set up...');
 
@@ -63,6 +49,7 @@ const main = async () => {
     console.log(articleIDs);
     console.log('Sending Notifications:');
     NotificationRepo.notify(articleIDs);
+    // TODO: CHANGE RESPONSE FORMAT
     res.json({ success: 'true' });
   });
 
