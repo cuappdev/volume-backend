@@ -21,11 +21,7 @@ const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
 };
 
 const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
-  const publication = await PublicationModel.findById(new ObjectId(publicationID));
-  if (!publication) {
-    return [];
-  }
-  return ArticleModel.find({ publicationSlug: publication.slug });
+  return ArticleModel.find({ 'publication.id': publicationID });
 };
 
 const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {

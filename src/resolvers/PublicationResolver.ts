@@ -16,6 +16,11 @@ class PublicationResolver {
     return PublicationRepo.getPublicationByID(id);
   }
 
+  @Query((_returns) => Publication, { nullable: true })
+  async getPublicationBySlug(@Arg('slug') slug: string) {
+    return PublicationRepo.getPublicationBySlug(slug);
+  }
+
   @Query((_returns) => [Publication])
   async getPublicationsByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
     return PublicationRepo.getPublicationsByIDs(ids);
