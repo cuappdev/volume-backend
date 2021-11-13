@@ -48,5 +48,5 @@ jobs:
             sleep 20s
             sudo systemctl stop nginx
             sudo systemctl restart nginx
-            docker stack deploy -c docker-compose.yml the-stack
+            docker stack deploy -c docker-compose.yml the-stack --with-registry-auth
             yes | docker system prune -a
