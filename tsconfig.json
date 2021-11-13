@@ -5,6 +5,9 @@
     "module": "commonjs",
     "outDir": "build",
     "strict": true,
+    "lib": [
+      "es2019"
+    ],
     "strictNullChecks": false,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
