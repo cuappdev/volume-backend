@@ -2,7 +2,7 @@ import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES } from '../common/constants';
-import getRecentArticles from '../db/rss-parser';
+import { PublicationModel } from '../entities/Publication';
 
 const getArticleByID = async (id: string): Promise<Article> => {
   return ArticleModel.findById(new ObjectId(id));
@@ -92,21 +92,6 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
 };
 
 /**
- * Returns most recent articles published.
- */
-const refreshFeed = async (): Promise<Article[]> => {
-  let articles = await getRecentArticles();
-  try {
-    // Attempt to insert articles while validating a duplicate isn't inserted
-    articles = await ArticleModel.insertMany(articles, { ordered: false });
-  } catch (e) {
-    // Set articles to all the ones that would have been inserted aka. weren't duplicates
-    articles = e.insertedDocs;
-  }
-  return articles;
-};
-
-/**
  * Increments number of shoutouts on an article and publication by one.
  * @function
  * @param {string} id - string representing the unique Object Id of an article.
@@ -137,6 +122,5 @@ export default {
   getArticlesByPublicationIDs,
   getTrendingArticles,
   incrementShoutouts,
-  refreshFeed,
   refreshTrendingArticles,
 };
