@@ -226,7 +226,7 @@
          "bio":"A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
          "bioShort":"Cornell Business Review is the premier business publication at Cornell University.",
          "rssName":"CBRnow - Cornell Business Review",
-         "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
+         "rssURL":"https://www.cornellappdev.com/?format=rss",
          "name":"Cornell Business Review",
          "slug":"cbr",
          "socialURLs":[
@@ -236,6 +236,72 @@
             }
          ],
          "websiteURL":"http://www.thecornellbusinessreview.com/cbr-now"
+      },
+      {
+         "bio":"We are a community of Cornell students who love creating.",
+         "bioShort":"We are a community of Cornell students who love creating.",
+         "rssName":"Cornell Creatives Newsletter",
+         "rssURL":"https://cornell.substack.com/feed",
+         "name":"Cornell Creatives Blog",
+         "slug":"creatives",
+         "socialURLs":[
+            {
+               "social":"insta",
+               "URL":"https://www.instagram.com/cornellcreatives/"
+            },
+            {
+               "social":"facebook",
+               "URL":"https://www.facebook.com/cornellcreatives/"
+            },
+            {
+               "social":"linkedin",
+               "URL":"https://www.linkedin.com/company/30581251/"
+            }
+         ],
+         "websiteURL":"https://cornellcreatives.com/"
+      },
+      {
+         "bio":"The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
+         "bioShort":"The 180 is a publication by Hotelies for Hotelies.",
+         "rssName":"The 180 Blog - The 180",
+         "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
+         "name":"The 180 at Cornell",
+         "slug":"180",
+         "socialURLs":[
+            {
+               "social":"insta",
+               "URL":"https://www.instagram.com/the_180_cornell/?hl=en"
+            },
+            {
+               "social":"facebook",
+               "URL":"https://www.facebook.com/Cornell.the180/"
+            },
+            {
+               "social":"linkedin",
+               "URL":"https://www.linkedin.com/company/cornell-the180/"
+            }
+         ],
+         "websiteURL":"https://www.the180print.org/"
+      },
+      {
+         "bio":"We are a student-run international affairs magazine that brings together writers, editors and artists to tackle global problems from a variety of perspectives.",
+         "bioShort":" Global Issues. Complex Challenges. Student Perspectives.",
+         "rssName":"Borders - The Cornell Diplomat",
+         "rssURL":"https://www.thecornelldiplomat.com/issue4?format=rss",
+         "name":"The Cornell Diplomat",
+         "slug":"diplo",
+         "socialURLs":[
+            {
+               "social":"insta",
+               "URL":"https://www.instagram.com/thecornelldiplomat/"
+            },
+            {
+               "social":"facebook",
+               "URL":"https://www.facebook.com/TheCornellDiplomat/"
+            }
+         ],
+         "websiteURL":"https://www.thecornelldiplomat.com/"
       }
+
    ]
 }

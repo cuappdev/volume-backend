@@ -45,10 +45,11 @@ const unfollowPublication = async (uuid: string, pubID: string): Promise<User> =
   const pubIDs = user.followedPublications.map((pubIDObject) => {
     return pubIDObject.id;
   });
-  if (pubIDs.indexOf(pubID) === -1) {
+  const pubIndex = pubIDs.indexOf(pubID);
+  if (pubIndex === -1) {
     return user;
   }
-  user.followedPublications.splice(pubIDs.indexOf(pubID), 1);
+  user.followedPublications.splice(pubIndex, 1);
   return user.save();
 };
 
