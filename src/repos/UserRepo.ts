@@ -63,6 +63,7 @@ const getUsersFollowingPublication = async (pubID: PublicationID): Promise<User[
   return users;
 };
 
+
 export default {
   createUser,
   getUserByUUID,
