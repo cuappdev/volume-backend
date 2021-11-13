@@ -1,8 +1,6 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-import { Publication } from '../entities/Publication';
-import PublicationRepo from '../repos/PublicationRepo';
 import { DEFAULT_LIMIT } from '../common/constants';
 
 @Resolver((_of) => Article)
@@ -19,7 +17,8 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], { nullable: false })
   async getAllArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
-    return ArticleRepo.getAllArticles(limit);
+    const articles = await ArticleRepo.getAllArticles(limit);
+    return articles;
   }
 
   @Query((_returns) => [Article], { nullable: false })
@@ -47,11 +46,6 @@ class ArticleResolver {
     return ArticleRepo.getTrendingArticles(limit);
   }
 
-  @FieldResolver((_returns) => Publication)
-  async publication(@Root() article: Article): Promise<Publication> {
-    return PublicationRepo.getPublicationBySlug(article['_doc'].publicationSlug); // eslint-disable-line
-  }
-
   @FieldResolver((_returns) => Number)
   async trendiness(@Root() article: Article): Promise<number> {
     const presentDate = new Date().getTime();
@@ -63,11 +57,6 @@ class ArticleResolver {
   @FieldResolver((_returns) => Boolean)
   async nsfw(@Root() article: Article): Promise<boolean> {
     return ArticleRepo.checkProfanity(article['_doc'].title); //eslint-disable-line
-  }
-
-  @Mutation((_returns) => [Article])
-  async refresh() {
-    return ArticleRepo.refreshFeed();
   }
 
   @Mutation((_returns) => Article)
