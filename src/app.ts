@@ -31,7 +31,6 @@ const main = async () => {
 
   server.applyMiddleware({ app });
 
-
   async function setupTrendingArticleRefreshCron() {
     // Refresh trending articles 12 hours
     cron.schedule('0 */12 * * *', async () => {
