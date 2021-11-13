@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User, UserModel } from '../entities/User';
+import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { PublicationID } from '../common/types';
 
 /**
@@ -14,13 +15,23 @@ const createUser = async (
   const followedPublications = followedPublicationsIDs.map((id) => {
     return Object.assign(new PublicationID(), { id });
   });
-
   const uuid = uuidv4();
+
+  const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
+    uuid,
+    createdAt: new Date('December 17, 1995 03:24:00'),
+    expirationDate: new Date('December 17, 1995 03:24:00'),
+    numShoutouts: 0,
+    readArticles: [],
+    randomArticles: [],
+  });
+
   const newUser = Object.assign(new User(), {
     uuid,
     deviceToken,
     followedPublications,
     deviceType,
+    weeklyDebrief,
   });
 
   return UserModel.create(newUser);
@@ -57,17 +68,17 @@ const getUserByUUID = async (uuid: string): Promise<User> => {
 
 /**
  * Return all users who follow a publication.
- */
+ 
 const getUsersFollowingPublication = async (pubID: PublicationID): Promise<User[]> => {
   const users = await UserModel.find({ followedPublications: pubID });
   return users;
 };
-
+*/
 
 export default {
   createUser,
   getUserByUUID,
-  getUsersFollowingPublication,
+  // getUsersFollowingPublication,
   followPublication,
   unfollowPublication,
 };

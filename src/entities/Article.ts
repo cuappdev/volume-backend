@@ -7,7 +7,7 @@ export class Article {
   id: string;
 
   @Field()
-  @Property({ unique: true })
+  @Property()
   articleURL: string;
 
   @Field()

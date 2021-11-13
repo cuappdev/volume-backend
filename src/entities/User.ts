@@ -32,9 +32,9 @@ export class User {
   @Property({ default: 0 })
   shoutouts?: number;
 
-  @Field()
-  @Property()
-  articlesRead: [Article];
+  @Field((type) => [Article])
+  @Property({ required: true, type: () => Article, default: [] })
+  articlesRead: mongoose.Types.DocumentArray<DocumentType<Article>>;
 
   @Field()
   @Property()

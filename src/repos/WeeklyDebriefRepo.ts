@@ -1,33 +1,49 @@
-import { ObjectId } from 'mongodb';
-import { User, UserModel } from '../entities/User';
+import { UserModel } from '../entities/User';
+import UserRepo from './UserRepo';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
+import { ArticleModel } from '../entities/Article';
 
-const createWeeklyDebrief = async (uuid: string): Promise<WeeklyDebrief> => {
-
-}
-const getWeeklyDebrief = async (uuid: string): Promise<WeeklyDebrief> => {
-  const user =await  UserModel.findOne({ uuid });
-  return 
-};
-/* - function createWeeklyDebrief
-    - expiration = current date + 7 days
-    - random_articles = get 2 random articles
-    - timestamp or week = current week
-    - for each user
-        - user.weekly_debrief.read_articles = user.read_articles
-            - any two articles they read from list
-        - user.weekly_debrief.shoutouts = user.shoutouts
-        - user.weekly_debrief.expiration_date = expiration_date
-        - user.weekly_debrief.random_article = random_articles
-        - user.shoutouts = 0
-        - user.read_articles []
-        
-*/
-const getExpirationDate = async (createdAt: Date): Promise<Date> => {
+const getExpirationDate = (createdAt: Date): Date => {
   createdAt.setDate(createdAt.getDate() + 7);
   return createdAt;
 };
+
+const createWeeklyDebrief = async (
+  uuid: string,
+  createdAt: Date,
+  expirationDate: Date,
+): Promise<void> => {
+  const user = await UserRepo.getUserByUUID(uuid);
+  const articleAggregate = ArticleModel.aggregate();
+
+  articleAggregate.sample(2);
+  const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
+    uuid,
+    createdAt,
+    expirationDate,
+    numShoutouts: user.shoutouts,
+    readArticles: user.articlesRead,
+    randomArticles: articleAggregate,
+  });
+  console.log(weeklyDebrief);
+  UserModel.updateOne(
+    { uuid },
+    {
+      shoutouts: 0,
+      articlesRead: [],
+      weeklyDebrief,
+    },
+  );
+};
+
+const createWeeklyDebriefs = async (uuids: [string]): Promise<void> => {
+  const createdAt = new Date();
+  const expDate = new Date();
+  expDate.setDate(createdAt.getDate() + 7);
+  uuids.map((uuid) => createWeeklyDebrief(uuid, createdAt, expDate));
+};
+
 export default {
-  getWeeklyDebrief,
+  createWeeklyDebriefs,
   getExpirationDate,
 };
