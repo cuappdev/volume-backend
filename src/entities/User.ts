@@ -21,7 +21,7 @@ export class User {
   followedPublications: mongoose.Types.DocumentArray<DocumentType<PublicationID>>;
 
   @Field()
-  @Property()
+  @Property({ unique: true })
   deviceToken: string;
 
   @Field()

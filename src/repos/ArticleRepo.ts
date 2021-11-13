@@ -2,7 +2,6 @@ import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
 import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES } from '../common/constants';
-import { PublicationModel } from '../entities/Publication';
 
 const getArticleByID = async (id: string): Promise<Article> => {
   return ArticleModel.findById(new ObjectId(id));
@@ -21,11 +20,7 @@ const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
 };
 
 const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
-  const publication = await PublicationModel.findById(new ObjectId(publicationID));
-  if (!publication) {
-    return [];
-  }
-  return ArticleModel.find({ publicationSlug: publication.slug });
+  return ArticleModel.find({ 'publication.id': publicationID });
 };
 
 const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
