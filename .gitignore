@@ -4,4 +4,4 @@
 *schema.*
 *build/*
 nohup.out
-*src/certificates/*
+*certs/*
