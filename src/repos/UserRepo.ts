@@ -5,27 +5,33 @@ import { PublicationID } from '../common/types';
 
 // WARNING TODO: CLEAN UP DOCUMENTATION
 /**
- * Create new pseudo suser.
+ * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
  */
 const createUser = async (
   deviceToken: string,
   followedPublicationsIDs: string[],
   deviceType: string,
 ): Promise<User> => {
-  // create PublicationID obejcts from string of followed publications
-  const followedPublications = followedPublicationsIDs.map((id) => {
-    return Object.assign(new PublicationID(), { id });
-  });
+  // check if user associated with this deviceToken already exists
+  const users = await UserModel.find({ deviceToken });
 
-  const uuid = uuidv4();
-  const newUser = Object.assign(new User(), {
-    uuid,
-    deviceToken,
-    followedPublications,
-    deviceType,
-  });
+  // if no user, create a new one
+  if (!users[0]) {
+    // create PublicationID obejcts from string of followed publications
+    const followedPublications = followedPublicationsIDs.map((id) => {
+      return Object.assign(new PublicationID(), { id });
+    });
 
-  return UserModel.create(newUser);
+    const uuid = uuidv4();
+    const newUser = Object.assign(new User(), {
+      uuid,
+      deviceToken,
+      followedPublications,
+      deviceType,
+    });
+    return UserModel.create(newUser);
+  }
+  return users[0];
 };
 
 /**

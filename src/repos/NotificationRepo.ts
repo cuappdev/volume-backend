@@ -41,7 +41,6 @@ const sendIOSNotification = async (
     },
   });
 
-
   // TODO: ADJUST SETTINGS
   note.expiry = Math.floor(Date.now() / 1000) + 3600;
   note.badge = 3;
