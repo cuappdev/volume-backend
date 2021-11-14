@@ -1,9 +1,14 @@
-import { Resolver, Mutation, Arg } from 'type-graphql';
+import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => User)
 class UserResolver {
+  @Query((_retuns) => User)
+  async getUser(@Arg('uuid') uuid: string) {
+    return UserRepo.getUserByUUID(uuid);
+  }
+
   @Mutation((_returns) => User)
   async createUser(
     @Arg('deviceToken') deviceToken: string,

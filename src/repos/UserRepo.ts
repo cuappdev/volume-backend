@@ -1,30 +1,47 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User, UserModel } from '../entities/User';
+import WeeklyDebrief from '../entities/WeeklyDebrief';
 import PublicationRepo from './PublicationRepo';
 import { PublicationID } from '../common/types';
 
 /**
- * Create new pseudo suser.
+ * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
  */
 const createUser = async (
   deviceToken: string,
   followedPublicationsIDs: string[],
   deviceType: string,
 ): Promise<User> => {
-  // create PublicationID obejcts from string of followed publications
-  const followedPublications = followedPublicationsIDs.map((id) => {
-    return Object.assign(new PublicationID(), { id });
-  });
+  // check if user associated with this deviceToken already exists
+  const users = await UserModel.find({ deviceToken });
 
-  const uuid = uuidv4();
-  const newUser = Object.assign(new User(), {
-    uuid,
-    deviceToken,
-    followedPublications,
-    deviceType,
-  });
+  // if no user, create a new one
+  if (!users[0]) {
+    // create PublicationID obejcts from string of followed publications
+    const followedPublications = followedPublicationsIDs.map((id) => {
+      return Object.assign(new PublicationID(), { id });
+    });
+    const uuid = uuidv4();
 
-  return UserModel.create(newUser);
+    const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
+      uuid,
+      createdAt: new Date(),
+      expirationDate: new Date('December 17, 1995 03:24:00'),
+      numShoutouts: 0,
+      readArticles: [],
+      randomArticles: [],
+    });
+
+    const newUser = Object.assign(new User(), {
+      uuid,
+      deviceToken,
+      followedPublications,
+      deviceType,
+      weeklyDebrief,
+    });
+    return UserModel.create(newUser);
+  }
+  return users[0];
 };
 
 /**
