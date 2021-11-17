@@ -3,7 +3,6 @@ import { User, UserModel } from '../entities/User';
 import PublicationRepo from './PublicationRepo';
 import { PublicationID } from '../common/types';
 
-// WARNING TODO: CLEAN UP DOCUMENTATION
 /**
  * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
  */
@@ -69,7 +68,7 @@ const getUserByUUID = async (uuid: string): Promise<User> => {
 const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> => {
   const publication = await PublicationRepo.getPublicationBySlug(pubSlug);
   // WARNING TODO: linear scan on DB, inefficient <-- turn into a query that just gets users following publications
-  const users = await UserModel.find();
+  const users = await UserModel.find({ 'followedPublication.id': publication.id });
   users.filter((u) => {
     u.followedPublications.map((id) => id.id).includes(publication.id);
   });

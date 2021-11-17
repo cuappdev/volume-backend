@@ -33,19 +33,13 @@ const main = async () => {
   });
 
   // Setup Android Admin
-  console.log('ANDROID Setting up Admin...');
-  console.log(process.env.FCM_AUTH_KEY_PATH);
   admin.initializeApp({
     credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
   });
-  console.log('ANDROID Admin set up...');
 
   app.post('/collect', (req, res) => {
     const { articleIDs } = req.body;
-    console.log(articleIDs);
-    console.log('Sending Notifications:');
     NotificationRepo.notify(articleIDs);
-    // TODO: CHANGE RESPONSE FORMAT
     res.json({ success: 'true' });
   });
 
