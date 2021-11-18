@@ -111,6 +111,7 @@ const notify = async (articleIDs: string[]): Promise<void> => {
     const publication = await PublicationRepo.getPublicationBySlug(article.publicationSlug);
     // get all the followers of publication this article was posted by
     const followers = await UserRepo.getUsersFollowingPublication(article.publicationSlug);
+    console.log(followers);
     // send notifications to each follower that publication posted article
     followers.forEach(async (follower) => {
       if (follower.deviceType === ANDROID) {

@@ -68,7 +68,7 @@ const getUserByUUID = async (uuid: string): Promise<User> => {
 const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> => {
   const publication = await PublicationRepo.getPublicationBySlug(pubSlug);
   // WARNING TODO: linear scan on DB, inefficient <-- turn into a query that just gets users following publications
-  const users = await UserModel.find({ 'followedPublication.id': publication.id });
+  const users = await UserModel.find();
   users.filter((u) => {
     u.followedPublications.map((id) => id.id).includes(publication.id);
   });
