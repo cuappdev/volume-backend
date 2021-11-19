@@ -4,8 +4,8 @@
   "description": "Backend for Volume app",
   "main": "src/app.ts",
   "scripts": {
-    "start": "cd migrate-mongo && migrate-mongo up && cd .. && ts-node src/app.ts",
-    "dev": "cd migrate-mongo && migrate-mongo up && cd .. && nodemon src/app.ts",
+    "start": "migrate-mongo up && ts-node src/app.ts",
+    "dev": "migrate-mongo up && nodemon src/app.ts",
     "newman": "node_modules/.bin/newman run tests/Volume\\ Testing.postman_collection.json",
     "test": "npm start & wait-on http://localhost:$APP_PORT && npm run newman && kill $(lsof -t -i:$APP_PORT)",
     "lint": "eslint src/**/*.ts --fix",
