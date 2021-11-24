@@ -35,7 +35,7 @@ export class Publication {
   rssURL: string;
 
   @Field()
-  @Property({ unique: true })
+  @Property() // Couldn't create multiple users with unique constraint active
   slug: string;
 
   @Field()

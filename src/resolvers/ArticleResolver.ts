@@ -2,6 +2,7 @@ import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphq
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
 import { DEFAULT_LIMIT } from '../common/constants';
+import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => Article)
 class ArticleResolver {
@@ -60,7 +61,8 @@ class ArticleResolver {
   }
 
   @Mutation((_returns) => Article)
-  async incrementShoutouts(@Arg('id') id: string) {
+  async incrementShoutouts(@Arg('uuid') uuid: string, @Arg('id') id: string) {
+    UserRepo.incrementShoutouts(uuid);
     return ArticleRepo.incrementShoutouts(id);
   }
 }

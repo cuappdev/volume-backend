@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
+import WeeklyDebriefRepo from '../repos/WeeklyDebriefRepo';
 
 @Resolver((_of) => User)
 class UserResolver {
@@ -29,6 +30,24 @@ class UserResolver {
   async unfollowPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
     const user = await UserRepo.unfollowPublication(uuid, pubID);
     return user;
+  }
+
+  @Mutation((_returns) => User)
+  async readArticle(@Arg('uuid') uuid: string, @Arg('articleID') articleID: string) {
+    const user = await UserRepo.appendReadArticle(uuid, articleID);
+    return user;
+  }
+
+  @Mutation((_returns) => User)
+  async bookmarkArticle(@Arg('uuid') uuid: string) {
+    const user = await UserRepo.incrementBookmarks(uuid);
+    return user;
+  }
+
+  @Mutation((_returns) => [User])
+  async testWeeklyDebrief() {
+    const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
+    return users;
   }
 }
 
