@@ -1,7 +1,6 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
-import WeeklyDebriefRepo from '../repos/WeeklyDebriefRepo';
 
 @Resolver((_of) => User)
 class UserResolver {
