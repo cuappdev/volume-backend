@@ -43,12 +43,6 @@ class UserResolver {
     const user = await UserRepo.incrementBookmarks(uuid);
     return user;
   }
-
-  @Mutation((_returns) => [User])
-  async getWeeklyDebrief() {
-    const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
-    return users;
-  }
 }
 
 export default UserResolver;
