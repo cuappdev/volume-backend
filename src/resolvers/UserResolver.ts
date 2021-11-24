@@ -45,7 +45,7 @@ class UserResolver {
   }
 
   @Mutation((_returns) => [User])
-  async testWeeklyDebrief() {
+  async getWeeklyDebrief() {
     const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
     return users;
   }
