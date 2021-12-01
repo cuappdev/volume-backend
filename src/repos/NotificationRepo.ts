@@ -26,7 +26,6 @@ const sendNewArticleIOSNotification = async (
       keyId: process.env.APNS_KEY_ID,
       teamId: process.env.APNS_TEAM_ID,
     },
-    production: false,
   });
 
   const notifTitle = publication.name;
