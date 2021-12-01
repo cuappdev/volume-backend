@@ -4,7 +4,7 @@
   "description": "Backend for Volume app",
   "main": "src/app.ts",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "migrate-mongo up && ts-node src/app.ts",
     "dev": "nodemon src/app.ts",
     "newman": "node_modules/.bin/newman run tests/Volume\\ Testing.postman_collection.json",
     "test": "npm start & wait-on http://localhost:$APP_PORT && npm run newman && kill $(lsof -t -i:$APP_PORT)",
@@ -33,6 +33,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^9.7.0",
     "graphql": "^15.5.0",
+    "migrate-mongo": "^8.2.3",
     "mockdate": "^3.0.2",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.9",
