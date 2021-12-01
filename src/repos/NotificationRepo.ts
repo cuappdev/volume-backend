@@ -36,18 +36,18 @@ const sendNewArticleIOSNotification = async (
       title: notifTitle,
       body: notifBody,
     },
-    data: {
-      userID: user.uuid,
-      articleURL: article.articleURL,
-      articleID: article.id,
-      notifcationType: 'new_article',
-    },
   });
 
   note.expiry = Math.floor(Date.now() / 1000) + 3600;
   note.badge = 3;
   note.sound = 'ping.aiff';
-  note.payload = { messageFrom: 'Volume' };
+  note.payload = {
+    messageFrom: 'Volume',
+    userID: user.uuid,
+    articleURL: article.articleURL,
+    articleID: article.id,
+    notificationType: 'new_article',
+  };
   note.topic = process.env.APNS_BUNDLE_ID;
 
   // Send notification to APN servers
