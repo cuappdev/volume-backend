@@ -30,6 +30,18 @@ class UserResolver {
     const user = await UserRepo.unfollowPublication(uuid, pubID);
     return user;
   }
+
+  @Mutation((_returns) => User)
+  async readArticle(@Arg('uuid') uuid: string, @Arg('articleID') articleID: string) {
+    const user = await UserRepo.appendReadArticle(uuid, articleID);
+    return user;
+  }
+
+  @Mutation((_returns) => User)
+  async bookmarkArticle(@Arg('uuid') uuid: string) {
+    const user = await UserRepo.incrementBookmarks(uuid);
+    return user;
+  }
 }
 
 export default UserResolver;

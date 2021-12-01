@@ -1,5 +1,5 @@
-import { UserModel } from '../entities/User';
-import UserRepo from './UserRepo';
+import { DocumentType } from '@typegoose/typegoose';
+import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { ArticleModel } from '../entities/Article';
 
@@ -9,38 +9,44 @@ const getExpirationDate = (createdAt: Date): Date => {
 };
 
 const createWeeklyDebrief = async (
-  uuid: string,
+  user: DocumentType<User>,
   createdAt: Date,
   expirationDate: Date,
-): Promise<void> => {
-  const user = await UserRepo.getUserByUUID(uuid);
+): Promise<User> => {
   const articleAggregate = ArticleModel.aggregate();
-
-  articleAggregate.sample(2);
+  const { uuid } = user;
   const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
     uuid,
     createdAt,
     expirationDate,
-    numShoutouts: user.shoutouts,
-    readArticles: user.articlesRead,
-    randomArticles: articleAggregate,
+    numShoutouts: user.numShoutouts,
+    numBookmarkedArticles: user.numBookmarkedArticles,
+    readArticles: user.readArticles.slice(0, 2),
+    numReadArticles: user.readArticles.length,
+    randomArticles: await articleAggregate.sample(2).exec(),
   });
-  console.log(weeklyDebrief);
-  UserModel.updateOne(
+  return UserModel.findOneAndUpdate(
     { uuid },
     {
-      shoutouts: 0,
-      articlesRead: [],
-      weeklyDebrief,
+      $set: {
+        readArticles: [],
+        numShoutouts: 0,
+        numBookmarkedArticles: 0,
+        weeklyDebrief,
+      },
     },
+    { new: true },
   );
 };
 
-const createWeeklyDebriefs = async (uuids: [string]): Promise<void> => {
+const createWeeklyDebriefs = async (): Promise<User[]> => {
   const createdAt = new Date();
   const expDate = new Date();
   expDate.setDate(createdAt.getDate() + 7);
-  uuids.map((uuid) => createWeeklyDebrief(uuid, createdAt, expDate));
+  const userList = UserModel.find({}).then((users) =>
+    Promise.all(users.map((user) => createWeeklyDebrief(user, createdAt, expDate))),
+  );
+  return userList;
 };
 
 export default {

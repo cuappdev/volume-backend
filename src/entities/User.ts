@@ -30,11 +30,15 @@ export class User {
 
   @Field()
   @Property({ default: 0 })
-  shoutouts?: number;
+  numShoutouts?: number;
+
+  @Field()
+  @Property({ default: 0 })
+  numBookmarkedArticles?: number;
 
   @Field((type) => [Article])
   @Property({ required: true, type: () => Article, default: [] })
-  articlesRead: mongoose.Types.DocumentArray<DocumentType<Article>>;
+  readArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
 
   @Field()
   @Property()

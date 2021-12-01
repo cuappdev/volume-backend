@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { prop as Property } from '@typegoose/typegoose';
+import { prop as Property, DocumentType } from '@typegoose/typegoose';
+import mongoose from 'mongoose';
 import { Article } from './Article';
 
 @ObjectType({ description: 'The Weekly Debrief Model' })
@@ -20,14 +21,22 @@ export default class WeeklyDebrief {
   expirationDate: Date;
 
   @Field()
-  @Property()
-  numShoutouts: number;
+  @Property({ default: 0 })
+  numShoutouts?: number;
+
+  @Field()
+  @Property({ default: 0 })
+  numBookmarkedArticles?: number;
+
+  @Field()
+  @Property({ default: 0 })
+  numReadArticles?: number;
 
   @Field((type) => [Article])
-  @Property()
-  readArticles: [Article];
+  @Property({ required: true, type: () => Article, default: [] })
+  readArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
 
   @Field((type) => [Article])
-  @Property()
-  randomArticles: [Article];
+  @Property({ required: true, type: () => Article, default: [] })
+  randomArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
 }

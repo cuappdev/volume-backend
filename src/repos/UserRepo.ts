@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import PublicationRepo from './PublicationRepo';
+import ArticleRepo from './ArticleRepo';
+import { Article } from '../entities/Article';
 import { PublicationID } from '../common/types';
 
 /**
@@ -27,7 +29,6 @@ const createUser = async (
       uuid,
       createdAt: new Date(),
       expirationDate: new Date('December 17, 1995 03:24:00'),
-      numShoutouts: 0,
       readArticles: [],
       randomArticles: [],
     });
@@ -86,8 +87,49 @@ const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> =>
   return users;
 };
 
+/**
+ * Add article to a user's readArticles
+ */
+const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
+  const article = await ArticleRepo.getArticleByID(articleID);
+  const user = await UserModel.findOne({ uuid });
+  const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
+  if (!user.readArticles.reduce(checkDuplicates, false)) {
+    user.readArticles.push(article);
+  }
+  user.save();
+  return user;
+};
+
+/**
+ * Increment shoutouts in user's numShoutouts
+ */
+const incrementShoutouts = async (uuid: string): Promise<User> => {
+  const user = await UserModel.findOne({ uuid });
+  if (user !== null) {
+    user.numShoutouts += 1;
+    user.save();
+  }
+  return user;
+};
+
+/**
+ * Increment number of bookmarks in user's numBookmarkedArticles
+ */
+const incrementBookmarks = async (uuid: string): Promise<User> => {
+  const user = await UserModel.findOne({ uuid });
+  if (user !== null) {
+    user.numBookmarkedArticles += 1;
+    user.save();
+  }
+  return user;
+};
+
 export default {
   createUser,
+  incrementShoutouts,
+  incrementBookmarks,
+  appendReadArticle,
   getUserByUUID,
   getUsersFollowingPublication,
   followPublication,
