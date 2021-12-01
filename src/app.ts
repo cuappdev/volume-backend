@@ -9,7 +9,6 @@ import ArticleRepo from './repos/ArticleRepo';
 import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
 import NotificationRepo from './repos/NotificationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
-import NotificationRepo from './repos/NotificationRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 

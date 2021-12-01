@@ -223,5 +223,5 @@ export default {
   sendWeeklyDebriefIOSNotification,
   sendWeeklyDebriefAndroidNotification,
   notifyNewArticles,
-  notifyWeeklyDebrief
+  notifyWeeklyDebrief,
 };
