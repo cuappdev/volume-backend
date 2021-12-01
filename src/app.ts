@@ -6,6 +6,8 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
+import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
+import NotificationRepo from './repos/NotificationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
 import NotificationRepo from './repos/NotificationRepo';
 import UserResolver from './resolvers/UserResolver';
@@ -41,11 +43,19 @@ const main = async () => {
 
   app.post('/collect', (req, res) => {
     const { articleIDs } = req.body;
-    NotificationRepo.notify(articleIDs);
+    NotificationRepo.notifyNewArticles(articleIDs);
     res.json({ success: 'true' });
   });
 
   server.applyMiddleware({ app });
+
+  async function setupWeeklyDebriefRefreshCron() {
+    // Refresh weekly debrifs and sent notifications once a week
+    cron.schedule('0 0 * * 0', async () => {
+      const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
+      NotificationRepo.notifyWeeklyDebrief(users);
+    });
+  }
 
   async function setupTrendingArticleRefreshCron() {
     // Refresh trending articles 12 hours
@@ -54,6 +64,7 @@ const main = async () => {
     });
   }
 
+  setupWeeklyDebriefRefreshCron();
   setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {
