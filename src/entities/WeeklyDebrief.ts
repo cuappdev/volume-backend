@@ -10,11 +10,11 @@ export default class WeeklyDebrief {
 
   @Field()
   @Property()
-  uuid: string; // uuid of user associated with this WeeklyDebrief
+  uuid: string;
 
   @Field()
   @Property()
-  createdAt: Date;
+  creationDate: Date;
 
   @Field()
   @Property()

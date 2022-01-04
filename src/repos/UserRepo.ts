@@ -27,7 +27,7 @@ const createUser = async (
 
     const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
       uuid,
-      createdAt: new Date(),
+      creationDate: new Date(),
       expirationDate: new Date('December 17, 1995 03:24:00'),
       readArticles: [],
       randomArticles: [],

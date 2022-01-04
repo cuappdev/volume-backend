@@ -3,21 +3,21 @@ import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { ArticleModel } from '../entities/Article';
 
-const getExpirationDate = (createdAt: Date): Date => {
-  createdAt.setDate(createdAt.getDate() + 7);
-  return createdAt;
+const getExpirationDate = (creationDate: Date): Date => {
+  creationDate.setDate(creationDate.getDate() + 7);
+  return creationDate;
 };
 
 const createWeeklyDebrief = async (
   user: DocumentType<User>,
-  createdAt: Date,
+  creationDate: Date,
   expirationDate: Date,
 ): Promise<User> => {
   const articleAggregate = ArticleModel.aggregate();
   const { uuid } = user;
   const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
     uuid,
-    createdAt,
+    creationDate,
     expirationDate,
     numShoutouts: user.numShoutouts,
     numBookmarkedArticles: user.numBookmarkedArticles,
@@ -40,11 +40,11 @@ const createWeeklyDebrief = async (
 };
 
 const createWeeklyDebriefs = async (): Promise<User[]> => {
-  const createdAt = new Date();
+  const creationDate = new Date();
   const expDate = new Date();
-  expDate.setDate(createdAt.getDate() + 7);
+  expDate.setDate(creationDate.getDate() + 7);
   const userList = UserModel.find({}).then((users) =>
-    Promise.all(users.map((user) => createWeeklyDebrief(user, createdAt, expDate))),
+    Promise.all(users.map((user) => createWeeklyDebrief(user, creationDate, expDate))),
   );
   return userList;
 };
