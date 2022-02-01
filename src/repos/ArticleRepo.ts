@@ -97,8 +97,11 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
  */
 const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
-  article.shoutouts += 1;
-  return article.save();
+  if (article !== null) {
+    article.shoutouts += 1;
+    return article.save();
+  }
+  return article;
 };
 
 /**

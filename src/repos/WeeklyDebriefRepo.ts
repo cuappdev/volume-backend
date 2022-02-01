@@ -35,7 +35,7 @@ const createWeeklyDebrief = async (
         weeklyDebrief,
       },
     },
-    { new: true },
+    { new: true, useFindAndModify: false },
   );
 };
 

@@ -60,7 +60,7 @@ class ArticleResolver {
     return ArticleRepo.checkProfanity(article['_doc'].title); //eslint-disable-line
   }
 
-  @Mutation((_returns) => Article)
+  @Mutation((_returns) => Article, { nullable: true })
   async incrementShoutouts(@Arg('uuid') uuid: string, @Arg('id') id: string) {
     UserRepo.incrementShoutouts(uuid);
     return ArticleRepo.incrementShoutouts(id);

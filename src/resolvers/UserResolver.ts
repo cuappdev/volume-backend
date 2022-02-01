@@ -1,10 +1,11 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
+import WeeklyDebriefRepo from '../repos/WeeklyDebriefRepo';
 
 @Resolver((_of) => User)
 class UserResolver {
-  @Query((_retuns) => User)
+  @Query((_returns) => User, { nullable: true })
   async getUser(@Arg('uuid') uuid: string) {
     return UserRepo.getUserByUUID(uuid);
   }
@@ -19,28 +20,34 @@ class UserResolver {
     return user;
   }
 
-  @Mutation((_returns) => User)
+  @Mutation((_returns) => User, { nullable: true })
   async followPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
     const user = await UserRepo.followPublication(uuid, pubID);
     return user;
   }
 
-  @Mutation((_returns) => User)
+  @Mutation((_returns) => User, { nullable: true })
   async unfollowPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
     const user = await UserRepo.unfollowPublication(uuid, pubID);
     return user;
   }
 
-  @Mutation((_returns) => User)
+  @Mutation((_returns) => User, { nullable: true })
   async readArticle(@Arg('uuid') uuid: string, @Arg('articleID') articleID: string) {
     const user = await UserRepo.appendReadArticle(uuid, articleID);
     return user;
   }
 
-  @Mutation((_returns) => User)
+  @Mutation((_returns) => User, { nullable: true })
   async bookmarkArticle(@Arg('uuid') uuid: string) {
     const user = await UserRepo.incrementBookmarks(uuid);
     return user;
+  }
+
+  @Mutation((_returns) => [User])
+  async getWeeklyDebrief() {
+    const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
+    return users;
   }
 }
 

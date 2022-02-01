@@ -5,6 +5,7 @@ import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
 import { Article } from '../entities/Article';
 import { PublicationID } from '../common/types';
+import { IMMEDIATELY_EXPIRE_DATE } from '../common/constants';
 
 /**
  * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
@@ -24,11 +25,12 @@ const createUser = async (
       return Object.assign(new PublicationID(), { id });
     });
     const uuid = uuidv4();
-
+    const creationDate = new Date();
+    const expirationDate = new Date(IMMEDIATELY_EXPIRE_DATE);
     const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
       uuid,
-      creationDate: new Date(),
-      expirationDate: new Date('December 17, 1995 03:24:00'),
+      creationDate,
+      expirationDate,
       readArticles: [],
       randomArticles: [],
     });
@@ -39,6 +41,7 @@ const createUser = async (
       followedPublications,
       deviceType,
       weeklyDebrief,
+      readArticles: [],
     });
     return UserModel.create(newUser);
   }
@@ -50,6 +53,9 @@ const createUser = async (
  */
 const followPublication = async (uuid: string, pubID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
+  if (!user) {
+    return user;
+  }
   user.followedPublications.push(Object.assign(new PublicationID(), { id: pubID }));
   return user.save();
 };
@@ -59,6 +65,9 @@ const followPublication = async (uuid: string, pubID: string): Promise<User> => 
  */
 const unfollowPublication = async (uuid: string, pubID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
+  if (!user) {
+    return user;
+  }
   const pubIDs = user.followedPublications.map((pubIDObject) => {
     return pubIDObject.id;
   });
@@ -94,8 +103,13 @@ const appendReadArticle = async (uuid: string, articleID: string): Promise<User>
   const article = await ArticleRepo.getArticleByID(articleID);
   const user = await UserModel.findOne({ uuid });
   const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
-  if (!user.readArticles.reduce(checkDuplicates, false)) {
-    user.readArticles.push(article);
+  if (!user) {
+    return user;
+  }
+  if (article) {
+    if (!user.readArticles.reduce(checkDuplicates, false)) {
+      user.readArticles.push(article);
+    }
   }
   user.save();
   return user;
