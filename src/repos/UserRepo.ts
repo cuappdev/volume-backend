@@ -53,11 +53,11 @@ const createUser = async (
  */
 const followPublication = async (uuid: string, pubID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
-  if (!user) {
-    return user;
+  if (user) {
+    user.followedPublications.push(Object.assign(new PublicationID(), { id: pubID }));
+    return user.save();
   }
-  user.followedPublications.push(Object.assign(new PublicationID(), { id: pubID }));
-  return user.save();
+  return user;
 };
 
 /**
@@ -65,18 +65,18 @@ const followPublication = async (uuid: string, pubID: string): Promise<User> => 
  */
 const unfollowPublication = async (uuid: string, pubID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
-  if (!user) {
-    return user;
+  if (user) {
+    const pubIDs = user.followedPublications.map((pubIDObject) => {
+      return pubIDObject.id;
+    });
+    const pubIndex = pubIDs.indexOf(pubID);
+    if (pubIndex === -1) {
+      return user;
+    }
+    user.followedPublications.splice(pubIndex, 1);
+    return user.save();
   }
-  const pubIDs = user.followedPublications.map((pubIDObject) => {
-    return pubIDObject.id;
-  });
-  const pubIndex = pubIDs.indexOf(pubID);
-  if (pubIndex === -1) {
-    return user;
-  }
-  user.followedPublications.splice(pubIndex, 1);
-  return user.save();
+  return user;
 };
 
 const getUserByUUID = async (uuid: string): Promise<User> => {
