@@ -1,11 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { User, UserModel } from '../entities/User';
-import WeeklyDebrief from '../entities/WeeklyDebrief';
 import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
 import { Article } from '../entities/Article';
 import { PublicationID } from '../common/types';
-import { IMMEDIATELY_EXPIRE_DATE } from '../common/constants';
 
 /**
  * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
@@ -20,27 +18,17 @@ const createUser = async (
 
   // if no user, create a new one
   if (!users[0]) {
-    // create PublicationID obejcts from string of followed publications
+    // create PublicationID objects from string of followed publications
     const followedPublications = followedPublicationsIDs.map((id) => {
       return Object.assign(new PublicationID(), { id });
     });
     const uuid = uuidv4();
-    const creationDate = new Date();
-    const expirationDate = new Date(IMMEDIATELY_EXPIRE_DATE);
-    const weeklyDebrief = Object.assign(new WeeklyDebrief(), {
-      uuid,
-      creationDate,
-      expirationDate,
-      readArticles: [],
-      randomArticles: [],
-    });
-
     const newUser = Object.assign(new User(), {
       uuid,
       deviceToken,
       followedPublications,
       deviceType,
-      weeklyDebrief,
+      weeklyDebrief: null,
       readArticles: [],
     });
     return UserModel.create(newUser);

@@ -40,9 +40,9 @@ export class User {
   @Property({ required: true, type: () => Article, default: [] })
   readArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  weeklyDebrief: WeeklyDebrief;
+  weeklyDebrief?: WeeklyDebrief;
 }
 
 export const UserModel = getModelForClass(User);
