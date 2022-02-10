@@ -120,7 +120,7 @@ const appendReadArticle = async (uuid: string, articleID: string): Promise<User>
  */
 const incrementShoutouts = async (uuid: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
-  if (user !== null) {
+  if (user) {
     user.numShoutouts += 1;
     user.save();
   }
@@ -132,7 +132,7 @@ const incrementShoutouts = async (uuid: string): Promise<User> => {
  */
 const incrementBookmarks = async (uuid: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
-  if (user !== null) {
+  if (user) {
     user.numBookmarkedArticles += 1;
     user.save();
   }
