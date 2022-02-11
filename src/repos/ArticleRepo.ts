@@ -5,24 +5,35 @@ import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES } from '../common/cons
 import { PublicationModel } from '../entities/Publication';
 
 const getArticleByID = async (id: string): Promise<Article> => {
-  return ArticleModel.findById(new ObjectId(id));
+  const article = ArticleModel.findById(new ObjectId(id));
+  const covidCheck = isCovidArticle((await article).title);
+  if(!covidCheck){
+    return article;
+  }
+  return null;
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
     // Filter out all null values that were returned by ObjectIds not associated
     // with articles in database
-    return articles.filter((article) => article !== null);
+    return articles.filter((article) => article !== null && !isCovidArticle(article.title));
   });
 };
 
 const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
-  return ArticleModel.find({}).limit(limit);
+  return ArticleModel.find({}).limit(limit).then((articles) =>
+  { 
+    return articles.filter((article) => !isCovidArticle(article.title))
+  })
 };
 
 const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
-  return ArticleModel.find({ 'publication.slug': publication.slug });
+  return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles)=>
+  {
+    return articles.filter((article) => !isCovidArticle(article.title))
+  })
 };
 
 const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
@@ -43,7 +54,9 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
     })
       // Sort dates in order of most recent to least
       .sort({ date: 'desc' })
-      .limit(limit)
+      .limit(limit).then((articles)=>{
+        return articles.filter((article) => !isCovidArticle(article.title))
+      })
   );
 };
 
@@ -55,7 +68,7 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  */
 const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articles = await ArticleModel.find({ isTrending: true }).exec();
-  return articles.slice(0, limit);
+  return articles.filter((article) => !isCovidArticle(article.title)).slice(0, limit);
 };
 
 /**
@@ -101,6 +114,12 @@ const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
   article.shoutouts += 1;
   return article.save();
+};
+
+const isCovidArticle = (title: string): boolean => {
+  const filter = new Filter();
+  filter.addWords("covid", "covid-19", "coronavirus", "test", "mask", "masks", "pandemic", "tests", "omicron","endemic")
+  return filter.isProfane(title);
 };
 
 /**
