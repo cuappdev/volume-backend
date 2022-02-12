@@ -6,8 +6,7 @@ import { PublicationModel } from '../entities/Publication';
 
 const getArticleByID = async (id: string): Promise<Article> => {
   const article = ArticleModel.findById(new ObjectId(id));
-  const covidCheck = isCovidArticle((await article).title);
-  if(!covidCheck){
+  if((await article).filtered){
     return article;
   }
   return null;
@@ -17,14 +16,14 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
     // Filter out all null values that were returned by ObjectIds not associated
     // with articles in database
-    return articles.filter((article) => article !== null && !isCovidArticle(article.title));
+    return articles.filter((article) => article !== null && !article.filtered);
   });
 };
 
 const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return ArticleModel.find({}).limit(limit).then((articles) =>
   { 
-    return articles.filter((article) => !isCovidArticle(article.title))
+    return articles.filter((article) => !article.filtered)
   })
 };
 
@@ -32,7 +31,7 @@ const getArticlesByPublicationID = async (publicationID: string): Promise<Articl
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
   return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles)=>
   {
-    return articles.filter((article) => !isCovidArticle(article.title))
+    return articles.filter((article) => !article.filtered)
   })
 };
 
@@ -55,7 +54,7 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
       // Sort dates in order of most recent to least
       .sort({ date: 'desc' })
       .limit(limit).then((articles)=>{
-        return articles.filter((article) => !isCovidArticle(article.title))
+        return articles.filter((article) => !article.filtered)
       })
   );
 };
@@ -68,7 +67,7 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  */
 const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articles = await ArticleModel.find({ isTrending: true }).exec();
-  return articles.filter((article) => !isCovidArticle(article.title)).slice(0, limit);
+  return articles.filter((article) => !article.filtered).slice(0, limit);
 };
 
 /**
@@ -114,12 +113,6 @@ const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
   article.shoutouts += 1;
   return article.save();
-};
-
-const isCovidArticle = (title: string): boolean => {
-  const filter = new Filter();
-  filter.addWords("covid", "covid-19", "coronavirus", "test", "mask", "masks", "pandemic", "tests", "omicron","endemic")
-  return filter.isProfane(title);
 };
 
 /**
