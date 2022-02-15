@@ -7,9 +7,9 @@ import { PublicationModel } from '../entities/Publication';
 const getArticleByID = async (id: string): Promise<Article> => {
   const article = ArticleModel.findById(new ObjectId(id));
   if((await article).filtered){
-    return article;
+    return null;
   }
-  return null;
+  return article;
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
