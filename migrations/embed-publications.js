@@ -24,7 +24,7 @@ module.exports = {
   async down(db) {
     const articles = await db.collection('articles').find({}).toArray();
     articles.map( async (article) => {
-      await db.collection('articles').updateOne({_id: article._id}, {$unset: {publication: ""}});
+      await db.collection('articles').updateOne({_id: article._id}, {$unset: {publication: ''}});
       return article;
     });
     },
