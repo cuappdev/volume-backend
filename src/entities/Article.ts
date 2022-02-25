@@ -45,7 +45,7 @@ export class Article {
 
   @Field()
   @Property()
-  filtered: boolean;
+  isFiltered: boolean;
 }
 
 export const ArticleModel = getModelForClass(Article);

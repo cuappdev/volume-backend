@@ -5,7 +5,7 @@ module.exports = {
     filter.addWords("covid-19","coronavirus", "pandemic","masks","mask")
     const articles = await db.collection('articles').find({}).toArray();
     articles.map( async (article) => {
-        await db.collection('articles').updateOne({_id: article._id}, {$set: {filtered: filter.isProfane(article.title)}});
+        await db.collection('articles').updateOne({_id: article._id}, {$set: {isFiltered: filter.isProfane(article.title)}});
         return article;
     });
   },
@@ -13,7 +13,7 @@ module.exports = {
   async down(db) {
     const articles = await db.collection('articles').find({}).toArray();
     articles.map( async (article) => {
-      await db.collection('articles').updateOne({_id: article._id}, {$unset: {filtered: ""}});
+      await db.collection('articles').updateOne({_id: article._id}, {$unset: {isFiltered: ""}});
       return article;
     });
     },
