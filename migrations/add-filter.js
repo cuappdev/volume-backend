@@ -5,7 +5,7 @@ module.exports = {
      */
     let Filter = require('../node_modules/bad-words');
     const filter = new Filter({emptyList: true});
-    filter.addWords('covid-19','coronavirus', 'pandemic','masks','mask')
+    filter.addWords('covid-19','coronavirus', 'pandemic','masks','mask','test','testing','tests')
     const articles = await db.collection('articles').find({}).toArray();
     articles.map( async (article) => {
         await db.collection('articles').updateOne({_id: article._id}, {$set: {isFiltered: filter.isProfane(article.title)}});
