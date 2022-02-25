@@ -88,12 +88,12 @@ const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> =>
  * Add article to a user's readArticles
  */
 const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
-  const article = await ArticleRepo.getArticleByID(articleID);
   const user = await UserModel.findOne({ uuid });
-  const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
   if (!user) {
     return user;
   }
+  const article = await ArticleRepo.getArticleByID(articleID);
+  const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
   if (article) {
     if (!user.readArticles.reduce(checkDuplicates, false)) {
       user.readArticles.push(article);

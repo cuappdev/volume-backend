@@ -15,7 +15,7 @@ class UserResolver {
 
   @Mutation((_returns) => User, {
     description: `Creates a single <User> via given <deviceToken>, <followedPublications>,
-   and <deviceType>. Will not create a user if one with the same <deviceToken> already exists.`,
+   and <deviceType>. Given <deviceToken> must be unique for a new user to be created, otherwise does nothing.`,
   })
   async createUser(
     @Arg('deviceToken') deviceToken: string,
@@ -63,7 +63,7 @@ class UserResolver {
   }
 
   @Mutation((_returns) => [User], {
-    description: 'Creates and returns the Weekly Debrief for all users',
+    description: 'Creates Weekly Debriefs for all users',
   })
   async getWeeklyDebrief() {
     const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
