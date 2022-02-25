@@ -1,13 +1,17 @@
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
-import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES } from '../common/constants';
+import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES, IS_FILTER_ACTIVE } from '../common/constants';
 import { PublicationModel } from '../entities/Publication';
+
+function isArticleFiltered(article: Article){
+  return IS_FILTER_ACTIVE && article.isFiltered;
+}
 
 const getArticleByID = async (id: string): Promise<Article> => {
   return ArticleModel.findById(new ObjectId(id)).then(
     (article) => {
-      if (!article.isFiltered){
+      if (!isArticleFiltered(article)){
         return article;
       }
     }
@@ -18,14 +22,14 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   return Promise.all(ids.map((id) => ArticleModel.findById(new ObjectId(id)))).then((articles) => {
     // Filter out all null values that were returned by ObjectIds not associated
     // with articles in database
-    return articles.filter((article) => article !== null && !article.isFiltered);
+    return articles.filter((article) => article !== null && !isArticleFiltered(article));
   });
 };
 
 const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return ArticleModel.find({}).limit(limit).then((articles) =>
   { 
-    return articles.filter((article) => !article.isFiltered)
+    return articles.filter((article) => !isArticleFiltered(article))
   })
 };
 
@@ -33,7 +37,7 @@ const getArticlesByPublicationID = async (publicationID: string): Promise<Articl
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
   return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles)=>
   {
-    return articles.filter((article) => !article.isFiltered)
+    return articles.filter((article) => !isArticleFiltered(article))
   })
 };
 
@@ -56,7 +60,7 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
       // Sort dates in order of most recent to least
       .sort({ date: 'desc' })
       .limit(limit).then((articles)=>{
-        return articles.filter((article) => !article.isFiltered)
+        return articles.filter((article) => !isArticleFiltered(article))
       })
   );
 };
@@ -69,7 +73,7 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  */
 const getTrendingArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
   const articles = await ArticleModel.find({ isTrending: true }).exec();
-  return articles.filter((article) => !article.isFiltered).slice(0, limit);
+  return articles.filter((article) => !isArticleFiltered(article)).slice(0, limit);
 };
 
 /**
