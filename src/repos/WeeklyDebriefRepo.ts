@@ -2,9 +2,10 @@ import { DocumentType } from '@typegoose/typegoose';
 import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { ArticleModel } from '../entities/Article';
+import { DAYS_IN_WEEK } from '../common/constants'
 
 const getExpirationDate = (creationDate: Date): Date => {
-  creationDate.setDate(creationDate.getDate() + 7);
+  creationDate.setDate(creationDate.getDate() + DAYS_IN_WEEK);
   return creationDate;
 };
 
@@ -42,7 +43,7 @@ const createWeeklyDebrief = async (
 const createWeeklyDebriefs = async (): Promise<User[]> => {
   const creationDate = new Date();
   const expDate = new Date();
-  expDate.setDate(creationDate.getDate() + 7);
+  expDate.setDate(creationDate.getDate() + DAYS_IN_WEEK);
   const userList = UserModel.find({}).then((users) =>
     Promise.all(users.map((user) => createWeeklyDebrief(user, creationDate, expDate))),
   );

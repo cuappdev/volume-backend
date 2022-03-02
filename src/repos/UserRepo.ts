@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-import { User, UserModel } from '../entities/User';
-import PublicationRepo from './PublicationRepo';
-import ArticleRepo from './ArticleRepo';
 import { Article } from '../entities/Article';
+import ArticleRepo from './ArticleRepo';
 import { PublicationID } from '../common/types';
+import PublicationRepo from './PublicationRepo';
+import { User, UserModel } from '../entities/User';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
@@ -128,12 +128,12 @@ const incrementBookmarks = async (uuid: string): Promise<User> => {
 };
 
 export default {
-  createUser,
-  incrementShoutouts,
-  incrementBookmarks,
   appendReadArticle,
+  createUser,
+  followPublication,
   getUserByUUID,
   getUsersFollowingPublication,
-  followPublication,
+  incrementBookmarks,
+  incrementShoutouts,
   unfollowPublication,
 };
