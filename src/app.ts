@@ -49,7 +49,7 @@ const main = async () => {
   server.applyMiddleware({ app });
 
   async function setupWeeklyDebriefRefreshCron() {
-    // Refresh weekly debrifs and sent notifications once a week
+    // Refresh weekly debriefs and sent notifications once a week
     cron.schedule('0 0 * * 0', async () => {
       const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
       NotificationRepo.notifyWeeklyDebrief(users);
