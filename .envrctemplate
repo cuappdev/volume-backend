@@ -1,3 +1,4 @@
 export NODE_ENV=[node env]
 export APP_PORT=[port]
 export MONGO_ADDRESS=[db uri]
+export DB_NAME=[db name]
