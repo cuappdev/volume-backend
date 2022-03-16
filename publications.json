@@ -226,7 +226,7 @@
          "bio":"A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
          "bioShort":"Cornell Business Review is the premier business publication at Cornell University.",
          "rssName":"CBRnow - Cornell Business Review",
-         "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
+         "rssURL":"https://www.cornellappdev.com/?format=rss",
          "name":"Cornell Business Review",
          "slug":"cbr",
          "socialURLs":[
