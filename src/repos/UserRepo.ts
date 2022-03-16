@@ -13,12 +13,12 @@ const createUser = async (
   followedPublicationsIDs: string[],
   deviceType: string,
 ): Promise<User> => {
-  // check if user associated with this deviceToken already exists
+  // Check if user associated with this deviceToken already exists
   const users = await UserModel.find({ deviceToken });
 
-  // if no user, create a new one
+  // If no user, create a new one
   if (!users[0]) {
-    // create PublicationID objects from string of followed publications
+    // Create PublicationID objects from string of followed publications
     const followedPublications = followedPublicationsIDs.map((id) => {
       return Object.assign(new PublicationID(), { id });
     });
