@@ -32,8 +32,8 @@ const main = async () => {
     res.sendFile('index.html', { root: __dirname });
   });
 
-  // Setup Android Admin
-  if (process.env.NODE_ENV == 'production') {
+  // Setup Firebase Admin
+  if (process.env.NODE_ENV === 'production') {
     admin.initializeApp({
       credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
     });
