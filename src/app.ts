@@ -1,13 +1,11 @@
 import 'reflect-metadata';
 import cron from 'node-cron';
-import admin from 'firebase-admin';
 import Express from 'express';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
-import NotificationRepo from './repos/NotificationRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
@@ -27,7 +25,6 @@ const main = async () => {
   });
   const app = Express();
 
-  app.use(Express.json());
   app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
   });
