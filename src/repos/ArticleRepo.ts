@@ -6,8 +6,8 @@ import { PublicationModel } from '../entities/Publication';
 
 function isArticleFiltered(article: Article){
   if(IS_FILTER_ACTIVE){
-    if (article.isFiltered){ //If the body has been checked already in microservice
-      return article.isFiltered; 
+    if (article.isFiltered){ // If the body has been checked already in microservice
+      return true; 
     }
     const filter = new Filter({ list: FILTERED_WORDS });
     return filter.isProfane(article.title);
