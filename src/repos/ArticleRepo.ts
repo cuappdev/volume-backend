@@ -58,6 +58,20 @@ const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Ar
   return articles.flat();
 };
 
+const getArticlesByPublicationSlug = async (slug: string): Promise<Article[]> => {
+  return ArticleModel.find({ 'publication.slug': slug });
+};
+
+const getArticlesByPublicationSlugs = async (slugs: string[]): Promise<Article[]> => {
+  const uniqueSlugs = [...new Set(slugs)];
+  const articles = await Promise.all(
+    uniqueSlugs.map(async (slug) => {
+      return getArticlesByPublicationSlug(slug);
+    }),
+  );
+  return articles.flat();
+};
+
 const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
@@ -124,8 +138,11 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
  */
 const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
-  article.shoutouts += 1;
-  return article.save();
+  if (article) {
+    article.shoutouts += 1;
+    return article.save();
+  }
+  return article;
 };
 
 /**
@@ -146,6 +163,8 @@ export default {
   getArticlesByIDs,
   getArticlesByPublicationID,
   getArticlesByPublicationIDs,
+  getArticlesByPublicationSlug,
+  getArticlesByPublicationSlugs,
   getTrendingArticles,
   incrementShoutouts,
   refreshTrendingArticles,
