@@ -42,6 +42,10 @@ export class Article {
   @Field()
   @Property({ default: false })
   isTrending: boolean;
+
+  @Field()
+  @Property()
+  isFiltered: boolean;
 }
 
 export const ArticleModel = getModelForClass(Article);
