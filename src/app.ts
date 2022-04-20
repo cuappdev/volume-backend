@@ -20,12 +20,18 @@ const main = async () => {
 
   await dbConnection();
 
+  var bodyParser = require('body-parser');
+
+  var app = Express();
+
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
+
   const server = new ApolloServer({
     schema,
     playground: true,
     introspection: true,
   });
-  const app = Express();
 
   app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
@@ -39,6 +45,8 @@ const main = async () => {
   }
 
   app.post('/collect', (req, res) => {
+    // console.log(req.body);
+    // console.log("HI");
     const { articleIDs } = req.body;
     NotificationRepo.notify(articleIDs);
     res.json({ success: 'true' });
