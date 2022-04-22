@@ -59,9 +59,6 @@ const notify = async (articleIDs: string[]): Promise<void> => {
     // send notifications to each follower that publication posted article
     followers.forEach(async (follower) => {
       sendNewArticleNotification(follower, article, publication);
-      // if (follower.deviceType === IOS) {
-      //   sendNewArticleIOSNotification(follower, article, publication);
-      // }
     });
   });
 };
