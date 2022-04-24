@@ -44,7 +44,7 @@ const main = async () => {
     });
   }
 
-  app.post('/collect', (req, res) => {
+  app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
     NotificationRepo.notify(articleIDs);
     res.json({ success: 'true' });
