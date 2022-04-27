@@ -1,9 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Article } from '../entities/Article';
 import ArticleRepo from './ArticleRepo';
 import { PublicationID } from '../common/types';
 import PublicationRepo from './PublicationRepo';
 import { User, UserModel } from '../entities/User';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.

@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
@@ -55,14 +56,13 @@ class UserResolver {
   })
   async bookmarkArticle(@Arg('uuid') uuid: string) {
     return await UserRepo.incrementBookmarks(uuid);
-
   }
 
   @Mutation((_returns) => [User], {
     description: 'Creates Weekly Debriefs for all users',
   })
   async getWeeklyDebrief() {
-   return await WeeklyDebriefRepo.createWeeklyDebriefs();
+    return await WeeklyDebriefRepo.createWeeklyDebriefs();
   }
 }
 
