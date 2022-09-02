@@ -33,7 +33,7 @@ const main = async () => {
   });
 
   // Setup Android Admin
-  if (process.env.NODE_ENV == 'production') {
+  if (process.env.NODE_ENV === 'production') {
     admin.initializeApp({
       credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
     });
