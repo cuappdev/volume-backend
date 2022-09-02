@@ -2,7 +2,7 @@ import { DocumentType } from '@typegoose/typegoose';
 import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { ArticleModel } from '../entities/Article';
-import { DAYS_IN_WEEK } from '../common/constants'
+import { DAYS_IN_WEEK } from '../common/constants';
 
 const getExpirationDate = (creationDate: Date): Date => {
   creationDate.setDate(creationDate.getDate() + DAYS_IN_WEEK);
