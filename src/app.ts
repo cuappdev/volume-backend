@@ -8,6 +8,7 @@ import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import NotificationRepo from './repos/NotificationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
+import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
@@ -20,12 +21,13 @@ const main = async () => {
 
   await dbConnection();
 
-  var bodyParser = require('body-parser');
+  // eslint-disable-next-line vars-on-top, global-require, @typescript-eslint/no-var-requires
+  const bodyParser = require('body-parser');
 
-  var app = Express();
+  const app = Express();
 
-  app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
 
   const server = new ApolloServer({
     schema,
@@ -46,11 +48,19 @@ const main = async () => {
 
   app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
-    NotificationRepo.notify(articleIDs);
+    NotificationRepo.notifyNewArticles(articleIDs);
     res.json({ success: 'true' });
   });
 
   server.applyMiddleware({ app });
+
+  async function setupWeeklyDebriefRefreshCron() {
+    // Refresh weekly debriefs and sent notifications once a week
+    cron.schedule('0 0 * * 0', async () => {
+      const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
+      NotificationRepo.notifyWeeklyDebrief(users);
+    });
+  }
 
   async function setupTrendingArticleRefreshCron() {
     // Refresh trending articles 12 hours
@@ -59,6 +69,7 @@ const main = async () => {
     });
   }
 
+  setupWeeklyDebriefRefreshCron();
   setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {
