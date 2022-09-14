@@ -23,7 +23,7 @@
          "bio":"Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
          "bioShort":"Dedicated exclusively to Cornell Athletics",
          "rssName":"Big Red Sports Network",
-         "rssURL":"https://www.bigredsportsnetwork.org/feed",
+         "rssURL":"https://www.cornellbrsn.com/blog-feed.xml",
          "name":"Big Red Sports Network",
          "slug":"brsn",
          "socialURLs":[
@@ -48,7 +48,7 @@
                "URL":"https://twitter.com/CornellBRSN"
             }
          ],
-         "websiteURL":"https://www.bigredsportsnetwork.org"
+         "websiteURL":"https://www.cornellbrsn.com/"
       },
       {
          "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
