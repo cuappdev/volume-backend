@@ -36,7 +36,8 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given <publicationID>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given <publicationID>. Results can offsetted by <offset> >= 0.',
   })
   async getArticlesByPublicationID(
     @Arg('publicationID') publicationID: string,
@@ -48,7 +49,8 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given list of <publicationIDs>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given list of <publicationIDs>. Results offsetted by <offset> >= 0.',
   })
   async getArticlesByPublicationIDs(
     @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
@@ -60,7 +62,8 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given <slug>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given <slug>. Results can be offsetted by <offset> >= 0.',
   })
   async getArticlesByPublicationSlug(
     @Arg('slug') slug: string,
@@ -72,7 +75,8 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given list of <slugs>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given list of <slugs>. Results can be offsetted by <offset> >= 0.',
   })
   async getArticlesByPublicationSlugs(
     @Arg('slugs', (type) => [String]) slugs: string[],
