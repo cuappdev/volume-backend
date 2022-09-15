@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-import { DEFAULT_LIMIT } from '../common/constants';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
 import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => Article)
@@ -28,7 +28,7 @@ class ArticleResolver {
   })
   async getAllArticles(
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: 0 }) offset: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     const articles = await ArticleRepo.getAllArticles(offset, limit);
     return articles;
@@ -42,7 +42,7 @@ class ArticleResolver {
   async getArticlesByPublicationID(
     @Arg('publicationID') publicationID: string,
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: 0 }) offset: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     return ArticleRepo.getArticlesByPublicationID(publicationID, limit, offset);
   }
@@ -55,7 +55,7 @@ class ArticleResolver {
   async getArticlesByPublicationIDs(
     @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: 0 }) offset: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     return ArticleRepo.getArticlesByPublicationIDs(publicationIDs, limit, offset);
   }
@@ -68,7 +68,7 @@ class ArticleResolver {
   async getArticlesByPublicationSlug(
     @Arg('slug') slug: string,
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: 0 }) offset: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     return ArticleRepo.getArticlesByPublicationSlug(slug, limit, offset);
   }
@@ -81,7 +81,7 @@ class ArticleResolver {
   async getArticlesByPublicationSlugs(
     @Arg('slugs', (type) => [String]) slugs: string[],
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: 0 }) offset: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     return ArticleRepo.getArticlesByPublicationSlugs(slugs, limit, offset);
   }

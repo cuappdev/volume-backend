@@ -6,6 +6,7 @@ import {
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
   IS_FILTER_ACTIVE,
   FILTERED_WORDS,
+  DEFAULT_OFFSET,
 } from '../common/constants';
 import { PublicationModel } from '../entities/Publication';
 
@@ -37,7 +38,10 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-const getAllArticles = async (offset = 0, limit = DEFAULT_LIMIT): Promise<Article[]> => {
+const getAllArticles = async (
+  offset = DEFAULT_OFFSET,
+  limit = DEFAULT_LIMIT,
+): Promise<Article[]> => {
   return ArticleModel.find({})
     .skip(offset)
     .limit(limit)
@@ -48,8 +52,8 @@ const getAllArticles = async (offset = 0, limit = DEFAULT_LIMIT): Promise<Articl
 
 const getArticlesByPublicationID = async (
   publicationID: string,
-  limit: number,
-  offset: number,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
   return ArticleModel.find({ 'publication.slug': publication.slug })
@@ -62,8 +66,8 @@ const getArticlesByPublicationID = async (
 
 const getArticlesByPublicationIDs = async (
   publicationIDs: string[],
-  limit: number,
-  offset: number,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   const uniquePubIDs = [...new Set(publicationIDs)];
   const articles = await Promise.all(
@@ -76,16 +80,16 @@ const getArticlesByPublicationIDs = async (
 
 const getArticlesByPublicationSlug = async (
   slug: string,
-  limit: number,
-  offset: number,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   return ArticleModel.find({ 'publication.slug': slug }).skip(offset).limit(limit);
 };
 
 const getArticlesByPublicationSlugs = async (
   slugs: string[],
-  limit: number,
-  offset: number,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   const uniqueSlugs = [...new Set(slugs)];
   const articles = await Promise.all(
