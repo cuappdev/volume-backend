@@ -24,10 +24,13 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: `Returns a list of <Articles> of size <limit>. Default <limit> is ${DEFAULT_LIMIT}`,
+    description: `Returns a list of <Articles> of size <limit> with offset <offset>. Default <limit> is ${DEFAULT_LIMIT} and default <offset> is 0`,
   })
-  async getAllArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
-    const articles = await ArticleRepo.getAllArticles(limit);
+  async getAllArticles(
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: 0 }) offset: number,
+  ) {
+    const articles = await ArticleRepo.getAllArticles(offset, limit);
     return articles;
   }
 
@@ -35,8 +38,12 @@ class ArticleResolver {
     nullable: false,
     description: 'Returns a list of <Articles> via the given <publicationID>',
   })
-  async getArticlesByPublicationID(@Arg('publicationID') publicationID: string) {
-    return ArticleRepo.getArticlesByPublicationID(publicationID);
+  async getArticlesByPublicationID(
+    @Arg('publicationID') publicationID: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: 0 }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationID(publicationID, limit, offset);
   }
 
   @Query((_returns) => [Article], {
@@ -45,24 +52,34 @@ class ArticleResolver {
   })
   async getArticlesByPublicationIDs(
     @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: 0 }) offset: number,
   ) {
-    return ArticleRepo.getArticlesByPublicationIDs(publicationIDs);
+    return ArticleRepo.getArticlesByPublicationIDs(publicationIDs, limit, offset);
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
     description: 'Returns a list of <Articles> via the given <slug>',
   })
-  async getArticlesByPublicationSlug(@Arg('slug') slug: string) {
-    return ArticleRepo.getArticlesByPublicationSlug(slug);
+  async getArticlesByPublicationSlug(
+    @Arg('slug') slug: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: 0 }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationSlug(slug, limit, offset);
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
     description: 'Returns a list of <Articles> via the given list of <slugs>',
   })
-  async getArticlesByPublicationSlugs(@Arg('slugs', (type) => [String]) slugs: string[]) {
-    return ArticleRepo.getArticlesByPublicationSlugs(slugs);
+  async getArticlesByPublicationSlugs(
+    @Arg('slugs', (type) => [String]) slugs: string[],
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: 0 }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationSlugs(slugs, limit, offset);
   }
 
   @Query((_returns) => [Article], {
