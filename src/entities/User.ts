@@ -25,6 +25,10 @@ export class User {
   @Field()
   @Property()
   deviceType: string; // ANDROID, IOS
+
+  @Field()
+  @Property({ default: 0 })
+  numBookmarkedArticles?: number;
 }
 
 export const UserModel = getModelForClass(User);

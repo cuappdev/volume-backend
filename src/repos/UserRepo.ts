@@ -75,10 +75,23 @@ const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> =>
   return users;
 };
 
+/**
+ * Increment number of bookmarks in user's numBookmarkedArticles
+ */
+const incrementBookmarks = async (uuid: string): Promise<User> => {
+  const user = await UserModel.findOne({ uuid });
+  if (user) {
+    user.numBookmarkedArticles += 1;
+    user.save();
+  }
+  return user;
+};
+
 export default {
   createUser,
   getUserByUUID,
   getUsersFollowingPublication,
   followPublication,
   unfollowPublication,
+  incrementBookmarks,
 };

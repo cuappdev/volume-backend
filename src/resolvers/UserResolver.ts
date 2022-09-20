@@ -25,6 +25,14 @@ class UserResolver {
     const user = await UserRepo.unfollowPublication(uuid, pubID);
     return user;
   }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: 'Increments the number of bookmarks for the <User> given by <uuid>',
+  })
+  async bookmarkArticle(@Arg('uuid') uuid: string) {
+    return await UserRepo.incrementBookmarks(uuid);
+  }
 }
 
 export default UserResolver;
