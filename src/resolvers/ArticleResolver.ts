@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-import { DEFAULT_LIMIT } from '../common/constants';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
 import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => Article)
@@ -24,45 +24,66 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: `Returns a list of <Articles> of size <limit>. Default <limit> is ${DEFAULT_LIMIT}`,
+    description: `Returns a list of <Articles> of size <limit> with offset <offset>. Default <limit> is ${DEFAULT_LIMIT} and default <offset> is 0`,
   })
-  async getAllArticles(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
-    const articles = await ArticleRepo.getAllArticles(limit);
+  async getAllArticles(
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
+  ) {
+    const articles = await ArticleRepo.getAllArticles(offset, limit);
     return articles;
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given <publicationID>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given <publicationID>. Results can offsetted by <offset> >= 0.',
   })
-  async getArticlesByPublicationID(@Arg('publicationID') publicationID: string) {
-    return ArticleRepo.getArticlesByPublicationID(publicationID);
+  async getArticlesByPublicationID(
+    @Arg('publicationID') publicationID: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationID(publicationID, limit, offset);
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given list of <publicationIDs>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given list of <publicationIDs>. Results offsetted by <offset> >= 0.',
   })
   async getArticlesByPublicationIDs(
     @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
-    return ArticleRepo.getArticlesByPublicationIDs(publicationIDs);
+    return ArticleRepo.getArticlesByPublicationIDs(publicationIDs, limit, offset);
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given <slug>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given <slug>. Results can be offsetted by <offset> >= 0.',
   })
-  async getArticlesByPublicationSlug(@Arg('slug') slug: string) {
-    return ArticleRepo.getArticlesByPublicationSlug(slug);
+  async getArticlesByPublicationSlug(
+    @Arg('slug') slug: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationSlug(slug, limit, offset);
   }
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description: 'Returns a list of <Articles> via the given list of <slugs>',
+    description:
+      'Returns a list of <Articles> of size <limit> via the given list of <slugs>. Results can be offsetted by <offset> >= 0.',
   })
-  async getArticlesByPublicationSlugs(@Arg('slugs', (type) => [String]) slugs: string[]) {
-    return ArticleRepo.getArticlesByPublicationSlugs(slugs);
+  async getArticlesByPublicationSlugs(
+    @Arg('slugs', (type) => [String]) slugs: string[],
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
+  ) {
+    return ArticleRepo.getArticlesByPublicationSlugs(slugs, limit, offset);
   }
 
   @Query((_returns) => [Article], {

@@ -5,3 +5,5 @@
 *build/*
 nohup.out
 *src/certificates*
+Makefile
+start.sh
