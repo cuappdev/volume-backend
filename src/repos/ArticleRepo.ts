@@ -1,13 +1,20 @@
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
-import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES, IS_FILTER_ACTIVE, FILTERED_WORDS} from '../common/constants';
+import {
+  DEFAULT_LIMIT,
+  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
+  IS_FILTER_ACTIVE,
+  FILTERED_WORDS,
+  DEFAULT_OFFSET,
+} from '../common/constants';
 import { PublicationModel } from '../entities/Publication';
 
-function isArticleFiltered(article: Article){
-  if(IS_FILTER_ACTIVE){
-    if (article.isFiltered){ // If the body has been checked already in microservice
-      return true; 
+function isArticleFiltered(article: Article) {
+  if (IS_FILTER_ACTIVE) {
+    if (article.isFiltered) {
+      // If the body has been checked already in microservice
+      return true;
     }
     const filter = new Filter({ list: FILTERED_WORDS });
     return filter.isProfane(article.title);
@@ -16,13 +23,11 @@ function isArticleFiltered(article: Article){
 }
 
 const getArticleByID = async (id: string): Promise<Article> => {
-  return ArticleModel.findById(new ObjectId(id)).then(
-    (article) => {
-      if (!isArticleFiltered(article)){
-        return article;
-      }
+  return ArticleModel.findById(new ObjectId(id)).then((article) => {
+    if (!isArticleFiltered(article)) {
+      return article;
     }
-  );
+  });
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
@@ -33,40 +38,63 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
-  return ArticleModel.find({}).limit(limit).then((articles) =>
-  { 
-    return articles.filter((article) => !isArticleFiltered(article))
-  })
+const getAllArticles = async (
+  offset = DEFAULT_OFFSET,
+  limit = DEFAULT_LIMIT,
+): Promise<Article[]> => {
+  return ArticleModel.find({})
+    .skip(offset)
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => !isArticleFiltered(article));
+    });
 };
 
-const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
+const getArticlesByPublicationID = async (
+  publicationID: string,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
-  return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles)=>
-  {
-    return articles.filter((article) => !isArticleFiltered(article))
-  })
+  return ArticleModel.find({ 'publication.slug': publication.slug })
+    .skip(offset)
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => !isArticleFiltered(article));
+    });
 };
 
-const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
+const getArticlesByPublicationIDs = async (
+  publicationIDs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
   const uniquePubIDs = [...new Set(publicationIDs)];
   const articles = await Promise.all(
     uniquePubIDs.map(async (pubID) => {
-      return getArticlesByPublicationID(pubID);
+      return getArticlesByPublicationID(pubID, limit, offset);
     }),
   );
   return articles.flat();
 };
 
-const getArticlesByPublicationSlug = async (slug: string): Promise<Article[]> => {
-  return ArticleModel.find({ 'publication.slug': slug });
+const getArticlesByPublicationSlug = async (
+  slug: string,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  return ArticleModel.find({ 'publication.slug': slug }).skip(offset).limit(limit);
 };
 
-const getArticlesByPublicationSlugs = async (slugs: string[]): Promise<Article[]> => {
+const getArticlesByPublicationSlugs = async (
+  slugs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
   const uniqueSlugs = [...new Set(slugs)];
   const articles = await Promise.all(
     uniqueSlugs.map(async (slug) => {
-      return getArticlesByPublicationSlug(slug);
+      return getArticlesByPublicationSlug(slug, limit, offset);
     }),
   );
   return articles.flat();
@@ -80,8 +108,9 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
     })
       // Sort dates in order of most recent to least
       .sort({ date: 'desc' })
-      .limit(limit).then((articles)=>{
-        return articles.filter((article) => !isArticleFiltered(article))
+      .limit(limit)
+      .then((articles) => {
+        return articles.filter((article) => !isArticleFiltered(article));
       })
   );
 };
