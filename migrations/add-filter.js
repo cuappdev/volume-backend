@@ -1,15 +1,15 @@
 module.exports = {
   async up(db) {
-     /**
-     * Adds the `isFiltered` field to all articles.
-     */
+    /**
+    * Adds the `isFiltered` field to all articles.
+    */
     let Filter = require('../node_modules/bad-words');
-    const filter = new Filter({emptyList: true});
-    filter.addWords('covid-19','coronavirus', 'pandemic','masks','mask')
+    const filter = new Filter({ emptyList: true });
+    filter.addWords('covid-19', 'coronavirus', 'pandemic', 'masks', 'mask', 'test', 'testing', 'tests')
     const articles = await db.collection('articles').find({}).toArray();
-    articles.map( async (article) => {
-        await db.collection('articles').updateOne({_id: article._id}, {$set: {isFiltered: filter.isProfane(article.title)}});
-        return article;
+    articles.map(async (article) => {
+      await db.collection('articles').updateOne({ _id: article._id }, { $set: { isFiltered: filter.isProfane(article.title) } });
+      return article;
     });
   },
 
@@ -18,9 +18,9 @@ module.exports = {
      * Reverts the changes to the mongo database.
      */
     const articles = await db.collection('articles').find({}).toArray();
-    articles.map( async (article) => {
-      await db.collection('articles').updateOne({_id: article._id}, {$unset: {isFiltered: ''}});
+    articles.map(async (article) => {
+      await db.collection('articles').updateOne({ _id: article._id }, { $unset: { isFiltered: '' } });
       return article;
     });
-    },
+  },
 };

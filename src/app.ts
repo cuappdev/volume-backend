@@ -6,8 +6,8 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
-import PublicationResolver from './resolvers/PublicationResolver';
 import NotificationRepo from './repos/NotificationRepo';
+import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
@@ -20,26 +20,31 @@ const main = async () => {
 
   await dbConnection();
 
+  var bodyParser = require('body-parser');
+
+  var app = Express();
+
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
+
   const server = new ApolloServer({
     schema,
     playground: true,
     introspection: true,
   });
-  const app = Express();
 
-  app.use(Express.json());
   app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
   });
 
-  // Setup Android Admin
-  if (process.env.NODE_ENV == 'production') {
+  // Setup Firebase Admin
+  if (process.env.NODE_ENV === 'production') {
     admin.initializeApp({
       credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
     });
   }
 
-  app.post('/collect', (req, res) => {
+  app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
     NotificationRepo.notify(articleIDs);
     res.json({ success: 'true' });

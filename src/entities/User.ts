@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, DocumentType, getModelForClass } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
+import { Article } from './Article';
+import WeeklyDebrief from './WeeklyDebrief';
 import { PublicationID } from '../common/types';
 
 @ObjectType({ description: 'The User Model' })
@@ -28,7 +30,19 @@ export class User {
 
   @Field()
   @Property({ default: 0 })
+  numShoutouts?: number;
+
+  @Field()
+  @Property({ default: 0 })
   numBookmarkedArticles?: number;
+
+  @Field((type) => [Article])
+  @Property({ required: true, type: () => Article, default: [] })
+  readArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
+
+  @Field({ nullable: true })
+  @Property()
+  weeklyDebrief?: WeeklyDebrief;
 }
 
 export const UserModel = getModelForClass(User);
