@@ -85,8 +85,6 @@ const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> =>
 };
 
 /**
-<<<<<<< HEAD
-=======
  * Add article to a user's readArticles
  */
 const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
@@ -118,7 +116,6 @@ const incrementShoutouts = async (uuid: string): Promise<User> => {
 };
 
 /**
->>>>>>> main
  * Increment number of bookmarks in user's numBookmarkedArticles
  */
 const incrementBookmarks = async (uuid: string): Promise<User> => {
@@ -139,5 +136,4 @@ export default {
   incrementBookmarks,
   incrementShoutouts,
   unfollowPublication,
-  incrementBookmarks,
 };

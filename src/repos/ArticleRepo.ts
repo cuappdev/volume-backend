@@ -1,23 +1,6 @@
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Article, ArticleModel } from '../entities/Article';
-<<<<<<< HEAD
-import { DEFAULT_LIMIT, MAX_NUM_DAYS_OF_TRENDING_ARTICLES, IS_FILTER_ACTIVE } from '../common/constants';
-import { PublicationModel } from '../entities/Publication';
-
-function isArticleFiltered(article: Article){
-  return IS_FILTER_ACTIVE && article.isFiltered;
-}
-
-const getArticleByID = async (id: string): Promise<Article> => {
-  return ArticleModel.findById(new ObjectId(id)).then(
-    (article) => {
-      if (!isArticleFiltered(article)){
-        return article;
-      }
-    }
-  );
-=======
 import {
   DEFAULT_LIMIT,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
@@ -45,7 +28,6 @@ const getArticleByID = async (id: string): Promise<Article> => {
       return article;
     }
   });
->>>>>>> main
 };
 
 const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
@@ -56,13 +38,6 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-<<<<<<< HEAD
-const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
-  return ArticleModel.find({}).limit(limit).then((articles) =>
-  { 
-    return articles.filter((article) => !isArticleFiltered(article))
-  })
-=======
 const getAllArticles = async (
   offset = DEFAULT_OFFSET,
   limit = DEFAULT_LIMIT,
@@ -73,7 +48,6 @@ const getAllArticles = async (
     .then((articles) => {
       return articles.filter((article) => !isArticleFiltered(article));
     });
->>>>>>> main
 };
 
 const getArticlesByPublicationID = async (
@@ -82,19 +56,12 @@ const getArticlesByPublicationID = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
-<<<<<<< HEAD
-  return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles)=>
-  {
-    return articles.filter((article) => !isArticleFiltered(article))
-  })
-=======
   return ArticleModel.find({ 'publication.slug': publication.slug })
     .skip(offset)
     .limit(limit)
     .then((articles) => {
       return articles.filter((article) => !isArticleFiltered(article));
     });
->>>>>>> main
 };
 
 const getArticlesByPublicationIDs = async (
@@ -141,14 +108,9 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
     })
       // Sort dates in order of most recent to least
       .sort({ date: 'desc' })
-<<<<<<< HEAD
-      .limit(limit).then((articles)=>{
-        return articles.filter((article) => !isArticleFiltered(article))
-=======
       .limit(limit)
       .then((articles) => {
         return articles.filter((article) => !isArticleFiltered(article));
->>>>>>> main
       })
   );
 };
