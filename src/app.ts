@@ -37,11 +37,9 @@ const main = async () => {
   });
 
   // Setup Firebase Admin
-  if (process.env.NODE_ENV === 'production') {
-    admin.initializeApp({
-      credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
-    });
-  }
+  admin.initializeApp({
+    credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
+  });
 
   app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
