@@ -6,6 +6,7 @@ import {
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
   IS_FILTER_ACTIVE,
   FILTERED_WORDS,
+  DEFAULT_OFFSET,
 } from '../common/constants';
 import { PublicationModel } from '../entities/Publication';
 
@@ -13,7 +14,7 @@ function isArticleFiltered(article: Article) {
   if (IS_FILTER_ACTIVE) {
     if (article.isFiltered) {
       // If the body has been checked already in microservice
-      return article.isFiltered;
+      return true;
     }
     const filter = new Filter({ list: FILTERED_WORDS });
     return filter.isProfane(article.title);
@@ -37,29 +38,70 @@ const getArticlesByIDs = async (ids: string[]): Promise<Article[]> => {
   });
 };
 
-const getAllArticles = async (limit = DEFAULT_LIMIT): Promise<Article[]> => {
+const getAllArticles = async (
+  offset = DEFAULT_OFFSET,
+  limit = DEFAULT_LIMIT,
+): Promise<Article[]> => {
   return ArticleModel.find({})
+    .sort({ date: 'desc' })
+    .skip(offset)
     .limit(limit)
     .then((articles) => {
       return articles.filter((article) => !isArticleFiltered(article));
     });
 };
 
-const getArticlesByPublicationID = async (publicationID: string): Promise<Article[]> => {
-  const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
-  return ArticleModel.find({ 'publication.slug': publication.slug }).then((articles) => {
-    return articles.filter((article) => !isArticleFiltered(article));
-  });
+const getArticlesByPublicationSlug = async (
+  slug: string,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  return ArticleModel.find({ 'publication.slug': slug })
+    .sort({ date: 'desc' })
+    .skip(offset)
+    .limit(limit);
 };
 
-const getArticlesByPublicationIDs = async (publicationIDs: string[]): Promise<Article[]> => {
-  const uniquePubIDs = [...new Set(publicationIDs)];
-  const articles = await Promise.all(
-    uniquePubIDs.map(async (pubID) => {
-      return getArticlesByPublicationID(pubID);
-    }),
+const getArticlesByPublicationSlugs = async (
+  slugs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  const uniqueSlugs = [...new Set(slugs)];
+  return ArticleModel.find({ 'publication.slug': { $in: uniqueSlugs } })
+    .sort({ date: 'desc' })
+    .skip(offset)
+    .limit(limit);
+};
+
+const getArticlesByPublicationID = async (
+  publicationID: string,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
+  return ArticleModel.find({ 'publication.slug': publication.slug })
+    .sort({ date: 'desc' })
+    .skip(offset)
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => !isArticleFiltered(article));
+    });
+};
+
+const getArticlesByPublicationIDs = async (
+  publicationIDs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  const uniquePubIDs = [...new Set(publicationIDs)].map((id) => new ObjectId(id));
+  console.log(uniquePubIDs);
+  const pubSlugs = await PublicationModel.find({ _id: { $in: uniquePubIDs } }).select('slug');
+  return getArticlesByPublicationSlugs(
+    pubSlugs.map((pub) => pub.slug),
+    limit,
+    offset,
   );
-  return articles.flat();
 };
 
 const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
@@ -129,8 +171,11 @@ const refreshTrendingArticles = async (): Promise<Article[]> => {
  */
 const incrementShoutouts = async (id: string): Promise<Article> => {
   const article = await ArticleModel.findById(new ObjectId(id));
-  article.shoutouts += 1;
-  return article.save();
+  if (article) {
+    article.shoutouts += 1;
+    return article.save();
+  }
+  return article;
 };
 
 /**
@@ -151,6 +196,8 @@ export default {
   getArticlesByIDs,
   getArticlesByPublicationID,
   getArticlesByPublicationIDs,
+  getArticlesByPublicationSlug,
+  getArticlesByPublicationSlugs,
   getTrendingArticles,
   incrementShoutouts,
   refreshTrendingArticles,
