@@ -21,13 +21,10 @@ const main = async () => {
 
   await dbConnection();
 
-  // eslint-disable-next-line vars-on-top, global-require, @typescript-eslint/no-var-requires
-  const bodyParser = require('body-parser');
-
   const app = Express();
 
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
+  app.use(Express.urlencoded({ extended: false }));
+  app.use(Express.json());
 
   const server = new ApolloServer({
     schema,
@@ -40,9 +37,11 @@ const main = async () => {
   });
 
   // Setup Firebase Admin
-  admin.initializeApp({
-    credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
-  });
+  if (process.env.NODE_ENV === 'production') {
+    admin.initializeApp({
+      credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
+    });
+  }
 
   app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
