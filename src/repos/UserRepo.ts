@@ -5,7 +5,7 @@ import { PublicationSlug } from '../common/types';
 import { User, UserModel } from '../entities/User';
 
 /**
- * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
+ * Create new user associated with deviceToken and followedPublicationsSlugs of deviceType.
  */
 const createUser = async (
   deviceToken: string,
@@ -17,7 +17,7 @@ const createUser = async (
 
   // If no user, create a new one
   if (!users[0]) {
-    // Create PublicationID objects from string of followed publications
+    // Create PublicationSlug objects from string of followed publications
     const followedPublications = followedPublicationsSlugs.map((slug) => new PublicationSlug(slug));
     const uuid = uuidv4();
     const newUser = Object.assign(new User(), {

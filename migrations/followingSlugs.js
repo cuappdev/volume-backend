@@ -1,7 +1,7 @@
 module.exports = {
     async up(db) {
         /**
-         * Convering user followed publication ids to slugs
+         * Converting user followed publication ids to slugs
          */
         const allUsers = await db.collection('users').find({}).toArray();
         allUsers.forEach(async (user) => {
@@ -16,7 +16,7 @@ module.exports = {
 
     async down(db) {
         /**
-         * Convering user followed publication slugs to ids
+         * Converting user followed publication slugs to ids
          */
         const allUsers = await db.collection('users').find({}).toArray();
         allUsers.forEach(async (user) => {
