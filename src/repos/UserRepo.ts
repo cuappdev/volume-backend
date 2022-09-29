@@ -34,7 +34,7 @@ const createUser = async (
 };
 
 /**
- * Adds publication of pubID to user represented by uuid's followedPublications.
+ * Adds publication slug to user's followedPublications.
  */
 const followPublication = async (uuid: string, slug: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
@@ -47,13 +47,13 @@ const followPublication = async (uuid: string, slug: string): Promise<User> => {
 };
 
 /**
- * Deletes publication of pubID from user represented by uuid's followedPublications.
+ * Deletes publication slug from user's followedPublications.
  */
 const unfollowPublication = async (uuid: string, pubSlug: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
   if (user) {
-    const pubIDs = user.followedPublications.map((pubSlugObj) => pubSlugObj.slug);
-    const pubIndex = pubIDs.indexOf(pubSlug);
+    const pubSlugs = user.followedPublications.map((pubSlugObj) => pubSlugObj.slug);
+    const pubIndex = pubSlugs.indexOf(pubSlug);
 
     if (pubIndex === -1) return user;
 
