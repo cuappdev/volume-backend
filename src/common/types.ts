@@ -19,3 +19,14 @@ export class PublicationID {
   @Property()
   id: string;
 }
+
+@ObjectType({ description: 'Slug of a Publication' })
+export class PublicationSlug {
+  @Field()
+  @Property()
+  slug: string;
+
+  constructor(slug: string) {
+    this.slug = slug;
+  }
+}
