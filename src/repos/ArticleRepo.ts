@@ -27,6 +27,8 @@ const getArticleByID = async (id: string): Promise<Article> => {
     if (!isArticleFiltered(article)) {
       return article;
     }
+
+    return null;
   });
 };
 

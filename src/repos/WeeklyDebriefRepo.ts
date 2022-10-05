@@ -3,6 +3,7 @@ import { User, UserModel } from '../entities/User';
 import WeeklyDebrief from '../entities/WeeklyDebrief';
 import { ArticleModel } from '../entities/Article';
 import { DAYS_IN_WEEK } from '../common/constants';
+import NotificationRepo from './NotificationRepo';
 
 const getExpirationDate = (creationDate: Date): Date => {
   creationDate.setDate(creationDate.getDate() + DAYS_IN_WEEK);
@@ -47,6 +48,11 @@ const createWeeklyDebriefs = async (): Promise<User[]> => {
   const userList = UserModel.find({}).then((users) =>
     Promise.all(users.map((user) => createWeeklyDebrief(user, creationDate, expDate))),
   );
+  if (process.env.NODE_ENV === 'dev') {
+    const user = await userList;
+    NotificationRepo.notifyWeeklyDebrief(user);
+  }
+
   return userList;
 };
 

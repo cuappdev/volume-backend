@@ -8,6 +8,7 @@ import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import NotificationRepo from './repos/NotificationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
+import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 
@@ -20,12 +21,10 @@ const main = async () => {
 
   await dbConnection();
 
-  var bodyParser = require('body-parser');
+  const app = Express();
 
-  var app = Express();
-
-  app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json())
+  app.use(Express.urlencoded({ extended: false }));
+  app.use(Express.json());
 
   const server = new ApolloServer({
     schema,
@@ -38,19 +37,25 @@ const main = async () => {
   });
 
   // Setup Firebase Admin
-  if (process.env.NODE_ENV === 'production') {
-    admin.initializeApp({
-      credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
-    });
-  }
+  admin.initializeApp({
+    credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
+  });
 
   app.post('/collect/', (req, res) => {
     const { articleIDs } = req.body;
-    NotificationRepo.notify(articleIDs);
+    NotificationRepo.notifyNewArticles(articleIDs);
     res.json({ success: 'true' });
   });
 
   server.applyMiddleware({ app });
+
+  async function setupWeeklyDebriefRefreshCron() {
+    // Refresh weekly debriefs and sent notifications once a week
+    cron.schedule('0 0 * * 0', async () => {
+      const users = await WeeklyDebriefRepo.createWeeklyDebriefs();
+      NotificationRepo.notifyWeeklyDebrief(users);
+    });
+  }
 
   async function setupTrendingArticleRefreshCron() {
     // Refresh trending articles 12 hours
@@ -59,6 +64,7 @@ const main = async () => {
     });
   }
 
+  setupWeeklyDebriefRefreshCron();
   setupTrendingArticleRefreshCron();
 
   ((port = process.env.APP_PORT) => {
