@@ -17,7 +17,7 @@ export class Magazine {
 
   @Field()
   @Property()
-  PDF: string; // Placeholder
+  pdfURL: string;
 
   @Field((type) => Publication)
   @Property({ type: () => Publication })
@@ -41,7 +41,11 @@ export class Magazine {
 
   @Field()
   @Property({ default: false })
-  isTrending: boolean; // Maybe
+  isFeatured: boolean;
+
+  @Field()
+  @Property({ default: 0 })
+  trendiness: number;
 
   @Field()
   @Property()

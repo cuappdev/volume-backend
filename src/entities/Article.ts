@@ -44,6 +44,10 @@ export class Article {
   isTrending: boolean;
 
   @Field()
+  @Property({ default: 0 })
+  trendiness: number;
+
+  @Field()
   @Property()
   isFiltered: boolean;
 }

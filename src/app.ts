@@ -10,22 +10,22 @@ import NotificationRepo from './repos/NotificationRepo';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
+import MagazineRepo from './repos/MagazineRepo';
+import MagazineResolver from './resolvers/MagazineResolver';
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [ArticleResolver, PublicationResolver, UserResolver],
+    resolvers: [ArticleResolver, PublicationResolver, UserResolver, MagazineResolver],
     emitSchemaFile: true,
     validate: false,
   });
 
   await dbConnection();
 
-  var bodyParser = require('body-parser');
+  const app = Express();
 
-  var app = Express();
-
-  app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json())
+  app.use(Express.urlencoded({ extended: false }));
+  app.use(Express.json());
 
   const server = new ApolloServer({
     schema,
@@ -53,9 +53,13 @@ const main = async () => {
   server.applyMiddleware({ app });
 
   async function setupTrendingArticleRefreshCron() {
+    // Refresh trending articles once
+    ArticleRepo.refreshTrendingArticles();
+    MagazineRepo.refreshFeaturedMagazines();
     // Refresh trending articles 12 hours
     cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
+      MagazineRepo.refreshFeaturedMagazines();
     });
   }
 
