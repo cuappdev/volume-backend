@@ -17,6 +17,10 @@ export class Magazine {
 
   @Field()
   @Property()
+  semester: string;
+
+  @Field()
+  @Property()
   pdfURL: string;
 
   @Field((type) => Publication)
