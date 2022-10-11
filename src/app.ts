@@ -43,9 +43,15 @@ const main = async () => {
     credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
   });
 
-  app.post('/collect/', (req, res) => {
+  app.post('/collect/articles/', (req, res) => {
     const { articleIDs } = req.body;
     NotificationRepo.notifyNewArticles(articleIDs);
+    res.json({ success: 'true' });
+  });
+
+  app.post('/collect/magazines/', (req, res) => {
+    const { magazineIDs } = req.body;
+    NotificationRepo.notifyNewMagazines(magazineIDs);
     res.json({ success: 'true' });
   });
 
