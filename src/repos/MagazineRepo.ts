@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 import { Magazine, MagazineModel } from '../entities/Magazine';
@@ -112,7 +113,7 @@ const refreshFeaturedMagazines = async (): Promise<Magazine[]> => {
   // Set previous featured magazines to not featured
   const oldFeaturedMagazines = await MagazineModel.find({ isFeatured: true }).exec();
   oldFeaturedMagazines.forEach(async (m) => {
-    const magazine = await MagazineModel.findById(new ObjectId(m._id)); // eslint-disable-line
+    const magazine = await MagazineModel.findById(new ObjectId(m._id));
     magazine.isFeatured = false;
     await magazine.save();
   });
@@ -131,7 +132,7 @@ const refreshFeaturedMagazines = async (): Promise<Magazine[]> => {
     });
 
   magazines.forEach(async (m) => {
-    const magazine = await MagazineModel.findById(new ObjectId(m._id)); // eslint-disable-line
+    const magazine = await MagazineModel.findById(new ObjectId(m._id));
     magazine.isFeatured = true;
     await magazine.save();
   });
