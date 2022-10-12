@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { User } from '../entities/User';
 import UserRepo from '../repos/UserRepo';
@@ -14,31 +15,31 @@ class UserResolver {
   }
 
   @Mutation((_returns) => User, {
-    description: `Creates a single <User> via given <deviceToken>, <followedPublications>,
+    description: `Creates a single <User> via given <deviceToken>, <followedPublications> (slugs),
    and <deviceType>. Given <deviceToken> must be unique for a new user to be created, otherwise does nothing.`,
   })
   async createUser(
     @Arg('deviceToken') deviceToken: string,
-    @Arg('followedPublications', (type) => [String]) followedPublicationsIDs: string[],
+    @Arg('followedPublications', (type) => [String]) followedPublicationsSlugs: string[],
     @Arg('deviceType') deviceType: string,
   ) {
-    return await UserRepo.createUser(deviceToken, followedPublicationsIDs, deviceType);
+    return await UserRepo.createUser(deviceToken, followedPublicationsSlugs, deviceType);
   }
 
   @Mutation((_returns) => User, {
     nullable: true,
-    description: 'Lets the user from a given <uuid> follow the <Publication> given by <pubID>',
+    description: 'User with id <uuid> follows the <Publication> referenced by <slug>',
   })
-  async followPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
-    return await UserRepo.followPublication(uuid, pubID);
+  async followPublication(@Arg('uuid') uuid: string, @Arg('slug') slug: string) {
+    return await UserRepo.followPublication(uuid, slug);
   }
 
   @Mutation((_returns) => User, {
     nullable: true,
-    description: 'Lets the user from a given <uuid> unfollow the <Publication> given by <pubID>',
+    description: 'User with id <uuid> unfollows the <Publication> referenced by <slug>',
   })
-  async unfollowPublication(@Arg('uuid') uuid: string, @Arg('pubID') pubID: string) {
-    return await UserRepo.unfollowPublication(uuid, pubID);
+  async unfollowPublication(@Arg('uuid') uuid: string, @Arg('slug') slug: string) {
+    return await UserRepo.unfollowPublication(uuid, slug);
   }
 
   @Mutation((_returns) => User, {
@@ -55,14 +56,13 @@ class UserResolver {
   })
   async bookmarkArticle(@Arg('uuid') uuid: string) {
     return await UserRepo.incrementBookmarks(uuid);
-
   }
 
   @Mutation((_returns) => [User], {
     description: 'Creates Weekly Debriefs for all users',
   })
   async getWeeklyDebrief() {
-   return await WeeklyDebriefRepo.createWeeklyDebriefs();
+    return await WeeklyDebriefRepo.createWeeklyDebriefs();
   }
 }
 

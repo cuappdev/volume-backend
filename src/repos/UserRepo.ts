@@ -1,16 +1,15 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Article } from '../entities/Article';
 import ArticleRepo from './ArticleRepo';
-import { PublicationID } from '../common/types';
-import PublicationRepo from './PublicationRepo';
+import { PublicationSlug } from '../common/types';
 import { User, UserModel } from '../entities/User';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
- * Create new user associated with deviceToken and followedPublicationsIDs of deviceType.
+ * Create new user associated with deviceToken and followedPublicationsSlugs of deviceType.
  */
 const createUser = async (
   deviceToken: string,
-  followedPublicationsIDs: string[],
+  followedPublicationsSlugs: string[],
   deviceType: string,
 ): Promise<User> => {
   // Check if user associated with this deviceToken already exists
@@ -18,10 +17,8 @@ const createUser = async (
 
   // If no user, create a new one
   if (!users[0]) {
-    // Create PublicationID objects from string of followed publications
-    const followedPublications = followedPublicationsIDs.map((id) => {
-      return Object.assign(new PublicationID(), { id });
-    });
+    // Create PublicationSlug objects from string of followed publications
+    const followedPublications = followedPublicationsSlugs.map((slug) => new PublicationSlug(slug));
     const uuid = uuidv4();
     const newUser = Object.assign(new User(), {
       uuid,
@@ -37,30 +34,29 @@ const createUser = async (
 };
 
 /**
- * Adds publication of pubID to user represented by uuid's followedPublications.
+ * Adds publication slug to user's followedPublications.
  */
-const followPublication = async (uuid: string, pubID: string): Promise<User> => {
+const followPublication = async (uuid: string, slug: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
+
   if (user) {
-    user.followedPublications.push(Object.assign(new PublicationID(), { id: pubID }));
+    user.followedPublications.push(new PublicationSlug(slug));
     return user.save();
   }
   return user;
 };
 
 /**
- * Deletes publication of pubID from user represented by uuid's followedPublications.
+ * Deletes publication slug from user's followedPublications.
  */
-const unfollowPublication = async (uuid: string, pubID: string): Promise<User> => {
+const unfollowPublication = async (uuid: string, pubSlug: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
   if (user) {
-    const pubIDs = user.followedPublications.map((pubIDObject) => {
-      return pubIDObject.id;
-    });
-    const pubIndex = pubIDs.indexOf(pubID);
-    if (pubIndex === -1) {
-      return user;
-    }
+    const pubSlugs = user.followedPublications.map((pubSlugObj) => pubSlugObj.slug);
+    const pubIndex = pubSlugs.indexOf(pubSlug);
+
+    if (pubIndex === -1) return user;
+
     user.followedPublications.splice(pubIndex, 1);
     return user.save();
   }
@@ -75,13 +71,10 @@ const getUserByUUID = async (uuid: string): Promise<User> => {
  * Return all users who follow a publication.
  */
 const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> => {
-  const publication = await PublicationRepo.getPublicationBySlug(pubSlug);
-  // WARNING TODO: linear scan on DB, inefficient <-- turn into a query that just gets users following publications
-  const users = await UserModel.find();
-  users.filter((u) => {
-    u.followedPublications.map((id) => id.id).includes(publication.id);
+  const matchedUsers = await UserModel.find({
+    followedPublications: { $elemMatch: { slug: pubSlug } },
   });
-  return users;
+  return matchedUsers;
 };
 
 /**
@@ -89,16 +82,16 @@ const getUsersFollowingPublication = async (pubSlug: string): Promise<User[]> =>
  */
 const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
-  if (!user) {
-    return user;
-  }
+
+  if (!user) return user;
+
   const article = await ArticleRepo.getArticleByID(articleID);
   const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
-  if (article) {
-    if (!user.readArticles.reduce(checkDuplicates, false)) {
-      user.readArticles.push(article);
-    }
+
+  if (article && !user.readArticles.reduce(checkDuplicates, false)) {
+    user.readArticles.push(article);
   }
+
   user.save();
   return user;
 };
@@ -108,10 +101,12 @@ const appendReadArticle = async (uuid: string, articleID: string): Promise<User>
  */
 const incrementShoutouts = async (uuid: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
+
   if (user) {
-    user.numShoutouts += 1;
+    user.numShoutouts++;
     user.save();
   }
+
   return user;
 };
 
@@ -120,10 +115,12 @@ const incrementShoutouts = async (uuid: string): Promise<User> => {
  */
 const incrementBookmarks = async (uuid: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
+
   if (user) {
-    user.numBookmarkedArticles += 1;
+    user.numBookmarkedArticles++;
     user.save();
   }
+
   return user;
 };
 
