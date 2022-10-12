@@ -8,7 +8,6 @@ import {
   FILTERED_WORDS,
   DEFAULT_OFFSET,
 } from '../common/constants';
-import { PublicationModel } from '../entities/Publication';
 
 function isArticleFiltered(article: Article) {
   if (IS_FILTER_ACTIVE) {
@@ -61,7 +60,10 @@ const getArticlesByPublicationSlug = async (
   return ArticleModel.find({ 'publication.slug': slug })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => !isArticleFiltered(article));
+    });
 };
 
 const getArticlesByPublicationSlugs = async (
@@ -73,37 +75,10 @@ const getArticlesByPublicationSlugs = async (
   return ArticleModel.find({ 'publication.slug': { $in: uniqueSlugs } })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
-};
-
-const getArticlesByPublicationID = async (
-  publicationID: string,
-  limit: number = DEFAULT_LIMIT,
-  offset: number = DEFAULT_OFFSET,
-): Promise<Article[]> => {
-  const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
-  return ArticleModel.find({ 'publication.slug': publication.slug })
-    .sort({ date: 'desc' })
-    .skip(offset)
     .limit(limit)
     .then((articles) => {
       return articles.filter((article) => !isArticleFiltered(article));
     });
-};
-
-const getArticlesByPublicationIDs = async (
-  publicationIDs: string[],
-  limit: number = DEFAULT_LIMIT,
-  offset: number = DEFAULT_OFFSET,
-): Promise<Article[]> => {
-  const uniquePubIDs = [...new Set(publicationIDs)].map((id) => new ObjectId(id));
-  console.log(uniquePubIDs);
-  const pubSlugs = await PublicationModel.find({ _id: { $in: uniquePubIDs } }).select('slug');
-  return getArticlesByPublicationSlugs(
-    pubSlugs.map((pub) => pub.slug),
-    limit,
-    offset,
-  );
 };
 
 const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
@@ -196,8 +171,6 @@ export default {
   getArticleByID,
   getArticlesAfterDate,
   getArticlesByIDs,
-  getArticlesByPublicationID,
-  getArticlesByPublicationIDs,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
   getTrendingArticles,
