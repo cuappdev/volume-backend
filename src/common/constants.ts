@@ -15,5 +15,4 @@ export const FILTERED_WORDS = [
 ];
 export const IMAGE_ADDRESS = 'https://raw.githubusercontent.com/cuappdev/assets/master/volume';
 export const IOS = 'IOS';
-export const IS_FILTER_ACTIVE = false;
 export const MAX_NUM_DAYS_OF_TRENDING_ARTICLES = 30;

@@ -4,10 +4,11 @@ import { Article, ArticleModel } from '../entities/Article';
 import {
   DEFAULT_LIMIT,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  IS_FILTER_ACTIVE,
   FILTERED_WORDS,
   DEFAULT_OFFSET,
 } from '../common/constants';
+
+const { IS_FILTER_ACTIVE } = process.env;
 
 function isArticleFiltered(article: Article) {
   if (IS_FILTER_ACTIVE) {
