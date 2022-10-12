@@ -7,6 +7,7 @@ import {
   FILTERED_WORDS,
   DEFAULT_OFFSET,
 } from '../common/constants';
+import { PublicationModel } from '../entities/Publication';
 
 const { IS_FILTER_ACTIVE } = process.env;
 
@@ -27,7 +28,6 @@ const getArticleByID = async (id: string): Promise<Article> => {
     if (!isArticleFiltered(article)) {
       return article;
     }
-
     return null;
   });
 };
@@ -63,7 +63,7 @@ const getArticlesByPublicationSlug = async (
     .skip(offset)
     .limit(limit)
     .then((articles) => {
-      return articles.filter((article) => !isArticleFiltered(article));
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
     });
 };
 
@@ -74,6 +74,21 @@ const getArticlesByPublicationSlugs = async (
 ): Promise<Article[]> => {
   const uniqueSlugs = [...new Set(slugs)];
   return ArticleModel.find({ 'publication.slug': { $in: uniqueSlugs } })
+    .sort({ date: 'desc' })
+    .skip(offset)
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
+    });
+};
+
+const getArticlesByPublicationID = async (
+  publicationID: string,
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  const publication = await (await PublicationModel.findById(publicationID)).execPopulate();
+  return ArticleModel.find({ 'publication.slug': publication.slug })
     .sort({ date: 'desc' })
     .skip(offset)
     .limit(limit)

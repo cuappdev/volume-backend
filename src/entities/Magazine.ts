@@ -2,14 +2,14 @@ import { Field, ID, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 import { Publication } from './Publication';
 
-@ObjectType({ description: 'The Article Model' })
-export class Article {
+@ObjectType({ description: 'The Magazine Model' })
+export class Magazine {
   @Field(() => ID)
   id: string;
 
   @Field()
-  @Property()
-  articleURL: string;
+  @Property({ unique: true })
+  magazineURL: string;
 
   @Field()
   @Property()
@@ -17,7 +17,11 @@ export class Article {
 
   @Field()
   @Property()
-  imageURL: string;
+  semester: string;
+
+  @Field()
+  @Property()
+  pdfURL: string;
 
   @Field((type) => Publication)
   @Property({ type: () => Publication })
@@ -41,7 +45,7 @@ export class Article {
 
   @Field()
   @Property({ default: false })
-  isTrending: boolean;
+  isFeatured: boolean;
 
   @Field()
   @Property({ default: 0 })
@@ -52,4 +56,4 @@ export class Article {
   isFiltered: boolean;
 }
 
-export const ArticleModel = getModelForClass(Article);
+export const MagazineModel = getModelForClass(Magazine);
