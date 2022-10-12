@@ -187,6 +187,7 @@ export default {
   getArticleByID,
   getArticlesAfterDate,
   getArticlesByIDs,
+  getArticlesByPublicationID,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
   getTrendingArticles,
