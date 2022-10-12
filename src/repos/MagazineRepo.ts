@@ -7,8 +7,9 @@ import {
   DEFAULT_OFFSET,
   FILTERED_WORDS,
   MAX_NUM_DAYS_OF_FEATURED_MAGAZINES,
-  IS_FILTER_ACTIVE,
 } from '../common/constants';
+
+const { IS_FILTER_ACTIVE } = process.env;
 
 function isMagazineFiltered(magazine: Magazine) {
   if (IS_FILTER_ACTIVE) {
