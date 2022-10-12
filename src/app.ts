@@ -11,10 +11,12 @@ import PublicationResolver from './resolvers/PublicationResolver';
 import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
 import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
+import MagazineRepo from './repos/MagazineRepo';
+import MagazineResolver from './resolvers/MagazineResolver';
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [ArticleResolver, PublicationResolver, UserResolver],
+    resolvers: [ArticleResolver, PublicationResolver, UserResolver, MagazineResolver],
     emitSchemaFile: true,
     validate: false,
   });
@@ -41,9 +43,15 @@ const main = async () => {
     credential: admin.credential.cert(process.env.FCM_AUTH_KEY_PATH),
   });
 
-  app.post('/collect/', (req, res) => {
+  app.post('/collect/articles/', (req, res) => {
     const { articleIDs } = req.body;
     NotificationRepo.notifyNewArticles(articleIDs);
+    res.json({ success: 'true' });
+  });
+
+  app.post('/collect/magazines/', (req, res) => {
+    const { magazineIDs } = req.body;
+    NotificationRepo.notifyNewMagazines(magazineIDs);
     res.json({ success: 'true' });
   });
 
@@ -58,9 +66,13 @@ const main = async () => {
   }
 
   async function setupTrendingArticleRefreshCron() {
+    // Refresh trending articles once
+    ArticleRepo.refreshTrendingArticles();
+    MagazineRepo.refreshFeaturedMagazines();
     // Refresh trending articles 12 hours
     cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
+      MagazineRepo.refreshFeaturedMagazines();
     });
   }
 

@@ -27,7 +27,6 @@ const getArticleByID = async (id: string): Promise<Article> => {
     if (!isArticleFiltered(article)) {
       return article;
     }
-
     return null;
   });
 };
@@ -61,7 +60,10 @@ const getArticlesByPublicationSlug = async (
   return ArticleModel.find({ 'publication.slug': slug })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
+    });
 };
 
 const getArticlesByPublicationSlugs = async (
@@ -73,7 +75,10 @@ const getArticlesByPublicationSlugs = async (
   return ArticleModel.find({ 'publication.slug': { $in: uniqueSlugs } })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
+    });
 };
 
 const getArticlesByPublicationID = async (

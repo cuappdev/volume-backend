@@ -111,7 +111,7 @@ class ArticleResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
-    return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
+    return article['_doc'].shoutouts / ((presentDate - article['_doc'].date.getTime())/1000); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {
