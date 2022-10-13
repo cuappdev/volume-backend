@@ -106,6 +106,17 @@ class ArticleResolver {
     return ArticleRepo.getTrendingArticles(limit);
   }
 
+  @Query((_returns) => [Article], {
+    nullable: false,
+    description: `Returns a list of <Articles> of size <limit> matches a particular query. Default <limit> is ${DEFAULT_LIMIT}`,
+  })
+  async searchArticles(
+    @Arg('query') query: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+  ) {
+    return ArticleRepo.searchArticles(query, limit);
+  }
+
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of an <Article>' })
   async trendiness(@Root() article: Article): Promise<number> {
     const presentDate = new Date().getTime();

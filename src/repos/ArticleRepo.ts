@@ -1,5 +1,6 @@
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
+import Fuse from 'fuse.js';
 import { Article, ArticleModel } from '../entities/Article';
 import {
   DEFAULT_LIMIT,
@@ -127,6 +128,24 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
 };
 
 /**
+ * Performs fuzzy search on all articles to find articles with title/publisher matching the query.
+ * @param query the term to search for
+ * @param limit the number of results to return
+ * @returns at most limit articles with titles or publishers matching the query
+ */
+const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
+  const allArticles = await ArticleModel.find({});
+  const searcher = new Fuse(allArticles, {
+    keys: ['title', 'publication.name'],
+  });
+
+  return searcher
+    .search(query)
+    .map((searchRes) => searchRes.item)
+    .slice(0, limit);
+};
+
+/**
  * Computes and returns the trending articles in the database.
  *
  * @function
@@ -205,6 +224,7 @@ export default {
   getArticlesByPublicationIDs,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
+  searchArticles,
   getTrendingArticles,
   incrementShoutouts,
   refreshTrendingArticles,
