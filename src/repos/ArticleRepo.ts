@@ -97,6 +97,21 @@ const getArticlesByPublicationID = async (
     });
 };
 
+const getArticlesByPublicationIDs = async (
+  publicationIDs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+): Promise<Article[]> => {
+  const uniquePubIDs = [...new Set(publicationIDs)].map((id) => new ObjectId(id));
+  console.log(uniquePubIDs);
+  const pubSlugs = await PublicationModel.find({ _id: { $in: uniquePubIDs } }).select('slug');
+  return getArticlesByPublicationSlugs(
+    pubSlugs.map((pub) => pub.slug),
+    limit,
+    offset,
+  );
+};
+
 const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Article[]> => {
   return (
     ArticleModel.find({
@@ -188,6 +203,7 @@ export default {
   getArticlesAfterDate,
   getArticlesByIDs,
   getArticlesByPublicationID,
+  getArticlesByPublicationIDs,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
   getTrendingArticles,
