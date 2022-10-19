@@ -195,6 +195,26 @@
          ],
          "websiteURL":"https://www.culsr.org/"
       },
+      {  
+         "bio":"Thread Magazine is an independent student publication and the only fashion, lifestyle, and art magazine at Cornell.",
+         "bioShort":"The only fashion, lifestyle, and art magazine at Cornell.",
+         "contentTypes":["magazines"],
+         "rssName":"Thread Magazine",
+         "rssURL":null,
+         "name":"Thread Magazine",
+         "slug":"thread",
+         "socialURLs":[
+            {
+               "social":"insta",
+               "URL":"https://www.instagram.com/threadmag/"
+            },
+            {
+               "social":"facebook",
+               "URL":"https://www.facebook.com/TheThreadMagazine/"
+            }
+         ],
+         "websiteURL":"https://threadcornell.com/"
+    },
       {
          "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
          "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
