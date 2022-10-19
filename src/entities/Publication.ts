@@ -30,9 +30,9 @@ export class Publication {
   @Property()
   rssName: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
-  rssURL: string;
+  rssURL?: string;
 
   @Field()
   @Property()
@@ -45,6 +45,10 @@ export class Publication {
   @Field()
   @Property()
   websiteURL: string;
+
+  @Field(() => [String])
+  @Property()
+  contentTypes: string[];
 }
 
 export const PublicationModel = getModelForClass(Publication);

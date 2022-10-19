@@ -14,7 +14,6 @@ const sendNewArticleNotification = async (
   publication: Publication,
 ): Promise<void> => {
   const { deviceToken } = user;
-
   const notifTitle = publication.name;
   const notifBody = article.title;
 
