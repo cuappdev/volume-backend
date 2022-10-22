@@ -3,6 +3,7 @@
       {
          "bio":"The Advocate promotes the dissemination of literature that examines youth-related issues with the goal of encouraging youth advocacy in local and federal politics.",
          "bioShort":"Encouraging political advocacy by examining issues relevant to college students",
+         "contentTypes":["articles"],
          "rssName":"The Advocate",
          "rssURL":"http://theadvocatecornell.com/feed/",
          "name":"The Advocate",
@@ -18,12 +19,14 @@
             }
          ],
          "websiteURL":"http://theadvocatecornell.com"
+
       },
       {
          "bio":"Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
          "bioShort":"Dedicated exclusively to Cornell Athletics",
+         "contentTypes":["articles"],
          "rssName":"Big Red Sports Network",
-         "rssURL":"https://www.bigredsportsnetwork.org/feed",
+         "rssURL":"https://www.cornellbrsn.com/blog-feed.xml",
          "name":"Big Red Sports Network",
          "slug":"brsn",
          "socialURLs":[
@@ -48,11 +51,12 @@
                "URL":"https://twitter.com/CornellBRSN"
             }
          ],
-         "websiteURL":"https://www.bigredsportsnetwork.org"
+         "websiteURL":"https://www.cornellbrsn.com/"
       },
       {
          "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
          "bioShort":"A journal of Christian thoughts",
+         "contentTypes":["articles"],
          "rssName":"Blog - CLARITAS",
          "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
          "name":"Cornell Claritas",
@@ -72,6 +76,7 @@
       {
          "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
          "bioShort":"Recipes, stories, and articles from group of passionate food enthusiasts",
+         "contentTypes":["articles"],
          "rssName":"Blog - CRÈME de cornell",
          "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
          "name":"Crème de Cornell",
@@ -91,6 +96,7 @@
       {
          "bio":"Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
          "bioShort":"Celebrating cultural diversity and view the world with an open mind",
+         "contentTypes":["articles"],
          "rssName":"Guac Magazine - Medium",
          "rssURL":"https://medium.com/feed/guac-magazine",
          "name":"Guac Magazine",
@@ -114,6 +120,7 @@
       {
          "bio":"Takes fresh from the sticky part of our rejected article pile.",
          "bioShort":"News published with the utmost regard for veracity and originality",
+         "contentTypes":["articles"],
          "rssName":"CU Nooz",
          "rssURL":"http://cunooz.com/feed/",
          "name":"CU Nooz",
@@ -133,6 +140,7 @@
       {
          "bio":"The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
          "bioShort":"One of the leading college conservative publications in the United States",
+         "contentTypes":["articles"],
          "rssName":"The Cornell Review",
          "rssURL":"https://www.thecornellreview.org/feed",
          "name":"The Cornell Review",
@@ -152,6 +160,7 @@
       {
          "bio":"As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
          "bioShort":"Your daily fix of Cornell buzz",
+         "contentTypes":["articles"],
          "rssName":"All - Slope Media",
          "rssURL":"https://www.slopemedia.org/all?format=rss",
          "name":"Slope Media",
@@ -179,6 +188,7 @@
       {
          "bio":"We created the review to provide a forum for the exchange of these ideas.",
          "bioShort":"An open platform for scholarly writing, critical thinking, and reasoned debate",
+         "contentTypes":["articles"],
          "rssName":"The Undergraduate Law & Society Review at Cornell",
          "rssURL":"https://www.culsr.org/?format=rss",
          "name":"The Undergraduate Law and Society Review at Cornell",
@@ -218,6 +228,7 @@
       {
          "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
          "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
+         "contentTypes":["articles"],
          "rssName":"Cornell Data Journal",
          "rssURL":"https://cdj-git-add-rss-ashpil.vercel.app/rss.xml",
          "name":"Cornell Data Journal",
@@ -245,6 +256,7 @@
       {
          "bio":"A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
          "bioShort":"Cornell Business Review is the premier business publication at Cornell University.",
+         "contentTypes":["articles"],
          "rssName":"CBRnow - Cornell Business Review",
          "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
          "name":"Cornell Business Review",
@@ -260,6 +272,7 @@
       {
          "bio":"We are a community of Cornell students who love creating.",
          "bioShort":"We are a community of Cornell students who love creating.",
+         "contentTypes":["articles"],
          "rssName":"Cornell Creatives Newsletter",
          "rssURL":"https://cornell.substack.com/feed",
          "name":"Cornell Creatives Blog",
@@ -283,6 +296,7 @@
       {
          "bio":"The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
          "bioShort":"The 180 is a publication by Hotelies for Hotelies.",
+         "contentTypes":["articles"],
          "rssName":"The 180 Blog - The 180",
          "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
          "name":"The 180 at Cornell",
@@ -306,6 +320,7 @@
       {
          "bio":"We are a student-run international affairs magazine that brings together writers, editors and artists to tackle global problems from a variety of perspectives.",
          "bioShort":" Global Issues. Complex Challenges. Student Perspectives.",
+         "contentTypes":["articles"],
          "rssName":"Borders - The Cornell Diplomat",
          "rssURL":"https://www.thecornelldiplomat.com/issue4?format=rss",
          "name":"The Cornell Diplomat",
