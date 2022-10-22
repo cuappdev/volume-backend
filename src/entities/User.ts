@@ -3,7 +3,7 @@ import { prop as Property, DocumentType, getModelForClass } from '@typegoose/typ
 import mongoose from 'mongoose';
 import { Article } from './Article';
 import WeeklyDebrief from './WeeklyDebrief';
-import { PublicationID } from '../common/types';
+import { PublicationSlug } from '../common/types';
 
 @ObjectType({ description: 'The User Model' })
 export class User {
@@ -16,9 +16,9 @@ export class User {
 
   // https://github.com/typegoose/typegoose/issues/522
   // https://github.com/typegoose/typegoose/discussions/380
-  @Field((type) => [PublicationID])
-  @Property({ required: true, type: () => PublicationID, default: [] })
-  followedPublications: mongoose.Types.DocumentArray<DocumentType<PublicationID>>;
+  @Field((type) => [PublicationSlug])
+  @Property({ required: true, type: () => PublicationSlug, default: [] })
+  followedPublications: mongoose.Types.DocumentArray<DocumentType<PublicationSlug>>;
 
   @Field()
   @Property({ unique: true })
