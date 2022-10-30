@@ -13,7 +13,7 @@ import { PublicationModel } from '../entities/Publication';
 const { IS_FILTER_ACTIVE } = process.env;
 
 function isArticleFiltered(article: Article) {
-  if (IS_FILTER_ACTIVE) {
+  if (IS_FILTER_ACTIVE === 'true') {
     if (article.isFiltered) {
       // If the body has been checked already in microservice
       return true;
