@@ -106,12 +106,23 @@ class ArticleResolver {
     return ArticleRepo.getTrendingArticles(limit);
   }
 
+  @Query((_returns) => [Article], {
+    nullable: false,
+    description: `Returns a list of <Articles> of size <limit> matches a particular query. Default <limit> is ${DEFAULT_LIMIT}`,
+  })
+  async searchArticles(
+    @Arg('query') query: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+  ) {
+    return ArticleRepo.searchArticles(query, limit);
+  }
+
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of an <Article>' })
   async trendiness(@Root() article: Article): Promise<number> {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
-    return article['_doc'].shoutouts / (presentDate - article['_doc'].date.getTime()); // eslint-disable-line
+    return article['_doc'].shoutouts / ((presentDate - article['_doc'].date.getTime())/1000); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {

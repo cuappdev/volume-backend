@@ -137,6 +137,16 @@ const getSocialURLs = async (publication: Publication): Promise<Social[]> => {
   return socialsURLs;
 };
 
+/**
+ * Retrieves informations about a publications content types.
+ * @param {Publication} publication
+ * @returns {string[]}
+ */
+const getContentTypes = async (publication: Publication): Promise<string[]> => {
+  const contentTypes = publication['_doc'].contentTypes; // eslint-disable-line
+  return contentTypes[0];
+};
+
 export default {
   addPublicationsToDB,
   getAllPublications,
@@ -147,4 +157,5 @@ export default {
   getPublicationsByIDs,
   getShoutouts,
   getSocialURLs,
+  getContentTypes,
 };

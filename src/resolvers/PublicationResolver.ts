@@ -65,6 +65,13 @@ class PublicationResolver {
   async socials(@Root() publication: Publication): Promise<Social[]> {
     return PublicationRepo.getSocialURLs(publication);
   }
+
+  @FieldResolver((_returns) => [String], {
+    description: "The information about a <Publication's> social platforms.",
+  })
+  async contentTypes(@Root() publication: Publication): Promise<string[]> {
+    return PublicationRepo.getContentTypes(publication);
+  }
 }
 
 export default PublicationResolver;

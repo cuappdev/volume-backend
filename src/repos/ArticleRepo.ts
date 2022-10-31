@@ -1,17 +1,19 @@
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
+import Fuse from 'fuse.js';
 import { Article, ArticleModel } from '../entities/Article';
 import {
   DEFAULT_LIMIT,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  IS_FILTER_ACTIVE,
   FILTERED_WORDS,
   DEFAULT_OFFSET,
 } from '../common/constants';
 import { PublicationModel } from '../entities/Publication';
 
+const { IS_FILTER_ACTIVE } = process.env;
+
 function isArticleFiltered(article: Article) {
-  if (IS_FILTER_ACTIVE) {
+  if (IS_FILTER_ACTIVE === 'true') {
     if (article.isFiltered) {
       // If the body has been checked already in microservice
       return true;
@@ -27,7 +29,6 @@ const getArticleByID = async (id: string): Promise<Article> => {
     if (!isArticleFiltered(article)) {
       return article;
     }
-
     return null;
   });
 };
@@ -61,7 +62,10 @@ const getArticlesByPublicationSlug = async (
   return ArticleModel.find({ 'publication.slug': slug })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
+    });
 };
 
 const getArticlesByPublicationSlugs = async (
@@ -73,7 +77,10 @@ const getArticlesByPublicationSlugs = async (
   return ArticleModel.find({ 'publication.slug': { $in: uniqueSlugs } })
     .sort({ date: 'desc' })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .then((articles) => {
+      return articles.filter((article) => article !== null && !isArticleFiltered(article));
+    });
 };
 
 const getArticlesByPublicationID = async (
@@ -119,6 +126,24 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
         return articles.filter((article) => !isArticleFiltered(article));
       })
   );
+};
+
+/**
+ * Performs fuzzy search on all articles to find articles with title/publisher matching the query.
+ * @param query the term to search for
+ * @param limit the number of results to return
+ * @returns at most limit articles with titles or publishers matching the query
+ */
+const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
+  const allArticles = await ArticleModel.find({});
+  const searcher = new Fuse(allArticles, {
+    keys: ['title', 'publication.name'],
+  });
+
+  return searcher
+    .search(query)
+    .map((searchRes) => searchRes.item)
+    .slice(0, limit);
 };
 
 /**
@@ -200,6 +225,7 @@ export default {
   getArticlesByPublicationIDs,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
+  searchArticles,
   getTrendingArticles,
   incrementShoutouts,
   refreshTrendingArticles,
