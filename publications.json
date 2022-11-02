@@ -224,7 +224,27 @@
             }
          ],
          "websiteURL":"https://threadcornell.com/"
-    },
+      },
+      {
+         "bio": "Logos is the undergraduate philosophy journal  at Cornell University. It is today among the leading publications of its kind in the United States, soliciting submissions from undergraduates around the world.",
+         "bioShort": "The undergraduate philosophy journal at Cornell University.",
+         "contentTypes": ["magazines"],
+         "rssName": "Logos Magazine",
+         "rssURL": null,
+         "name": "Logos Magazine",
+         "slug": "logos",
+         "socialURLs": [
+            {
+               "social": "insta",
+               "URL": "https://www.instagram.com/logosofcornell/"
+            },
+            {
+               "social": "facebook",
+               "URL": "https://www.facebook.com/logoscornell/"
+            }
+         ],
+         "websiteURL": "https://logos.philosophy.cornell.edu/"
+      },
       {
          "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
          "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
@@ -337,6 +357,5 @@
          ],
          "websiteURL":"https://www.thecornelldiplomat.com/"
       }
-
    ]
 }
