@@ -8,3 +8,6 @@ nohup.out
 */certificates/*
 Makefile
 start.sh
+
+# ignore database dumps
+dump/
