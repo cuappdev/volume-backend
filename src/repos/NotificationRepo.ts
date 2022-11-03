@@ -17,18 +17,33 @@ const sendNewArticleNotification = async (
   const notifTitle = publication.name;
   const notifBody = article.title;
 
-  const message = {
-    notification: {
-      title: notifTitle,
-      body: notifBody,
-    },
-    data: {
-      userID: user.uuid,
-      articleID: article.id,
-      articleURL: article.articleURL,
-      notificationType: 'new_article',
-    },
+  const notifData = {
+    title: notifTitle,
+    body: notifBody,
   };
+
+  const metaData = {
+    userID: user.uuid,
+    articleID: article.id,
+    articleURL: article.articleURL,
+    notificationType: 'new_article',
+  };
+
+  let message = {};
+
+  if (user.deviceType === 'IOS') {
+    message = {
+      notification: notifData,
+      data: metaData,
+    };
+  } else {
+    message = {
+      data: {
+        ...notifData,
+        ...metaData,
+      },
+    };
+  }
 
   const options = {
     priority: 'high',
