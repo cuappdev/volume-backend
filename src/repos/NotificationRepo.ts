@@ -8,14 +8,22 @@ import ArticleRepo from './ArticleRepo';
 import { Magazine } from '../entities/Magazine';
 import MagazineRepo from './MagazineRepo';
 
-const sendNewArticleNotification = async (
+/**
+ * General purpose function for sending notifications.
+ * @param user User object
+ * @param notifTitle Notification title
+ * @param notifBody Notificiation body
+ * @param uniqueData Any unique metadata to be sent in notif beyond uuid and notif type
+ * @param notifType Notification type (ex. 'new_article')
+ */
+const sendNotif = async (
   user: User,
-  article: Article,
-  publication: Publication,
-): Promise<void> => {
+  notifTitle: string,
+  notifBody: string,
+  uniqueData: Record<string, string>,
+  notifType: string,
+) => {
   const { deviceToken } = user;
-  const notifTitle = publication.name;
-  const notifBody = article.title;
 
   const notifData = {
     title: notifTitle,
@@ -24,13 +32,13 @@ const sendNewArticleNotification = async (
 
   const metaData = {
     userID: user.uuid,
-    articleID: article.id,
-    articleURL: article.articleURL,
-    notificationType: 'new_article',
+    ...uniqueData,
+    notificationType: notifType,
   };
 
   let message = {};
 
+  // Determine notif format based on device type
   if (user.deviceType === 'IOS') {
     message = {
       notification: notifData,
@@ -62,6 +70,22 @@ const sendNewArticleNotification = async (
     });
 };
 
+const sendNewArticleNotification = async (
+  user: User,
+  article: Article,
+  publication: Publication,
+): Promise<void> => {
+  const notifTitle = publication.name;
+  const notifBody = article.title;
+
+  const uniqueData = {
+    articleID: article.id,
+    articleURL: article.articleURL,
+  };
+
+  sendNotif(user, notifTitle, notifBody, uniqueData, 'new_article');
+};
+
 /**
  * Send notifications for new articles have been posted by publications.
  */
@@ -81,39 +105,15 @@ const sendNewMagazineNotification = async (
   magazine: Magazine,
   publication: Publication,
 ): Promise<void> => {
-  const { deviceToken } = user;
-
   const notifTitle = publication.name;
   const notifBody = magazine.title;
 
-  const message = {
-    notification: {
-      title: notifTitle,
-      body: notifBody,
-    },
-    data: {
-      userID: user.uuid,
-      magazineID: magazine.id,
-      magazinePDF: magazine.pdfURL,
-      notificationType: 'new_magazine',
-    },
+  const uniqueData = {
+    magazineID: magazine.id,
+    magazinePDF: magazine.pdfURL,
   };
 
-  const options = {
-    priority: 'high',
-    timeToLive: 60 * 60 * 24,
-  };
-
-  // Send notification to FCM servers
-  admin
-    .messaging()
-    .sendToDevice(deviceToken, message, options)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  sendNotif(user, notifTitle, notifBody, uniqueData, 'new_magazine');
 };
 
 /**
@@ -131,38 +131,10 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
 };
 
 const sendWeeklyDebriefNotification = async (user: User): Promise<void> => {
-  // Get device token of user
-  const { deviceToken } = user;
-
   const notifTitle = 'Your Weekly Debrief is Ready';
   const notifBody = 'Click to check out whats new on Volume this week!';
 
-  const message = {
-    notification: {
-      title: notifTitle,
-      body: notifBody,
-    },
-    data: {
-      userID: user.uuid,
-      notifcationType: 'weekly_debrief',
-    },
-  };
-
-  const options = {
-    priority: 'high',
-    timeToLive: 60 * 60 * 24,
-  };
-
-  // Send notification to FCM servers
-  admin
-    .messaging()
-    .sendToDevice(deviceToken, message, options)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  sendNotif(user, notifTitle, notifBody, {}, 'weekly_debrief');
 };
 
 /**
