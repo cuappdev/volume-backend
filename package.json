@@ -23,6 +23,7 @@
   "license": "ISC",
   "repository": "https://github.com/cuappdev/volume-backend/",
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@typegoose/typegoose": "^7.4.1",
     "@types/jest": "^29.2.2",
     "@types/node-cron": "^2.0.3",
@@ -47,6 +48,7 @@
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.9.0",
     "type-graphql": "^1.1.1",
+    "underscore": "^1.13.6",
     "uuid": "^8.3.2",
     "wait-on": "^5.2.1"
   },
