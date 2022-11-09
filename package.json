@@ -47,6 +47,7 @@
     "node-fetch-commonjs": "^3.2.4",
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.9.0",
+    "ts-jest": "^29.0.3",
     "type-graphql": "^1.1.1",
     "underscore": "^1.13.6",
     "uuid": "^8.3.2",

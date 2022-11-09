@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import PublicationRepo from '../../repos/PublicationRepo';
 
 let database: mongoose.Connection;
 
@@ -30,15 +29,12 @@ export const dbConnection = async (): Promise<mongoose.Connection> => {
     console.log('Error connecting to test database.');
   });
   /* eslint-enable no-console */
-  await PublicationRepo.addPublicationsToDB();
   return database;
 };
-
 /* Disconnects from database. */
 export const disconnectDB = (): void => {
   if (!database) {
     return;
   }
-  database.dropDatabase();
   mongoose.disconnect();
 };
