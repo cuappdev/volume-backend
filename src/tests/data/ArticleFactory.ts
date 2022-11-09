@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { faker } from '@faker-js/faker';
-import { ObjectId } from 'mongodb';
 import { _ } from 'underscore';
+import PublicationFactory from './PublicationFactory';
 import { Article, ArticleModel } from '../../entities/Article';
 import { FactoryUtils } from './FactoryUtils';
 import { PublicationModel } from '../../entities/Publication';
@@ -66,8 +66,7 @@ class ArticleFactory {
      * @returns The Article object with random values in its instance variables
      */
     const fakeArticle = new Article();
-    const examplePubs = await PublicationModel.aggregate().sample(1);
-    const examplePub = await PublicationModel.findById(new ObjectId(examplePubs[0]._id));
+    const examplePub = await PublicationFactory.getRandomPublication();
 
     fakeArticle.articleURL = faker.internet.url();
     fakeArticle.date = faker.date.past();
