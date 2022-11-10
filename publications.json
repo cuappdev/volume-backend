@@ -356,6 +356,22 @@
             }
          ],
          "websiteURL":"https://www.thecornelldiplomat.com/"
-      }
+      },
+      {
+         "bio": "A publication devoted to writing about societal issues from perspectives that are seldom discussed.",
+         "bioShort": "Using new perspectives to examine societal issues.",
+         "contentTypes": ["magazines"],
+         "rssName": "No Rules Magazine",
+         "rssURL": null,
+         "name": "No Rules Magazine",
+         "slug": "norules",
+         "socialURLs": [
+            {
+               "social": "insta",
+               "URL": "https://www.instagram.com/norules.cornell/"
+            }
+         ],
+         "websiteURL": "https://norulescornell.com"
+      },
    ]
 }
