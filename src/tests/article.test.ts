@@ -11,9 +11,7 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 
 // Maps an array of mongo documents [x] to an array of x.[val]
 function mapToValue(arr, val) {
-  return arr.map((x) => {
-    return x[val];
-  });
+  return arr.map((x) => x[val]);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,9 +39,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await ArticleModel.deleteMany({}).then(() => {
-    disconnectDB();
-  });
+  ArticleModel.deleteMany({}).then(disconnectDB);
 });
 
 describe('getAllArticle tests:', () => {

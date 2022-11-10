@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { _ } from 'underscore';
 import PublicationFactory from './PublicationFactory';
 import { Article, ArticleModel } from '../../entities/Article';
-import { FactoryUtils } from './FactoryUtils';
+import FactoryUtils from './FactoryUtils';
 import { PublicationModel } from '../../entities/Publication';
 
 class ArticleFactory {
