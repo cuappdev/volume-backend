@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable dot-notation */
+import { faker } from '@faker-js/faker';
 import { ArticleModel } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
 import PublicationRepo from '../repos/PublicationRepo';
@@ -12,17 +13,6 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 // Maps an array of mongo documents [x] to an array of x.[val]
 function mapToValue(arr, val) {
   return arr.map((x) => x[val]);
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function setAllToValue(arr, newMappings: { [key: string]: any }) {
-  return arr.map((x) => {
-    const newDoc = x;
-    Object.entries(newMappings).forEach(([k, v]) => {
-      newDoc[k] = v;
-    });
-    return newDoc;
-  });
 }
 
 function byDate(a, b) {
@@ -94,10 +84,11 @@ describe('getArticle(s)ByID(s) tests:', () => {
     expect(mapToValue(getArticlesResponse, 'title')).toEqual(mapToValue(articles, 'title'));
   });
 });
+
 describe('getArticlesByPublicationSlug(s) tests', () => {
   test('getArticlesByPublicationSlug - 1 publication, 1 article', async () => {
     const pub = await PublicationFactory.getRandomPublication();
-    const articles = setAllToValue(await ArticleFactory.create(1), {
+    const articles = await ArticleFactory.createSpecific(1, {
       publicationSlug: pub.slug,
       publication: pub,
     });
@@ -109,10 +100,12 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
 
   test('getArticlesByPublicationSlug - 1 publication, 3 articles', async () => {
     const pub = await PublicationFactory.getRandomPublication();
-    const articles = setAllToValue(await ArticleFactory.create(3), {
-      publicationSlug: pub.slug,
-      publication: pub,
-    }).sort(byDate);
+    const articles = (
+      await ArticleFactory.createSpecific(3, {
+        publicationSlug: pub.slug,
+        publication: pub,
+      })
+    ).sort(byDate);
 
     await ArticleModel.insertMany(articles);
     const getArticlesResponse = await ArticleRepo.getArticlesByPublicationSlug(pub.slug);
@@ -129,5 +122,48 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
     );
 
     expect(mapToValue(getArticlesResponse, 'title')).toEqual(mapToValue(articles, 'title'));
+  });
+});
+
+describe('getArticlesAfterDate tests', () => {
+  test('getArticlesAfterDate - filter 1 article', async () => {
+    const today = new Date();
+    let articles = await ArticleFactory.createSpecific(1, {
+      date: faker.date.recent(1), // 1 day ago
+    });
+    articles = articles.concat(
+      await ArticleFactory.createSpecific(1, {
+        date: faker.date.past(1, today.getDate() - 2), // 1 year ago
+      }),
+    );
+    await ArticleModel.insertMany(articles);
+
+    const getArticlesResponse = await ArticleRepo.getArticlesAfterDate(
+      faker.date.recent(2, today.getDate() - 1).toString(),
+    ); // find articles from after 2 days ago
+    expect(getArticlesResponse[0].title).toEqual(articles[0].title);
+  });
+});
+
+describe('searchArticle tests', () => {
+  test('searchArticle - 1 article', async () => {
+    const articles = await ArticleFactory.create(1);
+    await ArticleModel.insertMany(articles);
+
+    const getArticlesResponse = await ArticleRepo.searchArticles(articles[0].title); 
+    expect(getArticlesResponse[0].title).toEqual(articles[0].title);
+  });
+});
+
+describe('incrementShoutouts tests', () => {
+  test('incrementShoutouts - Shoutout 1 article', async () => {
+    const articles = await ArticleFactory.create(1);
+    const oldShoutouts = articles[0].shoutouts;
+    const insertOutput = await ArticleModel.insertMany(articles);
+
+    await ArticleRepo.incrementShoutouts(insertOutput[0]._id);
+
+    const getArticlesResponse = await ArticleRepo.getArticleByID(insertOutput[0]._id);
+    expect(getArticlesResponse.shoutouts).toEqual(oldShoutouts + 1);
   });
 });
