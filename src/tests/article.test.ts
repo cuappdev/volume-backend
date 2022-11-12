@@ -6,14 +6,12 @@ import { ArticleModel } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
 import PublicationRepo from '../repos/PublicationRepo';
 import ArticleFactory from './data/ArticleFactory';
+import FactoryUtils from './data/FactoryUtils';
 import PublicationFactory from './data/PublicationFactory';
 
 import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 
 // Maps an array of mongo documents [x] to an array of x.[val]
-function mapToValue(arr, val) {
-  return arr.map((x) => x[val]);
-}
 
 function byDate(a, b) {
   return -1 * (new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -57,10 +55,10 @@ describe('getAllArticle tests:', () => {
     articles.sort(byDate);
     await ArticleModel.insertMany(articles);
 
-    const articleTitles = mapToValue(articles.slice(2, 4), 'title'); // offset=2, limit=2
+    const articleTitles = FactoryUtils.mapToValue(articles.slice(2, 4), 'title'); // offset=2, limit=2
 
     const getArticlesResponse = await ArticleRepo.getAllArticles(2, 2);
-    const respTitles = mapToValue(getArticlesResponse, 'title');
+    const respTitles = FactoryUtils.mapToValue(getArticlesResponse, 'title');
 
     expect(respTitles).toEqual(articleTitles);
   });
@@ -78,10 +76,12 @@ describe('getArticle(s)ByID(s) tests:', () => {
   test('getArticlesByIDs - 3 articles', async () => {
     const articles = await ArticleFactory.create(3);
     const insertOutput = await ArticleModel.insertMany(articles);
-    const ids = mapToValue(insertOutput, '_id');
+    const ids = FactoryUtils.mapToValue(insertOutput, '_id');
     const getArticlesResponse = await ArticleRepo.getArticlesByIDs(ids);
 
-    expect(mapToValue(getArticlesResponse, 'title')).toEqual(mapToValue(articles, 'title'));
+    expect(FactoryUtils.mapToValue(getArticlesResponse, 'title')).toEqual(
+      FactoryUtils.mapToValue(articles, 'title'),
+    );
   });
 });
 
@@ -110,7 +110,9 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
     await ArticleModel.insertMany(articles);
     const getArticlesResponse = await ArticleRepo.getArticlesByPublicationSlug(pub.slug);
 
-    expect(mapToValue(getArticlesResponse, 'title')).toEqual(mapToValue(articles, 'title'));
+    expect(FactoryUtils.mapToValue(getArticlesResponse, 'title')).toEqual(
+      FactoryUtils.mapToValue(articles, 'title'),
+    );
   });
 
   test('getArticlesByPublicationSlugs - many publications, 5 articles', async () => {
@@ -118,10 +120,12 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
 
     await ArticleModel.insertMany(articles);
     const getArticlesResponse = await ArticleRepo.getArticlesByPublicationSlug(
-      mapToValue(articles, 'publicationSlug'),
+      FactoryUtils.mapToValue(articles, 'publicationSlug'),
     );
 
-    expect(mapToValue(getArticlesResponse, 'title')).toEqual(mapToValue(articles, 'title'));
+    expect(FactoryUtils.mapToValue(getArticlesResponse, 'title')).toEqual(
+      FactoryUtils.mapToValue(articles, 'title'),
+    );
   });
 });
 
@@ -150,7 +154,7 @@ describe('searchArticle tests', () => {
     const articles = await ArticleFactory.create(1);
     await ArticleModel.insertMany(articles);
 
-    const getArticlesResponse = await ArticleRepo.searchArticles(articles[0].title); 
+    const getArticlesResponse = await ArticleRepo.searchArticles(articles[0].title);
     expect(getArticlesResponse[0].title).toEqual(articles[0].title);
   });
 });

@@ -39,7 +39,7 @@ class ArticleFactory {
       return newDoc;
     });
   }
-
+  
   public static async fake(): Promise<Article> {
     /**
      * Returns a Article with random values in its instance variables
