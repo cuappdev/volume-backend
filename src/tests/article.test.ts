@@ -11,7 +11,6 @@ import PublicationFactory from './data/PublicationFactory';
 
 import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 
-// Maps an array of mongo documents [x] to an array of x.[val]
 
 function byDate(a, b) {
   return -1 * (new Date(a.date).getTime() - new Date(b.date).getTime());
