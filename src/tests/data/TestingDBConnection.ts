@@ -21,10 +21,6 @@ export const dbConnection = async (): Promise<mongoose.Connection> => {
   database = mongoose.connection;
 
   /* eslint-disable no-console */
-  database.once('open', async () => {
-    console.log('Connected to test database.');
-  });
-
   database.on('error', async () => {
     console.log('Error connecting to test database.');
   });
