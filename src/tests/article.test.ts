@@ -11,10 +11,6 @@ import PublicationFactory from './data/PublicationFactory';
 
 import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 
-
-function byDate(a, b) {
-  return -1 * (new Date(a.date).getTime() - new Date(b.date).getTime());
-}
 beforeAll(async () => {
   await dbConnection();
   await PublicationRepo.addPublicationsToDB();
@@ -51,7 +47,7 @@ describe('getAllArticle tests:', () => {
 
   test('getAllArticles - Sort by date desc, offset 2, limit 2', async () => {
     const articles = await ArticleFactory.create(5);
-    articles.sort(byDate);
+    articles.sort(FactoryUtils.compareByDate);
     await ArticleModel.insertMany(articles);
 
     const articleTitles = FactoryUtils.mapToValue(articles.slice(2, 4), 'title'); // offset=2, limit=2
@@ -104,7 +100,7 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
         publicationSlug: pub.slug,
         publication: pub,
       })
-    ).sort(byDate);
+    ).sort(FactoryUtils.compareByDate);
 
     await ArticleModel.insertMany(articles);
     const getArticlesResponse = await ArticleRepo.getArticlesByPublicationSlug(pub.slug);
@@ -115,7 +111,7 @@ describe('getArticlesByPublicationSlug(s) tests', () => {
   });
 
   test('getArticlesByPublicationSlugs - many publications, 5 articles', async () => {
-    const articles = (await ArticleFactory.create(3)).sort(byDate);
+    const articles = (await ArticleFactory.create(3)).sort(FactoryUtils.compareByDate);
 
     await ArticleModel.insertMany(articles);
     const getArticlesResponse = await ArticleRepo.getArticlesByPublicationSlug(

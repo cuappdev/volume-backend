@@ -6,5 +6,8 @@ class FactoryUtils {
   public static mapToValue(arr, val) {
     return arr.map((x) => x[val]);
   }
+  public static compareByDate(a, b) {
+    return -1 * (new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
 }
 export default FactoryUtils;
