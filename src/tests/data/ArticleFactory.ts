@@ -13,9 +13,7 @@ class ArticleFactory {
      * @param n The number of desired random Article objects
      * @returns A Promise of the list of n number of random Article objects
      */
-    return Promise.all(FactoryUtils.create(n, ArticleFactory.fake)).then((articles) => {
-      return articles;
-    });
+    return Promise.all(FactoryUtils.create(n, ArticleFactory.fake))
   }
 
   public static async createSpecific(
