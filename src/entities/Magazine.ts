@@ -8,10 +8,6 @@ export class Magazine {
   id: string;
 
   @Field()
-  @Property({ unique: true })
-  magazineURL: string;
-
-  @Field()
   @Property()
   date: Date;
 

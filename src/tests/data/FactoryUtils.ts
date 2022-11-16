@@ -7,7 +7,7 @@ class FactoryUtils {
    * Takes in an list of objects and returns a list of elements mapped
    * to a given key value for each object
    *
-   * @param socialsList The list of objects
+   * @param lst The list of objects
    * @param key The key to get values from
    * @returns An array of values that were mapped to key
    */
