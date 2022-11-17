@@ -44,7 +44,6 @@ describe('getAllArticle tests:', () => {
     const getArticlesResponse = await ArticleRepo.getAllArticles(0, 2);
     expect(getArticlesResponse).toHaveLength(2);
   });
-
   test('getAllArticles - Sort by date desc, offset 2, limit 2', async () => {
     const articles = await ArticleFactory.create(5);
     articles.sort(FactoryUtils.compareByDate);
