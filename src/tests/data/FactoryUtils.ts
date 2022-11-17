@@ -3,11 +3,27 @@ class FactoryUtils {
     return Array(n).fill(null).map(fn);
   }
 
-  public static mapToValue(arr, val) {
-    return arr.map((x) => x[val]);
+  /**
+   * Takes in an list of objects and returns a list of elements mapped
+   * to a given key value for each object
+   *
+   * @param lst The list of objects
+   * @param key The key to get values from
+   * @returns An array of values that were mapped to key
+   */
+  public static mapToValue(lst, key) {
+    return lst.map((x) => x[key]);
   }
+
+  /**
+   * Compares the time between two datess by most recent first
+   *
+   * @param a The first date to be compared
+   * @param b The second date to be compared
+   * @returns 1 if b is more recent than a, -1 if a is more recent than b, 0 if a and b are at the same time
+   */
   public static compareByDate(a, b) {
-    return -1 * (new Date(a.date).getTime() - new Date(b.date).getTime());
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
   }
 }
 export default FactoryUtils;
