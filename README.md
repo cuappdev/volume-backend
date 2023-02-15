@@ -33,9 +33,13 @@ To run the project, use
 
 Make sure `MongoDB` is installed. [See installation guide](https://docs.mongodb.com/manual/installation/).
 
-To view your database, enter your terminal and run
+To run MongoDB on a MacOS device, run
 
-`mongo`
+`brew services start mongodb-community@6.0` (6.0 may be outdated, check website for updated version).
+
+and connect MongoSH to a running instance using
+
+`mongosh`
 
 From here, you can interact with your database by typing `use <db_name>`.
 
