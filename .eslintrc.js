@@ -9,6 +9,8 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/no-unused-vars': 0,
     'semi-style': ['error', 'last'],
+    'import/named': 0,
+    'import/prefer-default-export': 0,
   },
   // This gets rid of weird react error for non-react project
   settings: {
