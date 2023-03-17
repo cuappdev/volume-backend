@@ -52,7 +52,7 @@ class UserResolver {
 
   @Mutation((_returns) => User, {
     nullable: true,
-    description: "Adds the <Magazine> given by the <magazineID> to the <User's> read articles",
+    description: "Adds the <Magazine> given by the <magazineID> to the <User's> read magazines",
   })
   async readMagazine(@Arg('uuid') uuid: string, @Arg('magazineID') magazineID: string) {
     return await UserRepo.appendReadMagazine(uuid, magazineID);

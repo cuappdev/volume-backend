@@ -170,5 +170,3 @@ describe('incrementShoutouts tests', () => {
     expect(getMagazinesResponse.shoutouts).toEqual(oldShoutouts + 1);
   });
 });
-
-// need : featured magazine tests
