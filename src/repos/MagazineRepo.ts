@@ -177,6 +177,11 @@ const searchMagazines = async (query: string, limit = DEFAULT_LIMIT) => {
   const searcher = new Fuse(allMagazines, {
     keys: ['title', 'publication.name'],
   });
+
+  return searcher
+    .search(query)
+    .map((searchRes) => searchRes.item)
+    .slice(0, limit);
 };
 
 export default {
