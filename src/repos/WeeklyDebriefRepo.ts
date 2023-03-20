@@ -24,7 +24,9 @@ const createWeeklyDebrief = async (
     numShoutouts: user.numShoutouts,
     numBookmarkedArticles: user.numBookmarkedArticles,
     readArticles: user.readArticles.slice(0, 2),
+    readMagazines: user.readMagazines.slice(0, 2),
     numReadArticles: user.readArticles.length,
+    numReadMagazines: user.readMagazines.length,
     randomArticles: await articleAggregate.sample(2).exec(),
   });
   return UserModel.findOneAndUpdate(
@@ -32,6 +34,7 @@ const createWeeklyDebrief = async (
     {
       $set: {
         readArticles: [],
+        readMagazines: [],
         numShoutouts: 0,
         numBookmarkedArticles: 0,
         weeklyDebrief,
