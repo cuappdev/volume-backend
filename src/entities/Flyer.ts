@@ -9,15 +9,19 @@ export class Flyer {
 
   @Field()
   @Property()
-  flyerURL: string;
-
-  @Field()
-  @Property()
   date: Date;
 
   @Field()
   @Property()
   imageURL: string;
+
+  @Field()
+  @Property({ nullable: true })
+  description: string;
+
+  @Field()
+  @Property()
+  location: string;
 
   @Field((type) => Organization)
   @Property({ type: () => Organization })
