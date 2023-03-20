@@ -170,3 +170,14 @@ describe('incrementShoutouts tests', () => {
     expect(getMagazinesResponse.shoutouts).toEqual(oldShoutouts + 1);
   });
 });
+
+describe('searchMagazine tests', () => {
+  test('searchMagazine - 1 article', async () => {
+    const magazines = await MagazineFactory.create(1);
+    const magTitle = magazines[0].title;
+    await MagazineModel.insertMany(magazines);
+
+    const getMagazinesResponse = await MagazineRepo.searchMagazines(magTitle);
+    expect(getMagazinesResponse[0].title).toEqual(magTitle);
+  });
+});
