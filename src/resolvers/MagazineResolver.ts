@@ -86,7 +86,7 @@ class MagazineResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'magazine' object,
     // magazine['_doc'] must be used to access fields of a magazine object
-    return (magazine['_doc'].shoutouts / (presentDate - magazine['_doc'].date.getTime())/1000); // eslint-disable-line
+    return magazine['_doc'].shoutouts / (presentDate - magazine['_doc'].date.getTime()) / 1000; // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {
