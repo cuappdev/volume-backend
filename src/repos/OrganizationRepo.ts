@@ -102,16 +102,6 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
   return orgFlyers.length;
 };
 
-/**
- * Retrieves informations about a Organizations content types.
- * @param {Organization} organization
- * @returns {string[]}
- */
-const getContentTypes = async (organization: Organization): Promise<string[]> => {
-  const contentTypes = organization['_doc'].contentTypes; // eslint-disable-line
-  return contentTypes[0];
-};
-
 export default {
   addOrganizationsToDB,
   getAllOrganizations,
@@ -121,5 +111,4 @@ export default {
   getOrganizationBySlug,
   getOrganizationsByIDs,
   getShoutouts,
-  getContentTypes,
 };

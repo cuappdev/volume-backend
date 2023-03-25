@@ -57,13 +57,6 @@ class OrganizationResolver {
   async numFlyers(@Root() organization: Organization): Promise<number> {
     return OrganizationRepo.getNumFlyers(organization);
   }
-
-  @FieldResolver((_returns) => [String], {
-    description: "The information about an <Organization's> social platforms.",
-  })
-  async contentTypes(@Root() organization: Organization): Promise<string[]> {
-    return OrganizationRepo.getContentTypes(organization);
-  }
 }
 
 export default OrganizationResolver;
