@@ -1,0 +1,29 @@
+{
+	"organizations": [{
+			"bio": "test bio",
+			"bioShort": "test bioshort",
+			"rssName": "test rssName",
+			"rssURL": "test rssURL",
+			"name": "test name",
+			"slug": "test slug",
+			"websiteURL": "test websiteURL"
+		}, {
+			"bio": "test bio1",
+			"bioShort": "test bioshort1",
+			"rssName": "test rssName1",
+			"rssURL": "test rssURL1",
+			"name": "test name1",
+			"slug": "test slug1",
+			"websiteURL": "test websiteURL1"
+		},
+		{
+			"bio": "test bio2",
+			"bioShort": "test bioshort2",
+			"rssName": "test rssName2",
+			"rssURL": "test rssURL2",
+			"name": "test name2",
+			"slug": "test slug2",
+			"websiteURL": "test websiteURL2"
+		}
+	]
+}

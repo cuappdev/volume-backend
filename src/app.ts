@@ -13,10 +13,19 @@ import UserResolver from './resolvers/UserResolver';
 import { dbConnection } from './db/DBConnection';
 import MagazineRepo from './repos/MagazineRepo';
 import MagazineResolver from './resolvers/MagazineResolver';
+import FlyerResolver from './resolvers/FlyerResolver';
+import OrganizationResolver from './resolvers/OrganizationResolver';
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [ArticleResolver, PublicationResolver, UserResolver, MagazineResolver],
+    resolvers: [
+      ArticleResolver,
+      PublicationResolver,
+      UserResolver,
+      MagazineResolver,
+      FlyerResolver,
+      OrganizationResolver,
+    ],
     emitSchemaFile: true,
     validate: false,
   });
