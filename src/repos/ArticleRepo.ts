@@ -130,14 +130,14 @@ const getShuffledArticlesByPublicationSlugs = async (
       },
     },
   ]).then((articles) => {
-    const articlesByPub = {};
-    for (const article of articles) {
-      articlesByPub[article._id] = article.articles.filter(
+    const filteredArticles = {};
+    for (const a of articles) {
+      filteredArticles[a._id] = a.articles.filter(
         (article) => article !== null && !isArticleFiltered(article),
       );
-      mostByOnePub = Math.max(mostByOnePub, articlesByPub[article._id].length);
+      mostByOnePub = Math.max(mostByOnePub, filteredArticles[a._id].length);
     }
-    return articlesByPub;
+    return filteredArticles;
   });
 
   // take the ith element from each array in articlesByPub, add it to a list named ithArticles,
@@ -148,7 +148,7 @@ const getShuffledArticlesByPublicationSlugs = async (
     const ithArticles = [];
     for (const key of Object.keys(articlesByPub)) {
       if (articlesByPub[key][i]) {
-        ithArticles.push(articlesByPub[key][i]);
+        ithArticles.push(new ArticleModel(articlesByPub[key][i])); // convert each article json object back to an ArticleModel object.
       }
     }
     ithArticles.sort((a, b) => {
@@ -156,7 +156,6 @@ const getShuffledArticlesByPublicationSlugs = async (
     });
     shuffledArticles.push(...ithArticles);
   }
-
   return shuffledArticles;
 };
 
