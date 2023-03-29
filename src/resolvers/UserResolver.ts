@@ -60,6 +60,14 @@ class UserResolver {
 
   @Mutation((_returns) => User, {
     nullable: true,
+    description: "Adds the <Flyer> given by the <flyerID> to the <User's> read flyers",
+  })
+  async readFlyer(@Arg('uuid') uuid: string, @Arg('flyerID') flyerID: string) {
+    return await UserRepo.appendReadFlyer(uuid, flyerID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
     description: 'Increments the number of bookmarks for the <User> given by <uuid>',
   })
   async bookmarkArticle(@Arg('uuid') uuid: string) {

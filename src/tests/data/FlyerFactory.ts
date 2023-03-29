@@ -59,6 +59,7 @@ class FlyerFactory {
     fakeFlyer.nsfw = _.sample([true, false]);
     fakeFlyer.shoutouts = _.random(0, 50);
     fakeFlyer.trendiness = 0;
+    fakeFlyer.sourceLink = faker.internet.url();
 
     return fakeFlyer;
   }

@@ -15,6 +15,7 @@ import MagazineRepo from './repos/MagazineRepo';
 import MagazineResolver from './resolvers/MagazineResolver';
 import FlyerResolver from './resolvers/FlyerResolver';
 import OrganizationResolver from './resolvers/OrganizationResolver';
+import FlyerRepo from './repos/FlyerRepo';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -75,13 +76,15 @@ const main = async () => {
   }
 
   async function setupTrendingArticleRefreshCron() {
-    // Refresh trending articles once
+    // Refresh trending articles, magazines, and flyers once
     ArticleRepo.refreshTrendingArticles();
     MagazineRepo.refreshFeaturedMagazines();
-    // Refresh trending articles 12 hours
+    FlyerRepo.refreshTrendingFlyers();
+    // Refresh trending articles, magazines, and flyers eveyr 12 hours
     cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
       MagazineRepo.refreshFeaturedMagazines();
+      FlyerRepo.refreshTrendingFlyers();
     });
   }
 
