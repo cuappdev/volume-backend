@@ -357,84 +357,20 @@
       "websiteURL": "https://www.thecornelldiplomat.com/"
     },
     {
-      "bio": "The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
-      "bioShort": "The 180 is a publication by Hotelies for Hotelies.",
-      "contentTypes": ["articles"],
-      "rssName": "The 180 Blog - The 180",
-      "rssURL": "https://www.the180print.org/the-180-blog?format=rss",
-      "name": "The 180 at Cornell",
-      "slug": "180",
-      "socialURLs": [
-        {
-          "social": "insta",
-          "URL": "https://www.instagram.com/the_180_cornell/?hl=en"
-        },
-        {
-          "social": "facebook",
-          "URL": "https://www.facebook.com/Cornell.the180/"
-        },
-        {
-          "social": "linkedin",
-          "URL": "https://www.linkedin.com/company/cornell-the180/"
-        }
-      ],
-      "websiteURL": "https://www.the180print.org/"
-    },
-    {
-      "bio": "Through the creative collaboration of Cornell University students, Collective X magazine undermines the persistent exclusion of diverse/non-normative individuals within creative fields, while testing artistic boundaries as a means of self-exploration.",
-      "bioShort": "We are a fashion publication that aims to develop the narrative experiences of oppressed and disregarded populations.",
+      "bio": "A publication devoted to writing about societal issues from perspectives that are seldom discussed.",
+      "bioShort": "Using new perspectives to examine societal issues.",
       "contentTypes": ["magazines"],
-      "rssName": "Collective X",
+      "rssName": "No Rules Magazine",
       "rssURL": null,
-      "name": "Collective X",
-      "slug": "collective",
+      "name": "No Rules Magazine",
+      "slug": "norules",
       "socialURLs": [
         {
           "social": "insta",
-          "URL": "https://www.instagram.com/collectivexcornell/"
-        },
-        {
-          "social": "facebook",
-          "URL": "https://www.facebook.com/collectivexmagazine/"
+          "URL": "https://www.instagram.com/norules.cornell/"
         }
       ],
-      "websiteURL": "https://www.thecollectivexliberation.com/"
-    },
-    {
-      "bio": "A student-run publication sharing the latest innovations in science, health, and medicine.",
-      "bioShort": "Everything about science, health, and medicine.",
-      "contentTypes": ["articles"],
-      "rssName": "The Cornell Healthcare Review",
-      "rssURL": "https://www.cornellhealthcarereview.org/blogs-feed.xml",
-      "name": "The Cornell Healthcare Review",
-      "slug": "healthcare",
-      "socialURLs": [
-        {
-          "social": "insta",
-          "URL": "https://www.instagram.com/cuhealthcarereview/"
-        }
-      ],
-      "websiteURL": "https://www.cornellhealthcarereview.org/"
-    },
-    {
-      "bio": "Founded in 1880, The Sun is the oldest continuously independent college daily in the United States.",
-      "bioShort": "Independent since 1880.",
-      "contentTypes": ["articles"],
-      "rssName": "The Cornell Daily Sun",
-      "rssURL": "https://cornellsun.com/feed/",
-      "name": "The Cornell Daily Sun",
-      "slug": "sun",
-      "socialURLs": [
-        {
-          "social": "insta",
-          "URL": "https://www.instagram.com/cornellsun/"
-        },
-        {
-          "social": "facebook",
-          "URL": "https://www.facebook.com/cornellsun/"
-        }
-      ],
-      "websiteURL": "https://cornellsun.com/"
+      "websiteURL": "https://norulescornell.com"
     }
   ]
 }
