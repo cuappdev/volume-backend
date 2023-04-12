@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Article } from '../entities/Article';
 import ArticleRepo from '../repos/ArticleRepo';
-import { DEFAULT_LIMIT, DEFAULT_OFFSET, DEFAULT_RANGE } from '../common/constants';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
 import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => Article)
@@ -88,20 +88,6 @@ class ArticleResolver {
 
   @Query((_returns) => [Article], {
     nullable: false,
-    description:
-      'Returns a list of <Articles> of size <limit> via the given list of <slugs>, shuffled so that each publication apears once before appearing again in the same batch. Individual batches are sorted chronologically. Results can be offsetted by<offset> >= 0.',
-  })
-  async getShuffledArticlesByPublicationSlugs(
-    @Arg('slugs', (type) => [String]) slugs: string[],
-    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
-    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
-    @Arg('timeRange', { defaultValue: DEFAULT_RANGE }) timeRange: number,
-  ) {
-    return ArticleRepo.getShuffledArticlesByPublicationSlugs(slugs, limit, offset, timeRange);
-  }
-
-  @Query((_returns) => [Article], {
-    nullable: false,
     description: `Returns a list of <Articles> <since> a given date, limited by <limit>. 
   <since> is formatted as an compliant RFC 2822 timestamp. Valid examples include: "2019-01-31", "Aug 9, 1995", "Wed, 09 Aug 1995 00:00:00", etc. Default <limit> is ${DEFAULT_LIMIT}`,
   })
@@ -136,7 +122,7 @@ class ArticleResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'article' object,
     // article['_doc'] must be used to access fields of a article object
-    return article['_doc'].shoutouts / ((presentDate - article['_doc'].date.getTime()) / 1000); // eslint-disable-line
+    return article['_doc'].shoutouts / ((presentDate - article['_doc'].date.getTime())/1000); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {
