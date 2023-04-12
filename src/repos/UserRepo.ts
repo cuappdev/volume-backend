@@ -3,8 +3,6 @@ import { Article } from '../entities/Article';
 import ArticleRepo from './ArticleRepo';
 import { PublicationSlug } from '../common/types';
 import { User, UserModel } from '../entities/User';
-import { Magazine } from '../entities/Magazine';
-import MagazineRepo from './MagazineRepo';
 
 /**
  * Create new user associated with deviceToken and followedPublicationsSlugs of deviceType.
@@ -99,25 +97,6 @@ const appendReadArticle = async (uuid: string, articleID: string): Promise<User>
 };
 
 /**
- * Add a magazine to a user's readMagazines
- */
-const appendReadMagazine = async (uuid: string, magazineID: string): Promise<User> => {
-  const user = await UserModel.findOne({ uuid });
-
-  if (!user) return user;
-
-  const magazine = await MagazineRepo.getMagazineByID(magazineID);
-  const checkDuplicates = (prev: boolean, cur: Magazine) => prev || cur.id === magazineID;
-
-  if (magazine && !user.readMagazines.reduce(checkDuplicates, false)) {
-    user.readMagazines.push(magazine);
-  }
-
-  user.save();
-  return user;
-};
-
-/**
  * Increment shoutouts in user's numShoutouts
  */
 const incrementShoutouts = async (uuid: string): Promise<User> => {
@@ -147,7 +126,6 @@ const incrementBookmarks = async (uuid: string): Promise<User> => {
 
 export default {
   appendReadArticle,
-  appendReadMagazine,
   createUser,
   followPublication,
   getUserByUUID,
