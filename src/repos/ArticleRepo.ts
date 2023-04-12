@@ -1,13 +1,14 @@
 import Filter from 'bad-words';
-import { ObjectId } from 'mongodb';
 import Fuse from 'fuse.js';
-import { Article, ArticleModel } from '../entities/Article';
+import { ObjectId } from 'mongodb';
+
 import {
   DEFAULT_LIMIT,
-  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  FILTERED_WORDS,
   DEFAULT_OFFSET,
+  FILTERED_WORDS,
+  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
 } from '../common/constants';
+import { Article, ArticleModel } from '../entities/Article';
 import { PublicationModel } from '../entities/Publication';
 
 const { IS_FILTER_ACTIVE } = process.env;
@@ -83,6 +84,81 @@ const getArticlesByPublicationSlugs = async (
     });
 };
 
+const getShuffledArticlesByPublicationSlugs = async (
+  slugs: string[],
+  limit: number = DEFAULT_LIMIT,
+  offset: number = DEFAULT_OFFSET,
+  timeRange = 12, // int value in months before current date to get articles from
+): Promise<Article[]> => {
+  // return a list of ArticleModels sorted by date, but each publisher has to show up at least once
+  // before articles by the same publisher shows up again
+  // e.g. publisher 1 has articles 1.1 (published jan 1), 1.2 (published jan 6)
+  //      publisher 2 has articles 2.1 (published jan 5), 2.2 (published jan 4)
+  //      publisher 3 has articles 3.1 (published jan 2), 3.2 (published jan 3)
+  // the function should return [1.1, 3.1, 2.1, 3.2, 2.2, 1.2]
+  const uniqueSlugs = [...new Set(slugs)];
+  const since = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() - timeRange,
+    new Date().getDate(),
+  );
+
+  let mostByOnePub = 0;
+
+  // by using the aggregate() function, create a dictionary of
+  // { publicationSlug: [ArticleModel] }
+  const articlesByPub = await ArticleModel.aggregate([
+    {
+      $match: {
+        'publication.slug': { $in: uniqueSlugs },
+        date: { $gte: since },
+      },
+    },
+    {
+      $sort: { date: -1 },
+    },
+    {
+      $skip: offset,
+    },
+    {
+      $limit: limit,
+    },
+    {
+      $group: {
+        _id: '$publication.slug',
+        articles: { $push: '$$ROOT' },
+      },
+    },
+  ]).then((articles) => {
+    const filteredArticles = {};
+    for (const a of articles) {
+      filteredArticles[a._id] = a.articles.filter(
+        (article) => article !== null && !isArticleFiltered(article),
+      );
+      mostByOnePub = Math.max(mostByOnePub, filteredArticles[a._id].length);
+    }
+    return filteredArticles;
+  });
+
+  // take the ith element from each array in articlesByPub, add it to a list named ithArticles,
+  // sort it by date, then add it to shuffledArticles. Repeat until all arrays in articlesByPub are empty
+  // if you are out of articles from a certain publisher, do not add anything from that publisher to ithArticles
+  const shuffledArticles = [];
+  for (let i = 0; i < mostByOnePub; i++) {
+    const ithArticles = [];
+    for (const key of Object.keys(articlesByPub)) {
+      if (articlesByPub[key][i]) {
+        ithArticles.push(new ArticleModel(articlesByPub[key][i])); // convert each article json object back to an ArticleModel object.
+      }
+    }
+    ithArticles.sort((a, b) => {
+      return b.date.getTime() - a.date.getTime();
+    });
+    shuffledArticles.push(...ithArticles);
+  }
+  return shuffledArticles;
+};
+
 const getArticlesByPublicationID = async (
   publicationID: string,
   limit: number = DEFAULT_LIMIT,
@@ -104,7 +180,6 @@ const getArticlesByPublicationIDs = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Article[]> => {
   const uniquePubIDs = [...new Set(publicationIDs)].map((id) => new ObjectId(id));
-  console.log(uniquePubIDs);
   const pubSlugs = await PublicationModel.find({ _id: { $in: uniquePubIDs } }).select('slug');
   return getArticlesByPublicationSlugs(
     pubSlugs.map((pub) => pub.slug),
@@ -225,6 +300,7 @@ export default {
   getArticlesByPublicationIDs,
   getArticlesByPublicationSlug,
   getArticlesByPublicationSlugs,
+  getShuffledArticlesByPublicationSlugs,
   searchArticles,
   getTrendingArticles,
   incrementShoutouts,
