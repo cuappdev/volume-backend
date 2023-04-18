@@ -4,9 +4,9 @@ import Fuse from 'fuse.js';
 import { Flyer, FlyerModel } from '../entities/Flyer';
 import {
   DEFAULT_LIMIT,
-  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  FILTERED_WORDS,
   DEFAULT_OFFSET,
+  FILTERED_WORDS,
+  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
 
@@ -24,6 +24,16 @@ function isFlyerFiltered(flyer: Flyer) {
   return false;
 }
 
+const getAllFlyers = async (offset = DEFAULT_OFFSET, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
+  return FlyerModel.find({})
+    .sort({ date: 'desc' })
+    .skip(offset)
+    .limit(limit)
+    .then((flyers) => {
+      return flyers.filter((flyer) => !isFlyerFiltered(flyer));
+    });
+};
+
 const getFlyerByID = async (id: string): Promise<Flyer> => {
   return FlyerModel.findById(new ObjectId(id)).then((flyer) => {
     if (!isFlyerFiltered(flyer)) {
@@ -36,19 +46,9 @@ const getFlyerByID = async (id: string): Promise<Flyer> => {
 const getFlyersByIDs = async (ids: string[]): Promise<Flyer[]> => {
   return Promise.all(ids.map((id) => FlyerModel.findById(new ObjectId(id)))).then((flyers) => {
     // Filter out all null values that were returned by ObjectIds not associated
-    // with Flyers in database
+    // with flyers in database
     return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
   });
-};
-
-const getAllFlyers = async (offset = DEFAULT_OFFSET, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
-  return FlyerModel.find({})
-    .sort({ date: 'desc' })
-    .skip(offset)
-    .limit(limit)
-    .then((flyers) => {
-      return flyers.filter((flyer) => !isFlyerFiltered(flyer));
-    });
 };
 
 const getFlyersByOrganizationSlug = async (

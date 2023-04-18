@@ -12,16 +12,28 @@ export class Flyer {
   date: Date;
 
   @Field()
-  @Property()
-  imageURL: string;
-
-  @Field()
   @Property({ nullable: true })
   description: string;
 
   @Field()
   @Property()
+  imageURL: string;
+
+  @Field()
+  @Property()
+  isFiltered: boolean;
+
+  @Field()
+  @Property({ default: false })
+  isTrending: boolean;
+
+  @Field()
+  @Property()
   location: string;
+
+  @Field()
+  @Property({ default: false })
+  nsfw: boolean;
 
   @Field((type) => Organization)
   @Property({ type: () => Organization })
@@ -40,20 +52,8 @@ export class Flyer {
   title: string;
 
   @Field()
-  @Property({ default: false })
-  nsfw: boolean;
-
-  @Field()
-  @Property({ default: false })
-  isTrending: boolean;
-
-  @Field()
   @Property({ default: 0 })
   trendiness: number;
-
-  @Field()
-  @Property()
-  isFiltered: boolean;
 }
 
 export const FlyerModel = getModelForClass(Flyer);
