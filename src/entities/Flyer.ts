@@ -20,10 +20,6 @@ export class Flyer {
   imageURL: string;
 
   @Field()
-  @Property()
-  isFiltered: boolean;
-
-  @Field()
   @Property({ default: false })
   isTrending: boolean;
 
