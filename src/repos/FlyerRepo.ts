@@ -88,7 +88,7 @@ const getFlyersByOrganizationID = async (
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
-      return flyers.filter((flyer) => !isFlyerFiltered(flyer));
+      return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
     });
 };
 
@@ -98,7 +98,6 @@ const getFlyersByOrganizationIDs = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
   const uniqueOrgIDs = [...new Set(organizationIDs)].map((id) => new ObjectId(id));
-  console.log(uniqueOrgIDs);
   const orgSlugs = await OrganizationModel.find({ _id: { $in: uniqueOrgIDs } }).select('slug');
   return getFlyersByOrganizationSlugs(
     orgSlugs.map((org) => org.slug),
@@ -117,7 +116,7 @@ const getFlyersAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise
       .sort({ date: 'desc' })
       .limit(limit)
       .then((flyers) => {
-        return flyers.filter((flyer) => !isFlyerFiltered(flyer));
+        return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
       })
   );
 };
@@ -219,8 +218,8 @@ export default {
   getFlyersByOrganizationIDs,
   getFlyersByOrganizationSlug,
   getFlyersByOrganizationSlugs,
-  searchFlyers,
   getTrendingFlyers,
   incrementShoutouts,
   refreshTrendingFlyers,
+  searchFlyers,
 };
