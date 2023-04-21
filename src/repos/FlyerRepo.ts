@@ -1,6 +1,7 @@
 import Filter from 'bad-words';
-import { ObjectId } from 'mongodb';
 import Fuse from 'fuse.js';
+import { ObjectId } from 'mongodb';
+
 import { Flyer, FlyerModel } from '../entities/Flyer';
 import {
   DEFAULT_LIMIT,

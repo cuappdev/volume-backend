@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable dot-notation */
 import { faker } from '@faker-js/faker';
-import { FlyerModel } from '../entities/Flyer';
-import FlyerRepo from '../repos/FlyerRepo';
-import OrganizationRepo from '../repos/OrganizationRepo';
+
 import FactoryUtils from './data/FactoryUtils';
 import FlyerFactory from './data/FlyerFactory';
+import { FlyerModel } from '../entities/Flyer';
+import FlyerRepo from '../repos/FlyerRepo';
 import OrganizationFactory from './data/OrganizationFactory';
+import OrganizationRepo from '../repos/OrganizationRepo';
 
 import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 

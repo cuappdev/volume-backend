@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { faker } from '@faker-js/faker';
 import { _ } from 'underscore';
-import OrganizationFactory from './OrganizationFactory';
-import { Flyer } from '../../entities/Flyer';
+import { faker } from '@faker-js/faker';
+
 import FactoryUtils from './FactoryUtils';
+import { Flyer } from '../../entities/Flyer';
+import OrganizationFactory from './OrganizationFactory';
 
 class FlyerFactory {
   public static async create(n: number): Promise<Flyer[]> {
