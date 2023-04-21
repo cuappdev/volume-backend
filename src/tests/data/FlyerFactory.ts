@@ -49,7 +49,7 @@ class FlyerFactory {
 
     fakeFlyer.date = faker.date.past();
     fakeFlyer.imageURL = faker.image.cats();
-    fakeFlyer.flyerURL = faker.datatype.string();
+    fakeFlyer.description = faker.datatype.string();
     fakeFlyer.location = faker.datatype.string();
     fakeFlyer.organization = exampleOrg;
     fakeFlyer.organizationSlug = exampleOrg.slug;

@@ -13,7 +13,7 @@ export class Flyer {
 
   @Field()
   @Property({ nullable: true })
-  flyerURL: string;
+  description: string;
 
   @Field()
   @Property()
