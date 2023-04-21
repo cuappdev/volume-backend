@@ -1,361 +1,440 @@
 {
-   "publications":[
-      {
-         "bio":"The Advocate promotes the dissemination of literature that examines youth-related issues with the goal of encouraging youth advocacy in local and federal politics.",
-         "bioShort":"Encouraging political advocacy by examining issues relevant to college students",
-         "contentTypes":["articles"],
-         "rssName":"The Advocate",
-         "rssURL":"http://theadvocatecornell.com/feed/",
-         "name":"The Advocate",
-         "slug":"advocate",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/theadvocateatcornelluniversity"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/The-Advocate-at-Cornell-University-109632540936869"
-            }
-         ],
-         "websiteURL":"http://theadvocatecornell.com"
-
-      },
-      {
-         "bio":"Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
-         "bioShort":"Dedicated exclusively to Cornell Athletics",
-         "contentTypes":["articles"],
-         "rssName":"Big Red Sports Network",
-         "rssURL":"https://www.cornellbrsn.com/blog-feed.xml",
-         "name":"Big Red Sports Network",
-         "slug":"brsn",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cornellbrsn"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/CornellBRSN"
-            },
-            {
-               "social":"youtube",
-               "URL":"https://www.youtube.com/channel/UCXl9QF-FaKPR3ldQ9zkG0jg/videos"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/bigredsportsnetwork"
-            },
-            {
-               "social":"twitter",
-               "URL":"https://twitter.com/CornellBRSN"
-            }
-         ],
-         "websiteURL":"https://www.cornellbrsn.com/"
-      },
-      {
-         "bio":"The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
-         "bioShort":"A journal of Christian thoughts",
-         "contentTypes":["articles"],
-         "rssName":"Blog - CLARITAS",
-         "rssURL":"https://www.cornellclaritas.com/blog?format=rss",
-         "name":"Cornell Claritas",
-         "slug":"claritas",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cornellclaritas"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/CornellClaritas"
-            }
-         ],
-         "websiteURL":"https://www.cornellclaritas.com"
-      },
-      {
-         "bio":"We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
-         "bioShort":"Recipes, stories, and articles from group of passionate food enthusiasts",
-         "contentTypes":["articles"],
-         "rssName":"Blog - CRÈME de cornell",
-         "rssURL":"https://www.cremedecornell.net/blogposts?format=rss",
-         "name":"Crème de Cornell",
-         "slug":"creme",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cremedecornell/?hl=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/CremedeCornell"
-            }
-         ],
-         "websiteURL":"https://www.cremedecornell.net"
-      },
-      {
-         "bio":"Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
-         "bioShort":"Celebrating cultural diversity and view the world with an open mind",
-         "contentTypes":["articles"],
-         "rssName":"Guac Magazine - Medium",
-         "rssURL":"https://medium.com/feed/guac-magazine",
-         "name":"Guac Magazine",
-         "slug":"guac",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/guacmag/?hl=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/guacmag"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/guac-magazine/about"
-            }
-         ],
-         "websiteURL":"https://medium.com/guac-magazine"
-      },
-      {
-         "bio":"Takes fresh from the sticky part of our rejected article pile.",
-         "bioShort":"News published with the utmost regard for veracity and originality",
-         "contentTypes":["articles"],
-         "rssName":"CU Nooz",
-         "rssURL":"http://cunooz.com/feed/",
-         "name":"CU Nooz",
-         "slug":"nooz",
-         "socialURLs":[
-            {
-               "social":"twitter",
-               "URL":"https://twitter.com/cunooz?lang=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/cunoozzz"
-            }
-         ],
-         "websiteURL":"http://cunooz.com"
-      },
-      {
-         "bio":"The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
-         "bioShort":"One of the leading college conservative publications in the United States",
-         "contentTypes":["articles"],
-         "rssName":"The Cornell Review",
-         "rssURL":"https://www.thecornellreview.org/feed",
-         "name":"The Cornell Review",
-         "slug":"review",
-         "socialURLs":[
-            {
-               "social":"twitter",
-               "URL":"https://twitter.com/cornellreview?lang=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/thecornellreview"
-            }
-         ],
-         "websiteURL":"https://www.thecornellreview.org"
-      },
-      {
-         "bio":"As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
-         "bioShort":"Your daily fix of Cornell buzz",
-         "contentTypes":["articles"],
-         "rssName":"All - Slope Media",
-         "rssURL":"https://www.slopemedia.org/all?format=rss",
-         "name":"Slope Media",
-         "slug":"slope",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/slopemedia"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/slopemedia"
-            },
-            {
-               "social":"youtube",
-               "URL":"https://www.youtube.com/user/SlopeMediaTV"
-            },
-            {
-               "social":"spotify",
-               "URL":"https://open.spotify.com/user/slopemedia?si=2_IbqlxtTP6O0fFkVp2GWA&nd=1"
-            }
-         ],
-         "websiteURL":"https://www.slopemedia.org"
-      },
-      {
-         "bio":"We created the review to provide a forum for the exchange of these ideas.",
-         "bioShort":"An open platform for scholarly writing, critical thinking, and reasoned debate",
-         "contentTypes":["articles"],
-         "rssName":"The Undergraduate Law & Society Review at Cornell",
-         "rssURL":"https://www.culsr.org/?format=rss",
-         "name":"The Undergraduate Law and Society Review at Cornell",
-         "slug":"ulsr",
-         "socialURLs":[
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/CULSReview"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornellundergraduatelawandsocietyreview/"
-            }
-         ],
-         "websiteURL":"https://www.culsr.org/"
-      },
-      {  
-         "bio":"Thread Magazine is an independent student publication and the only fashion, lifestyle, and art magazine at Cornell.",
-         "bioShort":"The only fashion, lifestyle, and art magazine at Cornell.",
-         "contentTypes":["magazines"],
-         "rssName":"Thread Magazine",
-         "rssURL":null,
-         "name":"Thread Magazine",
-         "slug":"thread",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/threadmag/"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/TheThreadMagazine/"
-            }
-         ],
-         "websiteURL":"https://threadcornell.com/"
-      },
-      {
-         "bio": "Logos is the undergraduate philosophy journal  at Cornell University. It is today among the leading publications of its kind in the United States, soliciting submissions from undergraduates around the world.",
-         "bioShort": "The undergraduate philosophy journal at Cornell University.",
-         "contentTypes": ["magazines"],
-         "rssName": "Logos Magazine",
-         "rssURL": null,
-         "name": "Logos Magazine",
-         "slug": "logos",
-         "socialURLs": [
-            {
-               "social": "insta",
-               "URL": "https://www.instagram.com/logosofcornell/"
-            },
-            {
-               "social": "facebook",
-               "URL": "https://www.facebook.com/logoscornell/"
-            }
-         ],
-         "websiteURL": "https://logos.philosophy.cornell.edu/"
-      },
-      {
-         "bio":"Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
-         "bioShort":"Offering data-driven perspectives on current events, academics, politics, and beyond.",
-         "contentTypes":["articles"],
-         "rssName":"Cornell Data Journal",
-         "rssURL":"https://cdj-git-add-rss-ashpil.vercel.app/rss.xml",
-         "name":"Cornell Data Journal",
-         "slug":"cdj",
-         "socialURLs":[
-            {
-               "social":"twitter",
-               "URL":"https://cornelldatajourn.al/socials/twitter.svg"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornell-data-journal/"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/cornelldatajournal/"
-            },
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cornelldatajournal/"
-            }
-         ],
-         "websiteURL":"https://cornelldatajourn.al/"
-      },
-      {
-         "bio":"A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
-         "bioShort":"Cornell Business Review is the premier business publication at Cornell University.",
-         "contentTypes":["articles"],
-         "rssName":"CBRnow - Cornell Business Review",
-         "rssURL":"http://www.thecornellbusinessreview.com/cbrnow?format=rss",
-         "name":"Cornell Business Review",
-         "slug":"cbr",
-         "socialURLs":[
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornell-business-review/"
-            }
-         ],
-         "websiteURL":"http://www.thecornellbusinessreview.com/cbr-now"
-      },
-      {
-         "bio":"We are a community of Cornell students who love creating.",
-         "bioShort":"We are a community of Cornell students who love creating.",
-         "contentTypes":["articles"],
-         "rssName":"Cornell Creatives Newsletter",
-         "rssURL":"https://cornell.substack.com/feed",
-         "name":"Cornell Creatives Blog",
-         "slug":"creatives",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/cornellcreatives/"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/cornellcreatives/"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/30581251/"
-            }
-         ],
-         "websiteURL":"https://cornellcreatives.com/"
-      },
-      {
-         "bio":"The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
-         "bioShort":"The 180 is a publication by Hotelies for Hotelies.",
-         "contentTypes":["articles"],
-         "rssName":"The 180 Blog - The 180",
-         "rssURL":"https://www.the180print.org/the-180-blog?format=rss",
-         "name":"The 180 at Cornell",
-         "slug":"180",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/the_180_cornell/?hl=en"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/Cornell.the180/"
-            },
-            {
-               "social":"linkedin",
-               "URL":"https://www.linkedin.com/company/cornell-the180/"
-            }
-         ],
-         "websiteURL":"https://www.the180print.org/"
-      },
-      {
-         "bio":"We are a student-run international affairs magazine that brings together writers, editors and artists to tackle global problems from a variety of perspectives.",
-         "bioShort":" Global Issues. Complex Challenges. Student Perspectives.",
-         "contentTypes":["articles"],
-         "rssName":"Borders - The Cornell Diplomat",
-         "rssURL":"https://www.thecornelldiplomat.com/issue4?format=rss",
-         "name":"The Cornell Diplomat",
-         "slug":"diplo",
-         "socialURLs":[
-            {
-               "social":"insta",
-               "URL":"https://www.instagram.com/thecornelldiplomat/"
-            },
-            {
-               "social":"facebook",
-               "URL":"https://www.facebook.com/TheCornellDiplomat/"
-            }
-         ],
-         "websiteURL":"https://www.thecornelldiplomat.com/"
-      }
-   ]
+  "publications": [
+    {
+      "bio": "The Advocate promotes the dissemination of literature that examines youth-related issues with the goal of encouraging youth advocacy in local and federal politics.",
+      "bioShort": "Encouraging political advocacy by examining issues relevant to college students",
+      "contentTypes": ["articles"],
+      "rssName": "The Advocate",
+      "rssURL": "http://theadvocatecornell.com/feed/",
+      "name": "The Advocate",
+      "slug": "advocate",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/theadvocateatcornelluniversity"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/The-Advocate-at-Cornell-University-109632540936869"
+        }
+      ],
+      "websiteURL": "http://theadvocatecornell.com"
+    },
+    {
+      "bio": "Student-run entertainment and media organization dedicated exclusively to Cornell University Athletics.",
+      "bioShort": "Dedicated exclusively to Cornell Athletics",
+      "contentTypes": ["articles"],
+      "rssName": "Big Red Sports Network",
+      "rssURL": "https://www.cornellbrsn.com/blog-feed.xml",
+      "name": "Big Red Sports Network",
+      "slug": "brsn",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornellbrsn"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/CornellBRSN"
+        },
+        {
+          "social": "youtube",
+          "URL": "https://www.youtube.com/channel/UCXl9QF-FaKPR3ldQ9zkG0jg/videos"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/bigredsportsnetwork"
+        },
+        {
+          "social": "twitter",
+          "URL": "https://twitter.com/CornellBRSN"
+        }
+      ],
+      "websiteURL": "https://www.cornellbrsn.com/"
+    },
+    {
+      "bio": "The Cornell Claritas is an ecumenical, interdenominational Christian publication that was founded on the hope of starting thoughtful Christian conversations within the academic community.",
+      "bioShort": "A journal of Christian thoughts",
+      "contentTypes": ["articles"],
+      "rssName": "Blog - CLARITAS",
+      "rssURL": "https://www.cornellclaritas.com/blog?format=rss",
+      "name": "Cornell Claritas",
+      "slug": "claritas",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornellclaritas"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/CornellClaritas"
+        }
+      ],
+      "websiteURL": "https://www.cornellclaritas.com"
+    },
+    {
+      "bio": "We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories.",
+      "bioShort": "Recipes, stories, and articles from group of passionate food enthusiasts",
+      "contentTypes": ["articles"],
+      "rssName": "Blog - CRÈME de cornell",
+      "rssURL": "https://www.cremedecornell.net/blogposts?format=rss",
+      "name": "Crème de Cornell",
+      "slug": "creme",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cremedecornell/?hl=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/CremedeCornell"
+        }
+      ],
+      "websiteURL": "https://www.cremedecornell.net"
+    },
+    {
+      "bio": "Guac is an award-winning travel publication run by an interdisciplinary group of students at Cornell University.",
+      "bioShort": "Celebrating cultural diversity and view the world with an open mind",
+      "contentTypes": ["articles"],
+      "rssName": "Guac Magazine - Medium",
+      "rssURL": "https://medium.com/feed/guac-magazine",
+      "name": "Guac Magazine",
+      "slug": "guac",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/guacmag/?hl=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/guacmag"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/guac-magazine/about"
+        }
+      ],
+      "websiteURL": "https://medium.com/guac-magazine"
+    },
+    {
+      "bio": "Takes fresh from the sticky part of our rejected article pile.",
+      "bioShort": "News published with the utmost regard for veracity and originality",
+      "contentTypes": ["articles"],
+      "rssName": "CU Nooz",
+      "rssURL": "http://cunooz.com/feed/",
+      "name": "CU Nooz",
+      "slug": "nooz",
+      "socialURLs": [
+        {
+          "social": "twitter",
+          "URL": "https://twitter.com/cunooz?lang=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/cunoozzz"
+        }
+      ],
+      "websiteURL": "http://cunooz.com"
+    },
+    {
+      "bio": "The Cornell Review is an independent newspaper published by students of Cornell University in Ithaca, New York.",
+      "bioShort": "One of the leading college conservative publications in the United States",
+      "contentTypes": ["articles"],
+      "rssName": "The Cornell Review",
+      "rssURL": "https://www.thecornellreview.org/feed",
+      "name": "The Cornell Review",
+      "slug": "review",
+      "socialURLs": [
+        {
+          "social": "twitter",
+          "URL": "https://twitter.com/cornellreview?lang=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/thecornellreview"
+        }
+      ],
+      "websiteURL": "https://www.thecornellreview.org"
+    },
+    {
+      "bio": "As Cornell’s multimedia powerhouse, Slope Media Group is a leader in Cornell-related media and entertainment, delivering a creative, student perspective on everything that matters to the Big Red community.",
+      "bioShort": "Your daily fix of Cornell buzz",
+      "contentTypes": ["articles"],
+      "rssName": "All - Slope Media",
+      "rssURL": "https://www.slopemedia.org/all?format=rss",
+      "name": "Slope Media",
+      "slug": "slope",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/slopemedia"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/slopemedia"
+        },
+        {
+          "social": "youtube",
+          "URL": "https://www.youtube.com/user/SlopeMediaTV"
+        },
+        {
+          "social": "spotify",
+          "URL": "https://open.spotify.com/user/slopemedia?si=2_IbqlxtTP6O0fFkVp2GWA&nd=1"
+        }
+      ],
+      "websiteURL": "https://www.slopemedia.org"
+    },
+    {
+      "bio": "We created the review to provide a forum for the exchange of these ideas.",
+      "bioShort": "An open platform for scholarly writing, critical thinking, and reasoned debate",
+      "contentTypes": ["articles"],
+      "rssName": "The Undergraduate Law & Society Review at Cornell",
+      "rssURL": "https://www.culsr.org/?format=rss",
+      "name": "The Undergraduate Law and Society Review at Cornell",
+      "slug": "ulsr",
+      "socialURLs": [
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/CULSReview"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/cornellundergraduatelawandsocietyreview/"
+        }
+      ],
+      "websiteURL": "https://www.culsr.org/"
+    },
+    {
+      "bio": "Thread Magazine is an independent student publication and the only fashion, lifestyle, and art magazine at Cornell.",
+      "bioShort": "The only fashion, lifestyle, and art magazine at Cornell.",
+      "contentTypes": ["magazines"],
+      "rssName": "Thread Magazine",
+      "rssURL": null,
+      "name": "Thread Magazine",
+      "slug": "thread",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/threadmag/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/TheThreadMagazine/"
+        }
+      ],
+      "websiteURL": "https://threadcornell.com/"
+    },
+    {
+      "bio": "Logos is the undergraduate philosophy journal  at Cornell University. It is today among the leading publications of its kind in the United States, soliciting submissions from undergraduates around the world.",
+      "bioShort": "The undergraduate philosophy journal at Cornell University.",
+      "contentTypes": ["magazines"],
+      "rssName": "Logos Magazine",
+      "rssURL": null,
+      "name": "Logos Magazine",
+      "slug": "logos",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/logosofcornell/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/logoscornell/"
+        }
+      ],
+      "websiteURL": "https://logos.philosophy.cornell.edu/"
+    },
+    {
+      "bio": "Cornell Data Journal is an online investigative journalism publication featuring data visualization, data communication, and interdisciplinary research pieces.",
+      "bioShort": "Offering data-driven perspectives on current events, academics, politics, and beyond.",
+      "contentTypes": ["articles"],
+      "rssName": "Cornell Data Journal",
+      "rssURL": "https://cdj-git-add-rss-ashpil.vercel.app/rss.xml",
+      "name": "Cornell Data Journal",
+      "slug": "cdj",
+      "socialURLs": [
+        {
+          "social": "twitter",
+          "URL": "https://cornelldatajourn.al/socials/twitter.svg"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/cornell-data-journal/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/cornelldatajournal/"
+        },
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornelldatajournal/"
+        }
+      ],
+      "websiteURL": "https://cornelldatajourn.al/"
+    },
+    {
+      "bio": "A student-run magazine that discusses business issues, trends, and debates among college students and alumni, CBR provides insight into recent events and passes along advice from student entrepreneurs and industry leaders and pioneers.",
+      "bioShort": "Cornell Business Review is the premier business publication at Cornell University.",
+      "contentTypes": ["articles"],
+      "rssName": "CBRnow - Cornell Business Review",
+      "rssURL": "http://www.thecornellbusinessreview.com/cbrnow?format=rss",
+      "name": "Cornell Business Review",
+      "slug": "cbr",
+      "socialURLs": [
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/cornell-business-review/"
+        }
+      ],
+      "websiteURL": "http://www.thecornellbusinessreview.com/cbr-now"
+    },
+    {
+      "bio": "We are a community of Cornell students who love creating.",
+      "bioShort": "We are a community of Cornell students who love creating.",
+      "contentTypes": ["articles"],
+      "rssName": "Cornell Creatives Newsletter",
+      "rssURL": "https://cornell.substack.com/feed",
+      "name": "Cornell Creatives Blog",
+      "slug": "creatives",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornellcreatives/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/cornellcreatives/"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/30581251/"
+        }
+      ],
+      "websiteURL": "https://cornellcreatives.com/"
+    },
+    {
+      "bio": "The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
+      "bioShort": "The 180 is a publication by Hotelies for Hotelies.",
+      "contentTypes": ["articles"],
+      "rssName": "The 180 Blog - The 180",
+      "rssURL": "https://www.the180print.org/the-180-blog?format=rss",
+      "name": "The 180 at Cornell",
+      "slug": "180",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/the_180_cornell/?hl=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/Cornell.the180/"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/cornell-the180/"
+        }
+      ],
+      "websiteURL": "https://www.the180print.org/"
+    },
+    {
+      "bio": "We are a student-run international affairs magazine that brings together writers, editors and artists to tackle global problems from a variety of perspectives.",
+      "bioShort": " Global Issues. Complex Challenges. Student Perspectives.",
+      "contentTypes": ["articles"],
+      "rssName": "Borders - The Cornell Diplomat",
+      "rssURL": "https://www.thecornelldiplomat.com/issue4?format=rss",
+      "name": "The Cornell Diplomat",
+      "slug": "diplo",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/thecornelldiplomat/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/TheCornellDiplomat/"
+        }
+      ],
+      "websiteURL": "https://www.thecornelldiplomat.com/"
+    },
+    {
+      "bio": "The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
+      "bioShort": "The 180 is a publication by Hotelies for Hotelies.",
+      "contentTypes": ["articles"],
+      "rssName": "The 180 Blog - The 180",
+      "rssURL": "https://www.the180print.org/the-180-blog?format=rss",
+      "name": "The 180 at Cornell",
+      "slug": "180",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/the_180_cornell/?hl=en"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/Cornell.the180/"
+        },
+        {
+          "social": "linkedin",
+          "URL": "https://www.linkedin.com/company/cornell-the180/"
+        }
+      ],
+      "websiteURL": "https://www.the180print.org/"
+    },
+    {
+      "bio": "Through the creative collaboration of Cornell University students, Collective X magazine undermines the persistent exclusion of diverse/non-normative individuals within creative fields, while testing artistic boundaries as a means of self-exploration.",
+      "bioShort": "We are a fashion publication that aims to develop the narrative experiences of oppressed and disregarded populations.",
+      "contentTypes": ["magazines"],
+      "rssName": "Collective X",
+      "rssURL": null,
+      "name": "Collective X",
+      "slug": "collective",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/collectivexcornell/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/collectivexmagazine/"
+        }
+      ],
+      "websiteURL": "https://www.thecollectivexliberation.com/"
+    },
+    {
+      "bio": "A student-run publication sharing the latest innovations in science, health, and medicine.",
+      "bioShort": "Everything about science, health, and medicine.",
+      "contentTypes": ["articles"],
+      "rssName": "The Cornell Healthcare Review",
+      "rssURL": "https://www.cornellhealthcarereview.org/blogs-feed.xml",
+      "name": "The Cornell Healthcare Review",
+      "slug": "healthcare",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cuhealthcarereview/"
+        }
+      ],
+      "websiteURL": "https://www.cornellhealthcarereview.org/"
+    },
+    {
+      "bio": "Founded in 1880, The Sun is the oldest continuously independent college daily in the United States.",
+      "bioShort": "Independent since 1880.",
+      "contentTypes": ["articles"],
+      "rssName": "The Cornell Daily Sun",
+      "rssURL": "https://cornellsun.com/feed/",
+      "name": "The Cornell Daily Sun",
+      "slug": "sun",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornellsun/"
+        },
+        {
+          "social": "facebook",
+          "URL": "https://www.facebook.com/cornellsun/"
+        }
+      ],
+      "websiteURL": "https://cornellsun.com/"
+    }
+  ]
 }

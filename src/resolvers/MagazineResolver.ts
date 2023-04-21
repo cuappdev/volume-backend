@@ -86,7 +86,7 @@ class MagazineResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'magazine' object,
     // magazine['_doc'] must be used to access fields of a magazine object
-    return (magazine['_doc'].shoutouts / (presentDate - magazine['_doc'].date.getTime())/1000); // eslint-disable-line
+    return magazine['_doc'].shoutouts / (presentDate - magazine['_doc'].date.getTime()) / 1000; // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {
@@ -104,6 +104,18 @@ class MagazineResolver {
   async incrementMagazineShoutouts(@Arg('uuid') uuid: string, @Arg('id') id: string) {
     UserRepo.incrementShoutouts(uuid);
     return MagazineRepo.incrementShoutouts(id);
+  }
+
+  @Query((_returns) => [Magazine], {
+    nullable: false,
+    description:
+      'Returns a list of <Magazines> of maximum size <limit> matching a particular query. Default <limit> is ${DEFAULT_LIMIT}',
+  })
+  async searchMagazines(
+    @Arg('query') query: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+  ) {
+    return MagazineRepo.searchMagazines(query, limit);
   }
 }
 

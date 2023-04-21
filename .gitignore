@@ -4,7 +4,8 @@
 *schema.*
 *build/*
 nohup.out
-*src/certificates*
+*certs/*
+*/certificates/*
 Makefile
 start.sh
 *secrets*
