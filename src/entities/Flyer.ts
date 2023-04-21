@@ -13,15 +13,11 @@ export class Flyer {
 
   @Field()
   @Property({ nullable: true })
-  description: string;
+  flyerURL: string;
 
   @Field()
   @Property()
   imageURL: string;
-
-  @Field()
-  @Property()
-  isFiltered: boolean;
 
   @Field()
   @Property({ default: false })

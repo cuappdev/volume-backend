@@ -14,10 +14,6 @@ const { IS_FILTER_ACTIVE } = process.env;
 
 function isFlyerFiltered(flyer: Flyer) {
   if (IS_FILTER_ACTIVE === 'true') {
-    if (flyer.isFiltered) {
-      // If the body has been checked already in microservice
-      return true;
-    }
     const filter = new Filter({ list: FILTERED_WORDS });
     return filter.isProfane(flyer.title);
   }
