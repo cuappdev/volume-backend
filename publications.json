@@ -357,6 +357,22 @@
       "websiteURL": "https://www.thecornelldiplomat.com/"
     },
     {
+      "bio": "A publication devoted to writing about societal issues from perspectives that are seldom discussed.",
+      "bioShort": "Using new perspectives to examine societal issues.",
+      "contentTypes": ["magazines"],
+      "rssName": "No Rules Magazine",
+      "rssURL": null,
+      "name": "No Rules Magazine",
+      "slug": "norules",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/norules.cornell/"
+        }
+      ],
+      "websiteURL": "https://norulescornell.com"
+    },
+    {
       "bio": "The 180 is a publication by Hotelies for Hotelies. We aim to not only highlight the culture of Cornell University’s Hotel School through a 180 degree perspective, but to also capsule the community’s memories physically through an annual print.",
       "bioShort": "The 180 is a publication by Hotelies for Hotelies.",
       "contentTypes": ["articles"],
