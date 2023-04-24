@@ -31,6 +31,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers();
     expect(getFlyersResponse).toHaveLength(0);
   });
+
   test('getAllFlyers - 5 flyers', async () => {
     const flyers = await FlyerFactory.create(5);
     await FlyerModel.insertMany(flyers);
@@ -38,6 +39,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers();
     expect(getFlyersResponse).toHaveLength(5);
   });
+
   test('getAllFlyers limit 2', async () => {
     const flyers = await FlyerFactory.create(3);
     await FlyerModel.insertMany(flyers);
@@ -45,6 +47,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers(0, 2);
     expect(getFlyersResponse).toHaveLength(2);
   });
+
   test('getAllFlyers - Sort by date desc, offset 2, limit 2', async () => {
     const flyers = await FlyerFactory.create(5);
     flyers.sort(FactoryUtils.compareByDate);
@@ -68,6 +71,7 @@ describe('getFlyer(s)ByID(s) tests:', () => {
     const getFlyersResponse = await FlyerRepo.getFlyerByID(id);
     expect(getFlyersResponse.title).toEqual(flyers[0].title);
   });
+
   test('getFlyersByIDs - 3 flyers', async () => {
     const flyers = await FlyerFactory.create(3);
     const insertOutput = await FlyerModel.insertMany(flyers);
