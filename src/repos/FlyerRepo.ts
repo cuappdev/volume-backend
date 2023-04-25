@@ -1,14 +1,14 @@
 import Filter from 'bad-words';
 import Fuse from 'fuse.js';
-
 import { ObjectId } from 'mongodb';
+
+import { Flyer, FlyerModel } from '../entities/Flyer';
 import {
   DEFAULT_LIMIT,
   DEFAULT_OFFSET,
   FILTERED_WORDS,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
 } from '../common/constants';
-import { Flyer, FlyerModel } from '../entities/Flyer';
 import { OrganizationModel } from '../entities/Organization';
 
 const { IS_FILTER_ACTIVE } = process.env;
