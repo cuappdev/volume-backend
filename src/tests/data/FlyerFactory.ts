@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { _ } from 'underscore';
 import { faker } from '@faker-js/faker';
-
-import FactoryUtils from './FactoryUtils';
-import { Flyer } from '../../entities/Flyer';
+import { _ } from 'underscore';
 import OrganizationFactory from './OrganizationFactory';
+import { Flyer } from '../../entities/Flyer';
+import FactoryUtils from './FactoryUtils';
 
 class FlyerFactory {
   public static async create(n: number): Promise<Flyer[]> {
@@ -50,7 +49,7 @@ class FlyerFactory {
 
     fakeFlyer.date = faker.date.past();
     fakeFlyer.imageURL = faker.image.cats();
-    fakeFlyer.description = faker.datatype.string();
+    fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.location = faker.datatype.string();
     fakeFlyer.organization = exampleOrg;
     fakeFlyer.organizationSlug = exampleOrg.slug;

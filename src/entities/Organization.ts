@@ -16,23 +16,11 @@ export class Organization {
 
   @Field()
   @Property()
-  bioShort: string;
-
-  @Field()
-  @Property()
   name: string;
 
   @Field()
   @Property()
   profileImageURL: string;
-
-  @Field()
-  @Property()
-  rssName: string;
-
-  @Field({ nullable: true })
-  @Property()
-  rssURL?: string;
 
   @Field()
   @Property()
@@ -45,10 +33,6 @@ export class Organization {
   @Field()
   @Property()
   websiteURL: string;
-
-  @Field(() => [String])
-  @Property()
-  contentTypes: string[];
 }
 
 export const OrganizationModel = getModelForClass(Organization);
