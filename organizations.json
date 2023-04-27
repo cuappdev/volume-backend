@@ -3,12 +3,14 @@
 			"bio": "",
 			"name": "Women in Stem at Cornell",
 			"slug": "wicc",
-			"websiteURL": "https://wicc.cornell.edu/#/"
+			"websiteURL": "https://wicc.cornell.edu/#/",
+			"categorySlug": "academic"
 		}, {
 			"bio": "",
 			"name": "AppDev",
 			"slug": "appdev",
-			"websiteURL": "https://www.cornellappdev.com/"
+			"websiteURL": "https://www.cornellappdev.com/",
+			"categorySlug": ""
 		},
 		{
 			"bio": "",
