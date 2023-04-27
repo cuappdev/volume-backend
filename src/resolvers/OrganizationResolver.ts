@@ -13,6 +13,14 @@ class OrganizationResolver {
     return OrganizationRepo.getAllOrganizations();
   }
 
+  @Query((_returns) => [Organization], {
+    nullable: true,
+    description: 'Returns a list of <Organization>s via a given <categorySlug>',
+  })
+  async getOrganizationsByCategory(@Arg('categorySlug') categorySlug: string) {
+    return OrganizationRepo.getOrganizationsByCategory(categorySlug);
+  }
+
   @Query((_returns) => Organization, {
     nullable: true,
     description: 'Returns a single <Organization> via a given <id>',
@@ -21,19 +29,19 @@ class OrganizationResolver {
     return OrganizationRepo.getOrganizationByID(id);
   }
 
+  @Query((_returns) => [Organization], {
+    description: 'Returns a list of <Organizations> via a given list of <ids>',
+  })
+  async getOrganizationsByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
+    return OrganizationRepo.getOrganizationsByIDs(ids);
+  }
+
   @Query((_returns) => Organization, {
     nullable: true,
     description: 'Returns a single <Organization> via a given <slug>',
   })
   async getOrganizationBySlug(@Arg('slug') slug: string) {
     return OrganizationRepo.getOrganizationBySlug(slug);
-  }
-
-  @Query((_returns) => [Organization], {
-    description: 'Returns a list of <Organizations> via a given list of <ids>',
-  })
-  async getOrganizationsByIDs(@Arg('ids', (type) => [String]) ids: string[]) {
-    return OrganizationRepo.getOrganizationsByIDs(ids);
   }
 
   @FieldResolver((_returns) => Flyer, {
@@ -45,17 +53,17 @@ class OrganizationResolver {
   }
 
   @FieldResolver((_returns) => Number, {
-    description: "The total shoutouts of an <Organization's> <Flyers>",
-  })
-  async shoutouts(@Root() organization: Organization): Promise<number> {
-    return OrganizationRepo.getShoutouts(organization);
-  }
-
-  @FieldResolver((_returns) => Number, {
     description: 'The total number of <Flyers> from an <Organization>',
   })
   async numFlyers(@Root() organization: Organization): Promise<number> {
     return OrganizationRepo.getNumFlyers(organization);
+  }
+
+  @FieldResolver((_returns) => Number, {
+    description: "The total shoutouts of an <Organization's> <Flyers>",
+  })
+  async shoutouts(@Root() organization: Organization): Promise<number> {
+    return OrganizationRepo.getShoutouts(organization);
   }
 }
 

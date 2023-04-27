@@ -88,8 +88,8 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
   test('getFlyersByOrganizationSlug - 1 organization, 1 flyer', async () => {
     const org = await OrganizationFactory.getRandomOrganization();
     const flyers = await FlyerFactory.createSpecific(1, {
-      organizationSlug: org.slug,
-      organization: org,
+      organizationSlugs: [org.slug],
+      organization: [org],
     });
     await FlyerModel.insertMany(flyers);
 
@@ -101,8 +101,8 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
     const org = await OrganizationFactory.getRandomOrganization();
     const flyers = (
       await FlyerFactory.createSpecific(3, {
-        organizationSlug: org.slug,
-        organization: org,
+        organizationSlugs: [org.slug],
+        organizations: [org],
       })
     ).sort(FactoryUtils.compareByDate);
 
@@ -114,16 +114,21 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
     );
   });
 
-  test('getFlyersByOrganizationSlugs - many organizations, 5 flyers', async () => {
-    const flyers = (await FlyerFactory.create(3)).sort(FactoryUtils.compareByDate);
-
+  test('getFlyersByOrganizationSlugs - many organizations, 3 flyers', async () => {
+    const org1 = await OrganizationFactory.getRandomOrganization();
+    const org2 = await OrganizationFactory.getRandomOrganization();
+    const flyers = (
+      await FlyerFactory.createSpecific(3, {
+        organizationSlugs: [org1.slug, org2.slug],
+      })
+    ).sort(FactoryUtils.compareByDate);
     await FlyerModel.insertMany(flyers);
-    const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(
-      FactoryUtils.mapToValue(flyers, 'organizationSlug'),
-    );
 
-    expect(FactoryUtils.mapToValue(getFlyersResponse, 'title')).toEqual(
-      FactoryUtils.mapToValue(flyers, 'title'),
+    const getFlyersResponse1 = await FlyerRepo.getFlyersByOrganizationSlugs([org1.slug]);
+    const getFlyersResponse2 = await FlyerRepo.getFlyersByOrganizationSlugs([org2.slug]);
+
+    expect(FactoryUtils.mapToValue(getFlyersResponse1, 'title')).toEqual(
+      FactoryUtils.mapToValue(getFlyersResponse2, 'title'),
     );
   });
 });

@@ -12,12 +12,13 @@ const addOrganizationsToDB = async (): Promise<void> => {
   const orgDocUpdates = [];
 
   for (const organization of organizationsJSON.organizations) {
-    const { bio, name, slug, websiteURL } = organization;
+    const { bio, name, slug, websiteURL, categorySlug } = organization;
     const orgDoc = Object.assign(new Organization(), {
       bio,
       name,
       slug,
       websiteURL,
+      categorySlug,
     });
 
     // Add or update the organization created from the JSON
@@ -27,6 +28,10 @@ const addOrganizationsToDB = async (): Promise<void> => {
   }
 
   await Promise.all(orgDocUpdates);
+};
+
+const getOrganizationsByCategory = async (categorySlug: string): Promise<Organization[]> => {
+  return OrganizationModel.find({ categorySlug });
 };
 
 const getOrganizationByID = async (id: string): Promise<Organization> => {
@@ -61,7 +66,7 @@ const getMostRecentFlyer = async (organization: Organization): Promise<Flyer> =>
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   return FlyerModel.findOne({
-    organizationSlug: organization['_doc'].slug, // eslint-disable-line
+    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
   }).sort({ date: 'desc' });
 };
 
@@ -75,7 +80,7 @@ const getShoutouts = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlug: organization['_doc'].slug, // eslint-disable-line
+    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.reduce((acc, flyer) => {
@@ -93,7 +98,7 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlug: organization['_doc'].slug, // eslint-disable-line
+    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.length;
@@ -104,8 +109,9 @@ export default {
   getAllOrganizations,
   getMostRecentFlyer,
   getNumFlyers,
+  getOrganizationsByCategory,
   getOrganizationByID,
-  getOrganizationBySlug,
   getOrganizationsByIDs,
+  getOrganizationBySlug,
   getShoutouts,
 };
