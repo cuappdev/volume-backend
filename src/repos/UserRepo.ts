@@ -68,6 +68,7 @@ const unfollowPublication = async (uuid: string, pubSlug: string): Promise<User>
 
 /**
  * Adds organization slug to user's followedOrganizations.
+ * Requires: the user is not already following the organization.
  */
 const followOrganization = async (uuid: string, slug: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
