@@ -127,54 +127,54 @@ const getUsersFollowingOrganization = async (orgSlug: string): Promise<User[]> =
 const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
 
-  if (!user) return user;
+  if (user) {
+    const article = await ArticleRepo.getArticleByID(articleID);
+    const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
 
-  const article = await ArticleRepo.getArticleByID(articleID);
-  const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
+    if (article && !user.readArticles.reduce(checkDuplicates, false)) {
+      user.readArticles.push(article);
+    }
 
-  if (article && !user.readArticles.reduce(checkDuplicates, false)) {
-    user.readArticles.push(article);
+    user.save();
   }
-
-  user.save();
   return user;
 };
 
 /**
- * Add a magazine to a user's readFlyers
+ * Add a flyer to a user's readFlyers
  */
 const appendReadFlyer = async (uuid: string, flyerID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
 
-  if (!user) return user;
+  if (user) {
+    const flyer = await FlyerRepo.getFlyerByID(flyerID);
+    const checkDuplicates = (prev: boolean, cur: Flyer) => prev || cur.id === flyerID;
 
-  const flyer = await FlyerRepo.getFlyerByID(flyerID);
-  const checkDuplicates = (prev: boolean, cur: Flyer) => prev || cur.id === flyerID;
+    if (flyer && !user.readFlyers.reduce(checkDuplicates, false)) {
+      user.readFlyers.push(flyer);
+    }
 
-  if (flyer && !user.readFlyers.reduce(checkDuplicates, false)) {
-    user.readFlyers.push(flyer);
+    user.save();
   }
-
-  user.save();
   return user;
 };
 
 /**
- * Add a flyer to a user's read
+ * Add a magazine to a user's read
  */
 const appendReadMagazine = async (uuid: string, magazineID: string): Promise<User> => {
   const user = await UserModel.findOne({ uuid });
 
-  if (!user) return user;
+  if (user) {
+    const magazine = await MagazineRepo.getMagazineByID(magazineID);
+    const checkDuplicates = (prev: boolean, cur: Magazine) => prev || cur.id === magazineID;
 
-  const magazine = await MagazineRepo.getMagazineByID(magazineID);
-  const checkDuplicates = (prev: boolean, cur: Magazine) => prev || cur.id === magazineID;
+    if (magazine && !user.readMagazines.reduce(checkDuplicates, false)) {
+      user.readMagazines.push(magazine);
+    }
 
-  if (magazine && !user.readMagazines.reduce(checkDuplicates, false)) {
-    user.readMagazines.push(magazine);
+    user.save();
   }
-
-  user.save();
   return user;
 };
 
