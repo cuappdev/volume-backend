@@ -81,7 +81,7 @@ const main = async () => {
     ArticleRepo.refreshTrendingArticles();
     MagazineRepo.refreshFeaturedMagazines();
     FlyerRepo.refreshTrendingFlyers();
-    // Refresh trending articles, magazines, and flyers eveyr 12 hours
+    // Refresh trending articles, magazines, and flyers every 12 hours
     cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
       MagazineRepo.refreshFeaturedMagazines();
