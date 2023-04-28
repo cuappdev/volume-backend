@@ -1,0 +1,20 @@
+{
+	"organizations": [{
+			"bio": "",
+			"name": "Women in Stem at Cornell",
+			"slug": "wicc",
+			"websiteURL": "https://wicc.cornell.edu/#/"
+		}, {
+			"bio": "",
+			"name": "AppDev",
+			"slug": "appdev",
+			"websiteURL": "https://www.cornellappdev.com/"
+		},
+		{
+			"bio": "",
+			"name": "Badminton Club",
+			"slug": "badminton",
+			"websiteURL": "https://cornellbadminton.com/"
+		}
+	]
+}

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
+import Fuse from 'fuse.js';
 import { Magazine, MagazineModel } from '../entities/Magazine';
 import {
   DEFAULT_LIMIT,
@@ -165,6 +166,24 @@ const checkProfanity = async (title: string): Promise<boolean> => {
   return filter.isProfane(title);
 };
 
+/**
+ * Performs fuzzy search on all magazines to find articles with title/publisher matching the query.
+ * @param query the term to search for
+ * @param limit the number of results to return
+ * @returns at most limit articles with titles or publishers matching the query
+ */
+const searchMagazines = async (query: string, limit = DEFAULT_LIMIT) => {
+  const allMagazines = await MagazineModel.find({});
+  const searcher = new Fuse(allMagazines, {
+    keys: ['title', 'publication.name'],
+  });
+
+  return searcher
+    .search(query)
+    .map((searchRes) => searchRes.item)
+    .slice(0, limit);
+};
+
 export default {
   getAllMagazines,
   getMagazinesBySemester,
@@ -176,4 +195,5 @@ export default {
   checkProfanity,
   incrementShoutouts,
   refreshFeaturedMagazines,
+  searchMagazines,
 };
