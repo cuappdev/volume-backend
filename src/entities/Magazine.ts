@@ -19,6 +19,10 @@ export class Magazine {
   @Property()
   pdfURL: string;
 
+  @Field()
+  @Property()
+  imageURL: string;
+
   @Field((type) => Publication)
   @Property({ type: () => Publication })
   publication: Publication;

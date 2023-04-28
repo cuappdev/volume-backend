@@ -1,15 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable dot-notation */
+
 import { faker } from '@faker-js/faker';
-import { FlyerModel } from '../entities/Flyer';
-import FlyerRepo from '../repos/FlyerRepo';
-import OrganizationRepo from '../repos/OrganizationRepo';
+import { dbConnection, disconnectDB } from './data/TestingDBConnection';
+import { DEFAULT_LIMIT } from '../common/constants';
 import FactoryUtils from './data/FactoryUtils';
 import FlyerFactory from './data/FlyerFactory';
+import { FlyerModel } from '../entities/Flyer';
+import FlyerRepo from '../repos/FlyerRepo';
 import OrganizationFactory from './data/OrganizationFactory';
-
-import { dbConnection, disconnectDB } from './data/TestingDBConnection';
+import OrganizationRepo from '../repos/OrganizationRepo';
 
 beforeAll(async () => {
   await dbConnection();
@@ -30,6 +31,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers();
     expect(getFlyersResponse).toHaveLength(0);
   });
+
   test('getAllFlyers - 5 flyers', async () => {
     const flyers = await FlyerFactory.create(5);
     await FlyerModel.insertMany(flyers);
@@ -37,6 +39,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers();
     expect(getFlyersResponse).toHaveLength(5);
   });
+
   test('getAllFlyers limit 2', async () => {
     const flyers = await FlyerFactory.create(3);
     await FlyerModel.insertMany(flyers);
@@ -44,6 +47,7 @@ describe('getAllFlyer tests:', () => {
     const getFlyersResponse = await FlyerRepo.getAllFlyers(0, 2);
     expect(getFlyersResponse).toHaveLength(2);
   });
+
   test('getAllFlyers - Sort by date desc, offset 2, limit 2', async () => {
     const flyers = await FlyerFactory.create(5);
     flyers.sort(FactoryUtils.compareByDate);
@@ -67,6 +71,7 @@ describe('getFlyer(s)ByID(s) tests:', () => {
     const getFlyersResponse = await FlyerRepo.getFlyerByID(id);
     expect(getFlyersResponse.title).toEqual(flyers[0].title);
   });
+
   test('getFlyersByIDs - 3 flyers', async () => {
     const flyers = await FlyerFactory.create(3);
     const insertOutput = await FlyerModel.insertMany(flyers);
@@ -81,28 +86,28 @@ describe('getFlyer(s)ByID(s) tests:', () => {
 
 describe('getFlyersByOrganizationSlug(s) tests', () => {
   test('getFlyersByOrganizationSlug - 1 organization, 1 flyer', async () => {
-    const pub = await OrganizationFactory.getRandomOrganization();
+    const org = await OrganizationFactory.getRandomOrganization();
     const flyers = await FlyerFactory.createSpecific(1, {
-      organizationSlug: pub.slug,
-      organization: pub,
+      organizationSlug: org.slug,
+      organization: org,
     });
     await FlyerModel.insertMany(flyers);
 
-    const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(pub.slug);
+    const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(org.slug);
     expect(getFlyersResponse[0].title).toEqual(flyers[0].title);
   });
 
   test('getFlyersByOrganizationSlug - 1 organization, 3 flyers', async () => {
-    const pub = await OrganizationFactory.getRandomOrganization();
+    const org = await OrganizationFactory.getRandomOrganization();
     const flyers = (
       await FlyerFactory.createSpecific(3, {
-        organizationSlug: pub.slug,
-        organization: pub,
+        organizationSlug: org.slug,
+        organization: org,
       })
     ).sort(FactoryUtils.compareByDate);
 
     await FlyerModel.insertMany(flyers);
-    const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(pub.slug);
+    const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(org.slug);
 
     expect(FactoryUtils.mapToValue(getFlyersResponse, 'title')).toEqual(
       FactoryUtils.mapToValue(flyers, 'title'),
@@ -151,6 +156,24 @@ describe('searchFlyer tests', () => {
     const getFlyersResponse = await FlyerRepo.searchFlyers(flyers[0].title);
     expect(getFlyersResponse[0].title).toEqual(flyers[0].title);
   });
+
+  test('searchFlyer - expect 0 flyers', async () => {
+    const flyers = await FlyerFactory.create(3);
+    await FlyerModel.insertMany(flyers);
+
+    const getFlyersResponse = await FlyerRepo.searchFlyers(Math.random().toString().substr(3, 20));
+    expect(getFlyersResponse).toHaveLength(0);
+  });
+
+  test('searchFlyer - return at most limit number of flyers', async () => {
+    const flyers = await FlyerFactory.createSpecific(DEFAULT_LIMIT + 1, {
+      title: 'faker',
+    });
+    await FlyerModel.insertMany(flyers);
+
+    const getFlyersResponse = await FlyerRepo.searchFlyers('faker');
+    expect(getFlyersResponse).toHaveLength(DEFAULT_LIMIT);
+  });
 });
 
 describe('incrementShoutouts tests', () => {
@@ -163,5 +186,21 @@ describe('incrementShoutouts tests', () => {
 
     const getFlyersResponse = await FlyerRepo.getFlyerByID(insertOutput[0]._id);
     expect(getFlyersResponse.shoutouts).toEqual(oldShoutouts + 1);
+  });
+});
+
+describe('getTrending tests', () => {
+  test('getTrendingFlyers - get 5 trending flyers', async () => {
+    const trendingFlyers = await FlyerFactory.createSpecific(5, {
+      isTrending: true,
+    });
+    const notTrendingFlyers = await FlyerFactory.createSpecific(5, {
+      isTrending: false,
+    });
+    await FlyerModel.insertMany(trendingFlyers);
+    await FlyerModel.insertMany(notTrendingFlyers);
+
+    const getFlyersResponse = await FlyerRepo.getTrendingFlyers();
+    expect(getFlyersResponse).toHaveLength(5);
   });
 });

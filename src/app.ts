@@ -3,29 +3,29 @@ import cron from 'node-cron';
 import admin from 'firebase-admin';
 import Express from 'express';
 import { buildSchema } from 'type-graphql';
+
 import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
+import { dbConnection } from './db/DBConnection';
+import FlyerResolver from './resolvers/FlyerResolver';
+import MagazineRepo from './repos/MagazineRepo';
+import MagazineResolver from './resolvers/MagazineResolver';
 import NotificationRepo from './repos/NotificationRepo';
+import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
 import UserResolver from './resolvers/UserResolver';
-import { dbConnection } from './db/DBConnection';
-import MagazineRepo from './repos/MagazineRepo';
-import MagazineResolver from './resolvers/MagazineResolver';
-import FlyerResolver from './resolvers/FlyerResolver';
-import OrganizationResolver from './resolvers/OrganizationResolver';
-import FlyerRepo from './repos/FlyerRepo';
 
 const main = async () => {
   const schema = await buildSchema({
     resolvers: [
       ArticleResolver,
+      FlyerResolver,
+      MagazineResolver,
+      OrganizationResolver,
       PublicationResolver,
       UserResolver,
-      MagazineResolver,
-      FlyerResolver,
-      OrganizationResolver,
     ],
     emitSchemaFile: true,
     validate: false,

@@ -49,9 +49,8 @@ class FlyerFactory {
 
     fakeFlyer.date = faker.date.past();
     fakeFlyer.imageURL = faker.image.cats();
-    fakeFlyer.description = faker.datatype.string();
+    fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.location = faker.datatype.string();
-    fakeFlyer.isFiltered = false;
     fakeFlyer.organization = exampleOrg;
     fakeFlyer.organizationSlug = exampleOrg.slug;
     fakeFlyer.title = faker.commerce.productDescription();
@@ -59,7 +58,6 @@ class FlyerFactory {
     fakeFlyer.nsfw = _.sample([true, false]);
     fakeFlyer.shoutouts = _.random(0, 50);
     fakeFlyer.trendiness = 0;
-    fakeFlyer.sourceLink = faker.internet.url();
 
     return fakeFlyer;
   }

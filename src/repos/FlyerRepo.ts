@@ -1,12 +1,13 @@
 import Filter from 'bad-words';
-import { ObjectId } from 'mongodb';
 import Fuse from 'fuse.js';
+import { ObjectId } from 'mongodb';
+
 import { Flyer, FlyerModel } from '../entities/Flyer';
 import {
   DEFAULT_LIMIT,
-  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  FILTERED_WORDS,
   DEFAULT_OFFSET,
+  FILTERED_WORDS,
+  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
 
@@ -14,10 +15,6 @@ const { IS_FILTER_ACTIVE } = process.env;
 
 function isFlyerFiltered(flyer: Flyer) {
   if (IS_FILTER_ACTIVE === 'true') {
-    if (flyer.isFiltered) {
-      // If the body has been checked already in microservice
-      return true;
-    }
     const filter = new Filter({ list: FILTERED_WORDS });
     return filter.isProfane(flyer.title);
   }
@@ -91,7 +88,7 @@ const getFlyersByOrganizationID = async (
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
-      return flyers.filter((flyer) => !isFlyerFiltered(flyer));
+      return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
     });
 };
 
@@ -101,7 +98,6 @@ const getFlyersByOrganizationIDs = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
   const uniqueOrgIDs = [...new Set(organizationIDs)].map((id) => new ObjectId(id));
-  console.log(uniqueOrgIDs);
   const orgSlugs = await OrganizationModel.find({ _id: { $in: uniqueOrgIDs } }).select('slug');
   return getFlyersByOrganizationSlugs(
     orgSlugs.map((org) => org.slug),
@@ -120,7 +116,7 @@ const getFlyersAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise
       .sort({ date: 'desc' })
       .limit(limit)
       .then((flyers) => {
-        return flyers.filter((flyer) => !isFlyerFiltered(flyer));
+        return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
       })
   );
 };
@@ -222,8 +218,8 @@ export default {
   getFlyersByOrganizationIDs,
   getFlyersByOrganizationSlug,
   getFlyersByOrganizationSlugs,
-  searchFlyers,
   getTrendingFlyers,
   incrementShoutouts,
   refreshTrendingFlyers,
+  searchFlyers,
 };

@@ -12,13 +12,10 @@ const addOrganizationsToDB = async (): Promise<void> => {
   const orgDocUpdates = [];
 
   for (const organization of organizationsJSON.organizations) {
-    const { bio, bioShort, rssName, rssURL, name, slug, websiteURL } = organization;
+    const { bio, name, slug, websiteURL } = organization;
     const orgDoc = Object.assign(new Organization(), {
       bio,
-      bioShort,
       name,
-      rssName,
-      rssURL,
       slug,
       websiteURL,
     });
