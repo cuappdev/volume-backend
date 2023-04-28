@@ -28,10 +28,26 @@ class UserResolver {
 
   @Mutation((_returns) => User, {
     nullable: true,
+    description: 'User with id <uuid> follows the <Organization> referenced by <slug>',
+  })
+  async followOrganization(@Arg('uuid') uuid: string, @Arg('slug') slug: string) {
+    return await UserRepo.followOrganization(uuid, slug);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
     description: 'User with id <uuid> follows the <Publication> referenced by <slug>',
   })
   async followPublication(@Arg('uuid') uuid: string, @Arg('slug') slug: string) {
     return await UserRepo.followPublication(uuid, slug);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: 'User with id <uuid> unfollows the <Organization> referenced by <slug>',
+  })
+  async unfollowOrganization(@Arg('uuid') uuid: string, @Arg('slug') slug: string) {
+    return await UserRepo.unfollowOrganization(uuid, slug);
   }
 
   @Mutation((_returns) => User, {
@@ -56,6 +72,14 @@ class UserResolver {
   })
   async readMagazine(@Arg('uuid') uuid: string, @Arg('magazineID') magazineID: string) {
     return await UserRepo.appendReadMagazine(uuid, magazineID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: "Adds the <Flyer> given by the <flyerID> to the <User's> read flyers",
+  })
+  async readFlyer(@Arg('uuid') uuid: string, @Arg('flyerID') flyerID: string) {
+    return await UserRepo.appendReadFlyer(uuid, flyerID);
   }
 
   @Mutation((_returns) => User, {
