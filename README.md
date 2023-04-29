@@ -1,22 +1,27 @@
-# volume-backend  
+# volume-backend
 
 An open-sourced backend for Volume, a news aggregator for Cornell's publications
-and magazines. Made by [Cornell AppDev](cornellappdev.com). 
+and magazines. Made by [Cornell AppDev](cornellappdev.com).
 
 Tech stack:
+
 1. Typescript/Node.js
 2. MongoDB
 3. GraphQL
 
-## Installation  
+## Installation
 
-To run this project, you must have [Node.js](https://nodejs.org/en/download/) and [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) installed on your machine. 
+To run this project, you must have [Node.js](https://nodejs.org/en/download/) and [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) installed on your machine.
 
 Clone the project with
 
 `git clone https://github.com/cuappdev/volume-backend.git`
 
-After cloning the project `cd` into the new directory and install dependencies with 
+After cloning the project `cd` into the new directory run
+
+`git config core.hooksPath .github/hooks`
+
+and install dependencies with
 
 `npm install`
 
@@ -28,9 +33,13 @@ To run the project, use
 
 Make sure `MongoDB` is installed. [See installation guide](https://docs.mongodb.com/manual/installation/).
 
-To view your database, enter your terminal and run 
+To run MongoDB on a MacOS device, run
 
-`mongo`
+`brew services start mongodb-community@6.0` (6.0 may be outdated, check website for updated version).
+
+and connect MongoSH to a running instance using
+
+`mongosh`
 
 From here, you can interact with your database by typing `use <db_name>`.
 
@@ -44,4 +53,4 @@ We recommend using [`direnv`](https://direnv.net/). To set up, run the following
 
 ## Configuration(optional)
 
-We recommend using ESLint and Prettier for linting/formatting. If you are using VSCode, they can be downloaded directly through the Extensions panel. Run ESLint on the codebase with `npm run lint` and Prettier with  `npm run format`.
+We recommend using ESLint and Prettier for linting/formatting. If you are using VSCode, they can be downloaded directly through the Extensions panel. Run ESLint on the codebase with `npm run lint` and Prettier with `npm run format`.
