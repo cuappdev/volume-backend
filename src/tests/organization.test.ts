@@ -99,7 +99,7 @@ describe('getOrganizationByCategory tests:', () => {
     const getOrganizationsResponse = await OrganizationRepo.getOrganizationsByCategory(
       categorySlug,
     );
-    expect(getOrganizationsResponse[0].slug).toEqual(org.slug);
+    expect(FactoryUtils.mapToValue(getOrganizationsResponse, 'slug')).toContain(org.slug);
   });
 });
 

@@ -28,14 +28,6 @@ const main = async () => {
       PublicationResolver,
       UserResolver,
     ],
-    resolvers: [
-      ArticleResolver,
-      FlyerResolver,
-      MagazineResolver,
-      OrganizationResolver,
-      PublicationResolver,
-      UserResolver,
-    ],
     emitSchemaFile: true,
     validate: false,
   });
