@@ -46,21 +46,21 @@ class OrganizationResolver {
 
   @FieldResolver((_returns) => Flyer, {
     nullable: true,
-    description: 'The most recent <Flyer> of an <Organization>',
+    description: 'Returns the most recent <Flyer> of an <Organization>',
   })
   async mostRecentFlyer(@Root() organization: Organization): Promise<Flyer> {
     return OrganizationRepo.getMostRecentFlyer(organization);
   }
 
   @FieldResolver((_returns) => Number, {
-    description: 'The total number of <Flyers> from an <Organization>',
+    description: 'Returns the total number of <Flyers> from an <Organization>',
   })
   async numFlyers(@Root() organization: Organization): Promise<number> {
     return OrganizationRepo.getNumFlyers(organization);
   }
 
   @FieldResolver((_returns) => Number, {
-    description: "The total shoutouts of an <Organization's> <Flyers>",
+    description: "Returns the total shoutouts of an <Organization's> <Flyers>",
   })
   async shoutouts(@Root() organization: Organization): Promise<number> {
     return OrganizationRepo.getShoutouts(organization);
