@@ -51,8 +51,8 @@ class FlyerFactory {
     fakeFlyer.imageURL = faker.image.cats();
     fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.location = faker.datatype.string();
-    fakeFlyer.organization = exampleOrg;
-    fakeFlyer.organizationSlug = exampleOrg.slug;
+    fakeFlyer.organizations = [exampleOrg];
+    fakeFlyer.organizationSlugs = [exampleOrg.slug];
     fakeFlyer.title = faker.commerce.productDescription();
     fakeFlyer.isTrending = _.sample([true, false]);
     fakeFlyer.nsfw = _.sample([true, false]);

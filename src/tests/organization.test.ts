@@ -27,27 +27,27 @@ afterAll(async () => {
 
 describe('getAllOrganizations tests:', () => {
   test('getAllOrganizations', async () => {
-    const pubs = await OrganizationFactory.getAllOrganizations();
+    const orgs = await OrganizationFactory.getAllOrganizations();
 
     const getOrganizationsResponse = await OrganizationRepo.getAllOrganizations();
     expect(FactoryUtils.mapToValue(getOrganizationsResponse, 'slug')).toEqual(
-      FactoryUtils.mapToValue(pubs, 'slug'),
+      FactoryUtils.mapToValue(orgs, 'slug'),
     );
   });
 });
 
 describe('getMostRecentFlyer tests:', () => {
   test('getMostRecentFlyer - Out of 2-10 flyers', async () => {
-    const pub = await OrganizationRepo.getOrganizationBySlug(
+    const org = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const flyers = await FlyerFactory.createSpecific(_.random(2, 10), {
-      organizationSlug: pub.slug,
-      organization: pub,
+      organizationSlugs: [org.slug],
+      organizations: [org],
     });
     await FlyerModel.insertMany(flyers);
 
-    const getOrganizationsResponse = await OrganizationRepo.getMostRecentFlyer(pub);
+    const getOrganizationsResponse = await OrganizationRepo.getMostRecentFlyer(org);
     const respDate = new Date(getOrganizationsResponse.date);
 
     const flyerDates = FactoryUtils.mapToValue(flyers, 'date');
@@ -62,56 +62,71 @@ describe('getMostRecentFlyer tests:', () => {
 
 describe('getNumFlyer tests:', () => {
   test('getNumFlyer - 0 flyers', async () => {
-    const pub = await OrganizationRepo.getOrganizationBySlug(
+    const org = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
 
-    const numResp = await OrganizationRepo.getNumFlyers(pub);
+    const numResp = await OrganizationRepo.getNumFlyers(org);
 
     expect(numResp).toEqual(0);
   });
 
   test('getNumFlyer - Random number of flyers', async () => {
-    const pub = await OrganizationRepo.getOrganizationBySlug(
+    const org1 = await OrganizationRepo.getOrganizationBySlug(
+      (await OrganizationFactory.getRandomOrganization()).slug,
+    );
+    const org2 = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const numFlyers = _.random(1, 10);
     const flyers = await FlyerFactory.createSpecific(numFlyers, {
-      organizationSlug: pub.slug,
-      organization: pub,
+      organizationSlugs: [org1.slug],
+      organizations: [org1, org2],
     });
     await FlyerModel.insertMany(flyers);
 
-    const numResp = await OrganizationRepo.getNumFlyers(pub);
+    const numResp = await OrganizationRepo.getNumFlyers(org1);
 
     expect(numResp).toEqual(numFlyers);
   });
 });
 
+describe('getOrganizationByCategory tests:', () => {
+  test('getOrganizationByCategory - 1 category', async () => {
+    const org = await OrganizationFactory.getRandomOrganization();
+    const { categorySlug } = org;
+
+    const getOrganizationsResponse = await OrganizationRepo.getOrganizationsByCategory(
+      categorySlug,
+    );
+    expect(FactoryUtils.mapToValue(getOrganizationsResponse, 'slug')).toContain(org.slug);
+  });
+});
+
 describe('getOrganizationBySlug tests:', () => {
-  test('getOrganizationBySlug - 1 pub', async () => {
-    const pub = await OrganizationFactory.getRandomOrganization();
+  test('getOrganizationBySlug - 1 org', async () => {
+    const org = await OrganizationFactory.getRandomOrganization();
 
-    const getOrganizationsResponse = await OrganizationRepo.getOrganizationBySlug(pub.slug);
+    const getOrganizationsResponse = await OrganizationRepo.getOrganizationBySlug(org.slug);
 
-    expect(getOrganizationsResponse.slug).toEqual(pub.slug);
+    expect(getOrganizationsResponse.slug).toEqual(org.slug);
   });
 });
 
 describe('getShoutouts tests:', () => {
-  test('getShoutouts - Random number of flyers with 2 shoutouts, 1 pub', async () => {
-    const pub = await OrganizationRepo.getOrganizationBySlug(
+  test('getShoutouts - Random number of flyers with 2 shoutouts, 1 org', async () => {
+    const org = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const numFlyers = _.random(1, 20);
     const numShoutouts = numFlyers * 2;
     const flyers = await FlyerFactory.createSpecific(numFlyers, {
-      organizationSlug: pub.slug,
-      organization: pub,
+      organizationSlugs: [org.slug],
+      organizations: [org],
       shoutouts: 2,
     });
     await FlyerModel.insertMany(flyers);
-    const getOrganizationsResponse = await OrganizationRepo.getShoutouts(pub);
+    const getOrganizationsResponse = await OrganizationRepo.getShoutouts(org);
 
     expect(getOrganizationsResponse).toEqual(numShoutouts);
   });
