@@ -16,6 +16,10 @@ export class Organization {
 
   @Field()
   @Property()
+  categorySlug: string;
+
+  @Field()
+  @Property()
   name: string;
 
   @Field()

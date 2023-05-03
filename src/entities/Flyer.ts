@@ -31,13 +31,13 @@ export class Flyer {
   @Property({ default: false })
   nsfw: boolean;
 
-  @Field((type) => Organization)
-  @Property({ type: () => Organization })
-  organization: Organization;
+  @Field((type) => [Organization])
+  @Property({ type: () => [Organization] })
+  organizations: [Organization];
 
-  @Field()
-  @Property()
-  organizationSlug: string;
+  @Field((type) => [String])
+  @Property({ type: () => [String] })
+  organizationSlugs: [string];
 
   @Field()
   @Property({ default: 0 })

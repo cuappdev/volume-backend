@@ -53,7 +53,7 @@ const getFlyersByOrganizationSlug = async (
   limit: number = DEFAULT_LIMIT,
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
-  return FlyerModel.find({ 'organization.slug': slug })
+  return FlyerModel.find({ organizationSlugs: slug })
     .sort({ date: 'desc' })
     .skip(offset)
     .limit(limit)
@@ -68,7 +68,7 @@ const getFlyersByOrganizationSlugs = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
   const uniqueSlugs = [...new Set(slugs)];
-  return FlyerModel.find({ 'organization.slug': { $in: uniqueSlugs } })
+  return FlyerModel.find({ organizationSlugs: { $in: uniqueSlugs } })
     .sort({ date: 'desc' })
     .skip(offset)
     .limit(limit)
@@ -83,7 +83,7 @@ const getFlyersByOrganizationID = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
   const organization = await (await OrganizationModel.findById(organizationID)).execPopulate();
-  return FlyerModel.find({ 'organization.slug': organization.slug })
+  return FlyerModel.find({ organizationSlugs: organization.slug })
     .sort({ date: 'desc' })
     .skip(offset)
     .limit(limit)
