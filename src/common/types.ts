@@ -30,3 +30,21 @@ export class PublicationSlug {
     this.slug = slug;
   }
 }
+
+@ObjectType({ description: 'ID of an Organization' })
+export class OrganizationID {
+  @Field()
+  @Property()
+  id: string;
+}
+
+@ObjectType({ description: 'Slug of an Organization' })
+export class OrganizationSlug {
+  @Field()
+  @Property()
+  slug: string;
+
+  constructor(slug: string) {
+    this.slug = slug;
+  }
+}

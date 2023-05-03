@@ -13,6 +13,9 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 import PublicationFactory from './data/PublicationFactory';
 import MagazineFactory from './data/MagazineFactory';
 import ArticleFactory from './data/ArticleFactory';
+import { FlyerModel } from '../entities/Flyer';
+import FlyerFactory from './data/FlyerFactory';
+import OrganizationFactory from './data/OrganizationFactory';
 
 beforeAll(async () => {
   await dbConnection();
@@ -20,17 +23,20 @@ beforeAll(async () => {
   await MagazineModel.createCollection();
   await UserModel.createCollection();
   await ArticleModel.createCollection();
+  await FlyerModel.createCollection();
 });
 
 beforeEach(async () => {
   await UserModel.deleteMany({});
   await MagazineModel.deleteMany({});
   await ArticleModel.deleteMany({});
+  await FlyerModel.deleteMany({});
 });
 
 afterAll(async () => {
   UserModel.deleteMany({});
   ArticleModel.deleteMany({});
+  FlyerModel.deleteMany({});
   MagazineModel.deleteMany({}).then(disconnectDB);
 });
 
@@ -95,6 +101,57 @@ describe('(un)followPublication tests:', () => {
   });
 });
 
+describe('(un)followOrganization tests:', () => {
+  test('followOrganization - 1 user, 1 organization', async () => {
+    const organization = await OrganizationFactory.getRandomOrganization();
+    const users = await UserFactory.create(1);
+    await UserModel.insertMany(users);
+    await UserRepo.followOrganization(users[0].uuid, organization.slug);
+
+    const getUserResponse = await UserRepo.getUsersFollowingOrganization(organization.slug);
+    expect(FactoryUtils.mapToValue(getUserResponse, 'uuid')).toEqual(
+      FactoryUtils.mapToValue(users, 'uuid'),
+    );
+  });
+
+  test('followOrganization - 3 users, 1 organization', async () => {
+    const organization = await OrganizationFactory.getRandomOrganization();
+    const users = await UserFactory.create(3);
+    await UserModel.insertMany(users);
+    for (let i = 0; i < 3; i++) await UserRepo.followOrganization(users[i].uuid, organization.slug);
+
+    const getUsersResponse = await UserRepo.getUsersFollowingOrganization(organization.slug);
+    expect(FactoryUtils.mapToValue(getUsersResponse, 'uuid')).toEqual(
+      FactoryUtils.mapToValue(users, 'uuid'),
+    );
+  });
+
+  test('unfollowOrganization - 1 user, 1 organization', async () => {
+    const organization = await OrganizationFactory.getRandomOrganization();
+    const users = await UserFactory.create(1);
+    await UserModel.insertMany(users);
+
+    await UserRepo.followOrganization(users[0].uuid, organization.slug);
+    await UserRepo.unfollowOrganization(users[0].uuid, organization.slug);
+
+    const getUsersResponse = await UserRepo.getUsersFollowingOrganization(organization.slug);
+    expect(getUsersResponse).toHaveLength(0);
+  });
+
+  test('unfollowOrganization - 3 users, 1 organization', async () => {
+    const organization = await OrganizationFactory.getRandomOrganization();
+    const users = await UserFactory.create(3);
+    await UserModel.insertMany(users);
+
+    for (let i = 0; i < 3; i++) await UserRepo.followOrganization(users[i].uuid, organization.slug);
+    for (let i = 0; i < 2; i++)
+      await UserRepo.unfollowOrganization(users[i].uuid, organization.slug);
+
+    const getUsersResponse = await UserRepo.getUsersFollowingOrganization(organization.slug);
+    expect(getUsersResponse).toHaveLength(1);
+  });
+});
+
 // testing with user.test.ts instead of a separate weekly debrief file because
 // mutations are done with UserRepo, also because testing WeeklyDebrief requires
 // mocking which isn't a priority as of right now
@@ -123,6 +180,21 @@ describe('weekly debrief tests:', () => {
 
     const getUsersResponse = await UserRepo.getUserByUUID(insertOutput[0].uuid);
     expect(getUsersResponse.numBookmarkedArticles).toEqual(1);
+  });
+
+  test('appendReadFlyer', async () => {
+    const users = await UserFactory.create(1);
+    const flyers = await FlyerFactory.create(1);
+    await UserModel.insertMany(users);
+    const insertOutput = await FlyerModel.insertMany(flyers);
+    await UserRepo.appendReadFlyer(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
+    const getUsersResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUsersResponse.readFlyers).toHaveLength(1);
   });
 
   test('appendReadMagazine', async () => {
