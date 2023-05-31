@@ -2,7 +2,6 @@ import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphq
 import { Flyer } from '../entities/Flyer';
 import FlyerRepo from '../repos/FlyerRepo';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
-import UserRepo from '../repos/UserRepo';
 
 @Resolver((_of) => Flyer)
 class FlyerResolver {
@@ -149,8 +148,7 @@ class FlyerResolver {
     description: `Increments the shoutouts of a <Flyer> with the given <id>.
   Increments the numShoutouts given of the user with the given [uuid].`,
   })
-  async incrementShoutouts(@Arg('uuid') uuid: string, @Arg('id') id: string) {
-    UserRepo.incrementShoutouts(uuid);
+  async incrementTimesClicked(@Arg('uuid') uuid: string, @Arg('id') id: string) {
     return FlyerRepo.incrementTimesClicked(id);
   }
 }
