@@ -31,7 +31,7 @@ const getAllFlyers = async (offset = DEFAULT_OFFSET, limit = DEFAULT_LIMIT): Pro
     });
 };
 
-const getFlyersAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
+const getFlyersAfterDate = (since: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
   return (
     FlyerModel.find({
       // Get all Flyers after or on the desired date
@@ -46,7 +46,7 @@ const getFlyersAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise
   );
 };
 
-const getFlyersBeforeDate = async (before: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
+const getFlyersBeforeDate = (before: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
   return (
     FlyerModel.find({
       // Get all Flyers before the desired date
