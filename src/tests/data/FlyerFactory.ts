@@ -47,7 +47,8 @@ class FlyerFactory {
     const fakeFlyer = new Flyer();
     const exampleOrg = await OrganizationFactory.getRandomOrganization();
 
-    fakeFlyer.date = faker.date.past();
+    fakeFlyer.startDate = faker.date.past();
+    fakeFlyer.endDate = faker.date.future();
     fakeFlyer.imageURL = faker.image.cats();
     fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.location = faker.datatype.string();
@@ -56,7 +57,7 @@ class FlyerFactory {
     fakeFlyer.title = faker.commerce.productDescription();
     fakeFlyer.isTrending = _.sample([true, false]);
     fakeFlyer.nsfw = _.sample([true, false]);
-    fakeFlyer.shoutouts = _.random(0, 50);
+    fakeFlyer.timesClicked = _.random(0, 50);
     fakeFlyer.trendiness = 0;
 
     return fakeFlyer;

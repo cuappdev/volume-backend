@@ -37,27 +37,27 @@ class FlyerResolver {
   @Query((_returns) => [Flyer], {
     nullable: false,
     description:
-      'Returns a list of <Flyers> of size <limit> via the given <publicationID>. Results can offsetted by <offset> >= 0.',
+      'Returns a list of <Flyers> of size <limit> via the given <organizationID>. Results can offsetted by <offset> >= 0.',
   })
   async getFlyersByOrganizationID(
-    @Arg('publicationID') publicationID: string,
+    @Arg('organizationID') organizationID: string,
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
     @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
-    return FlyerRepo.getFlyersByOrganizationID(publicationID, limit, offset);
+    return FlyerRepo.getFlyersByOrganizationID(organizationID, limit, offset);
   }
 
   @Query((_returns) => [Flyer], {
     nullable: false,
     description:
-      'Returns a list of <Flyers> of size <limit> via the given list of <publicationIDs>. Results offsetted by <offset> >= 0.',
+      'Returns a list of <Flyers> of size <limit> via the given list of <organizationIDs>. Results offsetted by <offset> >= 0.',
   })
   async getFlyersByOrganizationIDs(
-    @Arg('publicationIDs', (type) => [String]) publicationIDs: string[],
+    @Arg('organizationIDs', (type) => [String]) organizationIDs: string[],
     @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
     @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
-    return FlyerRepo.getFlyersByOrganizationIDs(publicationIDs, limit, offset);
+    return FlyerRepo.getFlyersByOrganizationIDs(organizationIDs, limit, offset);
   }
 
   @Query((_returns) => [Flyer], {
@@ -100,6 +100,18 @@ class FlyerResolver {
 
   @Query((_returns) => [Flyer], {
     nullable: false,
+    description: `Returns a list of <Flyers> <before> a given date, limited by <limit>. 
+  <before> is formatted as an compliant RFC 2822 timestamp. Valid examples include: "2019-01-31", "Aug 9, 1995", "Wed, 09 Aug 1995 00:00:00", etc. Default <limit> is ${DEFAULT_LIMIT}`,
+  })
+  async getFlyersBeforeDate(
+    @Arg('before') before: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+  ) {
+    return FlyerRepo.getFlyersBeforeDate(before, limit);
+  }
+
+  @Query((_returns) => [Flyer], {
+    nullable: false,
     description: `Returns a list of trending <Flyers> of size <limit>. Default <limit> is ${DEFAULT_LIMIT}`,
   })
   async getTrendingFlyers(@Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number) {
@@ -122,7 +134,7 @@ class FlyerResolver {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'Flyer' object,
     // Flyer['_doc'] must be used to access fields of a Flyer object
-    return flyer['_doc'].shoutouts / ((presentDate - flyer['_doc'].date.getTime())/1000); // eslint-disable-line
+    return flyer['_doc'].timesClicked / ((presentDate - flyer['_doc'].startDate.getTime()) / 1000); // eslint-disable-line
   }
 
   @FieldResolver((_returns) => Boolean, {
@@ -139,7 +151,7 @@ class FlyerResolver {
   })
   async incrementShoutouts(@Arg('uuid') uuid: string, @Arg('id') id: string) {
     UserRepo.incrementShoutouts(uuid);
-    return FlyerRepo.incrementShoutouts(id);
+    return FlyerRepo.incrementTimesClicked(id);
   }
 }
 

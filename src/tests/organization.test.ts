@@ -48,9 +48,9 @@ describe('getMostRecentFlyer tests:', () => {
     await FlyerModel.insertMany(flyers);
 
     const getOrganizationsResponse = await OrganizationRepo.getMostRecentFlyer(org);
-    const respDate = new Date(getOrganizationsResponse.date);
+    const respDate = new Date(getOrganizationsResponse.startDate);
 
-    const flyerDates = FactoryUtils.mapToValue(flyers, 'date');
+    const flyerDates = FactoryUtils.mapToValue(flyers, 'startDate');
 
     const isMin = flyerDates.every((d) => {
       return respDate.getTime() >= new Date(d).getTime();
@@ -119,15 +119,15 @@ describe('getShoutouts tests:', () => {
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const numFlyers = _.random(1, 20);
-    const numShoutouts = numFlyers * 2;
+    const numClicks = numFlyers * 2;
     const flyers = await FlyerFactory.createSpecific(numFlyers, {
       organizationSlugs: [org.slug],
       organizations: [org],
-      shoutouts: 2,
+      timesClicked: 2,
     });
     await FlyerModel.insertMany(flyers);
-    const getOrganizationsResponse = await OrganizationRepo.getShoutouts(org);
+    const getOrganizationsResponse = await OrganizationRepo.getClicks(org);
 
-    expect(getOrganizationsResponse).toEqual(numShoutouts);
+    expect(getOrganizationsResponse).toEqual(numClicks);
   });
 });
