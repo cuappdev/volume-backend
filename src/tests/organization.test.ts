@@ -113,8 +113,8 @@ describe('getOrganizationBySlug tests:', () => {
   });
 });
 
-describe('getShoutouts tests:', () => {
-  test('getShoutouts - Random number of flyers with 2 shoutouts, 1 org', async () => {
+describe('getClicks tests:', () => {
+  test('getClicks - Random number of flyers with 2 clicks, 1 org', async () => {
     const org = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
