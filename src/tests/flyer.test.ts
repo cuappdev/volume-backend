@@ -50,7 +50,7 @@ describe('getAllFlyer tests:', () => {
 
   test('getAllFlyers - Sort by date desc, offset 2, limit 2', async () => {
     const flyers = await FlyerFactory.create(5);
-    flyers.sort(FactoryUtils.compareByDate);
+    flyers.sort(FactoryUtils.compareByStartDate);
     await FlyerModel.insertMany(flyers);
 
     const flyerTitles = FactoryUtils.mapToValue(flyers.slice(2, 4), 'title'); // offset=2, limit=2
@@ -104,7 +104,7 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
         organizationSlugs: [org.slug],
         organizations: [org],
       })
-    ).sort(FactoryUtils.compareByDate);
+    ).sort(FactoryUtils.compareByStartDate);
 
     await FlyerModel.insertMany(flyers);
     const getFlyersResponse = await FlyerRepo.getFlyersByOrganizationSlug(org.slug);
@@ -121,7 +121,7 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
       await FlyerFactory.createSpecific(3, {
         organizationSlugs: [org1.slug, org2.slug],
       })
-    ).sort(FactoryUtils.compareByDate);
+    ).sort(FactoryUtils.compareByEndDate);
     await FlyerModel.insertMany(flyers);
 
     const getFlyersResponse1 = await FlyerRepo.getFlyersByOrganizationSlugs([org1.slug]);
@@ -137,11 +137,11 @@ describe('getFlyersAfterDate tests', () => {
   test('getFlyersAfterDate - filter 1 flyer', async () => {
     const today = new Date();
     let flyers = await FlyerFactory.createSpecific(1, {
-      date: faker.date.recent(1), // 1 day ago
+      endDate: faker.date.recent(1), // 1 day ago
     });
     flyers = flyers.concat(
       await FlyerFactory.createSpecific(1, {
-        date: faker.date.past(1, today.getDate() - 2), // 1 year ago
+        endDate: faker.date.past(1, today.getDate() - 2), // 1 year ago
       }),
     );
     await FlyerModel.insertMany(flyers);
@@ -150,6 +150,18 @@ describe('getFlyersAfterDate tests', () => {
       faker.date.recent(2, today.getDate() - 1).toString(),
     ); // find flyers from after 2 days ago
     expect(getFlyersResponse[0].title).toEqual(flyers[0].title);
+  });
+});
+
+describe('getFlyersBeforeDate tests', () => {
+  test('getFlyersBeforeDate - three flyers', async () => {
+    const flyers = await FlyerFactory.createSpecific(3, {
+      endDate: faker.date.past(1), // 1 year ago
+    });
+    await FlyerModel.insertMany(flyers);
+
+    const getFlyersResponse = await FlyerRepo.getFlyersBeforeDate(faker.date.future(2).toString());
+    expect(getFlyersResponse).toHaveLength(3);
   });
 });
 
@@ -184,13 +196,13 @@ describe('searchFlyer tests', () => {
 describe('incrementShoutouts tests', () => {
   test('incrementShoutouts - Shoutout 1 flyer', async () => {
     const flyers = await FlyerFactory.create(1);
-    const oldShoutouts = flyers[0].shoutouts;
+    const oldClicks = flyers[0].timesClicked;
     const insertOutput = await FlyerModel.insertMany(flyers);
 
-    await FlyerRepo.incrementShoutouts(insertOutput[0]._id);
+    await FlyerRepo.incrementTimesClicked(insertOutput[0]._id);
 
     const getFlyersResponse = await FlyerRepo.getFlyerByID(insertOutput[0]._id);
-    expect(getFlyersResponse.shoutouts).toEqual(oldShoutouts + 1);
+    expect(getFlyersResponse.timesClicked).toEqual(oldClicks + 1);
   });
 });
 

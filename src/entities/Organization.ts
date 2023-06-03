@@ -7,11 +7,11 @@ export class Organization {
   id: string;
 
   @Field()
-  @Property()
+  @Property({ nullable: true })
   backgroundImageURL: string;
 
   @Field()
-  @Property()
+  @Property({ nullable: true })
   bio: string;
 
   @Field()
@@ -23,7 +23,7 @@ export class Organization {
   name: string;
 
   @Field()
-  @Property()
+  @Property({ nullable: true })
   profileImageURL: string;
 
   @Field()
@@ -35,7 +35,7 @@ export class Organization {
   shoutouts?: number;
 
   @Field()
-  @Property()
+  @Property({ nullable: true })
   websiteURL: string;
 }
 
