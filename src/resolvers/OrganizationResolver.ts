@@ -60,10 +60,10 @@ class OrganizationResolver {
   }
 
   @FieldResolver((_returns) => Number, {
-    description: "Returns the total shoutouts of an <Organization's> <Flyers>",
+    description: "Returns the total times clicked of an <Organization's> <Flyers>",
   })
-  async shoutouts(@Root() organization: Organization): Promise<number> {
-    return OrganizationRepo.getShoutouts(organization);
+  async clicks(@Root() organization: Organization): Promise<number> {
+    return OrganizationRepo.getClicks(organization);
   }
 }
 
