@@ -145,10 +145,9 @@ class FlyerResolver {
 
   @Mutation((_returns) => Flyer, {
     nullable: true,
-    description: `Increments the shoutouts of a <Flyer> with the given <id>.
-  Increments the numShoutouts given of the user with the given [uuid].`,
+    description: `Increments the times clicked of a <Flyer> with the given <id>.`,
   })
-  async incrementTimesClicked(@Arg('uuid') uuid: string, @Arg('id') id: string) {
+  async incrementTimesClicked(@Arg('id') id: string) {
     return FlyerRepo.incrementTimesClicked(id);
   }
 }

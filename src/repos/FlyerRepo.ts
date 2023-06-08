@@ -8,6 +8,7 @@ import {
   DEFAULT_OFFSET,
   FILTERED_WORDS,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
+  MAX_NUM_OF_TRENDING_FLYERS,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
 
@@ -178,17 +179,19 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
   });
 
   // Get new trending Flyers
-  const flyers = await FlyerModel.aggregate()
-    // Get a sample of random Flyers
-    .sample(100)
-    // Get Flyers after 30 days ago
-    .match({
-      date: {
-        $gte: new Date(
-          new Date().setDate(new Date().getDate() - MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
-        ),
-      },
-    });
+  const flyers = await (
+    await FlyerModel.aggregate()
+      // sort flyers by trendiness
+      .sort({ trendiness: 'desc' })
+      // Only get flyers for events that start in the next few days
+      .match({
+        startDate: {
+          $lte: new Date(
+            new Date().setDate(new Date().getDate() + MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
+          ),
+        },
+      })
+  ).slice(0, MAX_NUM_OF_TRENDING_FLYERS);
 
   flyers.forEach(async (a) => {
     const flyer = await FlyerModel.findById(new ObjectId(a._id)); // eslint-disable-line
@@ -208,6 +211,9 @@ const incrementTimesClicked = async (id: string): Promise<Flyer> => {
   const flyer = await FlyerModel.findById(new ObjectId(id));
   if (flyer) {
     flyer.timesClicked += 1;
+    // update the trendiness of a flyer
+    flyer.trendiness =
+      (flyer.timesClicked / (flyer.startDate.getTime() - new Date().getTime())) * 10000000;
     return flyer.save();
   }
   return flyer;
