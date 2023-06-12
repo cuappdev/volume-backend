@@ -18,3 +18,4 @@ export const IMAGE_ADDRESS = 'https://raw.githubusercontent.com/cuappdev/assets/
 export const IOS = 'IOS';
 export const MAX_NUM_DAYS_OF_TRENDING_ARTICLES = 30;
 export const MAX_NUM_DAYS_OF_FEATURED_MAGAZINES = 30;
+export const MAX_NUM_OF_TRENDING_FLYERS = 10;
