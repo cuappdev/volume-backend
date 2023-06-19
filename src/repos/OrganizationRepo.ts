@@ -67,16 +67,16 @@ const getMostRecentFlyer = async (organization: Organization): Promise<Flyer> =>
   // Organization['_doc'] must be used to access fields of a Organization object
   return FlyerModel.findOne({
     organizationSlugs: organization['_doc'].slug, // eslint-disable-line
-  }).sort({ date: 'desc' });
+  }).sort({ startDate: 'desc' });
 };
 
 /**
- * Retrieves the number of shoutouts a Organization has by summing the shoutouts
+ * Retrieves the number of clicks an Organization has by summing the clicks
  * of all of its flyers.
  * @param {Organization} Organization
  * @returns {Number}
  */
-const getShoutouts = async (organization: Organization): Promise<number> => {
+const getClicks = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
@@ -84,7 +84,7 @@ const getShoutouts = async (organization: Organization): Promise<number> => {
   });
 
   return orgFlyers.reduce((acc, flyer) => {
-    return acc + flyer.shoutouts;
+    return acc + flyer.timesClicked;
   }, 0);
 };
 
@@ -107,11 +107,11 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
 export default {
   addOrganizationsToDB,
   getAllOrganizations,
+  getClicks,
   getMostRecentFlyer,
   getNumFlyers,
   getOrganizationsByCategory,
   getOrganizationByID,
   getOrganizationsByIDs,
   getOrganizationBySlug,
-  getShoutouts,
 };

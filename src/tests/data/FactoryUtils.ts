@@ -16,14 +16,39 @@ class FactoryUtils {
   }
 
   /**
-   * Compares the time between two datess by most recent first
+   * Compares the time between two dates by most recent first
    *
    * @param a The first date to be compared
    * @param b The second date to be compared
-   * @returns 1 if b is more recent than a, -1 if a is more recent than b, 0 if a and b are at the same time
+   * @returns A positive integer if b is more recent than a, a negative integer
+   * if a is more recent than b, 0 if a and b are at the same time
    */
   public static compareByDate(a, b) {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
+  }
+
+  /**
+   * Compares the time between two end dates by most recent first
+   *
+   * @param a The first date to be compared
+   * @param b The second date to be compared
+   * @returns A positive integer if b is more recent than a, a negative integer
+   * if a is more recent than b, 0 if a and b are at the same time
+   */
+  public static compareByEndDate(a, b) {
+    return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
+  }
+
+  /**
+   * Compares the time between two start dates by most recent first
+   *
+   * @param a The first date to be compared
+   * @param b The second date to be compared
+   * @returns A positive integer if b is more recent than a, a negative integer
+   * if a is more recent than b, 0 if a and b are at the same time
+   */
+  public static compareByStartDate(a, b) {
+    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
   }
 }
 export default FactoryUtils;
