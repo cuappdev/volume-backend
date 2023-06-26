@@ -8,6 +8,7 @@ import {
   DEFAULT_OFFSET,
   FILTERED_WORDS,
   MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
+  MAX_NUM_OF_TRENDING_FLYERS,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
 
@@ -23,12 +24,42 @@ function isFlyerFiltered(flyer: Flyer) {
 
 const getAllFlyers = async (offset = DEFAULT_OFFSET, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
   return FlyerModel.find({})
-    .sort({ date: 'desc' })
+    .sort({ startDate: 'desc' })
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
       return flyers.filter((flyer) => !isFlyerFiltered(flyer));
     });
+};
+
+const getFlyersAfterDate = (since: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
+  return (
+    FlyerModel.find({
+      // Get all Flyers after or on the desired date
+      endDate: { $gte: new Date(since) },
+    })
+      // Sort dates in order of most recent to least
+      .sort({ endDate: 'desc' })
+      .limit(limit)
+      .then((flyers) => {
+        return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
+      })
+  );
+};
+
+const getFlyersBeforeDate = (before: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
+  return (
+    FlyerModel.find({
+      // Get all Flyers before the desired date
+      endDate: { $lt: new Date(before) },
+    })
+      // Sort dates in order of most recent to least
+      .sort({ endDate: 'desc' })
+      .limit(limit)
+      .then((flyers) => {
+        return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
+      })
+  );
 };
 
 const getFlyerByID = async (id: string): Promise<Flyer> => {
@@ -54,7 +85,7 @@ const getFlyersByOrganizationSlug = async (
   offset: number = DEFAULT_OFFSET,
 ): Promise<Flyer[]> => {
   return FlyerModel.find({ organizationSlugs: slug })
-    .sort({ date: 'desc' })
+    .sort({ startDate: 'desc' })
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
@@ -69,7 +100,7 @@ const getFlyersByOrganizationSlugs = async (
 ): Promise<Flyer[]> => {
   const uniqueSlugs = [...new Set(slugs)];
   return FlyerModel.find({ organizationSlugs: { $in: uniqueSlugs } })
-    .sort({ date: 'desc' })
+    .sort({ startDate: 'desc' })
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
@@ -84,7 +115,7 @@ const getFlyersByOrganizationID = async (
 ): Promise<Flyer[]> => {
   const organization = await (await OrganizationModel.findById(organizationID)).execPopulate();
   return FlyerModel.find({ organizationSlugs: organization.slug })
-    .sort({ date: 'desc' })
+    .sort({ startDate: 'desc' })
     .skip(offset)
     .limit(limit)
     .then((flyers) => {
@@ -103,21 +134,6 @@ const getFlyersByOrganizationIDs = async (
     orgSlugs.map((org) => org.slug),
     limit,
     offset,
-  );
-};
-
-const getFlyersAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
-  return (
-    FlyerModel.find({
-      // Get all Flyers after or on the desired date
-      date: { $gte: new Date(new Date(since).setHours(0, 0, 0)) },
-    })
-      // Sort dates in order of most recent to least
-      .sort({ date: 'desc' })
-      .limit(limit)
-      .then((flyers) => {
-        return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
-      })
   );
 };
 
@@ -163,17 +179,19 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
   });
 
   // Get new trending Flyers
-  const flyers = await FlyerModel.aggregate()
-    // Get a sample of random Flyers
-    .sample(100)
-    // Get Flyers after 30 days ago
-    .match({
-      date: {
-        $gte: new Date(
-          new Date().setDate(new Date().getDate() - MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
-        ),
-      },
-    });
+  const flyers = await (
+    await FlyerModel.aggregate()
+      // sort flyers by trendiness
+      .sort({ trendiness: 'desc' })
+      // Only get flyers for events that start in the next few days
+      .match({
+        startDate: {
+          $lte: new Date(
+            new Date().setDate(new Date().getDate() + MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
+          ),
+        },
+      })
+  ).slice(0, MAX_NUM_OF_TRENDING_FLYERS);
 
   flyers.forEach(async (a) => {
     const flyer = await FlyerModel.findById(new ObjectId(a._id)); // eslint-disable-line
@@ -185,14 +203,17 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
 };
 
 /**
- * Increments number of shoutouts on an Flyer and publication by one.
+ * Increments number of times clicked on a flyer by one.
  * @function
- * @param {string} id - string representing the unique Object Id of an Flyer.
+ * @param {string} id - string representing the unique Object Id of a flyer.
  */
-const incrementShoutouts = async (id: string): Promise<Flyer> => {
+const incrementTimesClicked = async (id: string): Promise<Flyer> => {
   const flyer = await FlyerModel.findById(new ObjectId(id));
   if (flyer) {
-    flyer.shoutouts += 1;
+    flyer.timesClicked += 1;
+    // update the trendiness of a flyer
+    flyer.trendiness =
+      (flyer.timesClicked / (flyer.startDate.getTime() - new Date().getTime())) * 10000000;
     return flyer.save();
   }
   return flyer;
@@ -213,13 +234,14 @@ export default {
   getAllFlyers,
   getFlyerByID,
   getFlyersAfterDate,
+  getFlyersBeforeDate,
   getFlyersByIDs,
   getFlyersByOrganizationID,
   getFlyersByOrganizationIDs,
   getFlyersByOrganizationSlug,
   getFlyersByOrganizationSlugs,
   getTrendingFlyers,
-  incrementShoutouts,
+  incrementTimesClicked,
   refreshTrendingFlyers,
   searchFlyers,
 };

@@ -9,7 +9,7 @@ export class Flyer {
 
   @Field()
   @Property()
-  date: Date;
+  endDate: Date;
 
   @Field()
   @Property({ nullable: true })
@@ -40,8 +40,12 @@ export class Flyer {
   organizationSlugs: [string];
 
   @Field()
+  @Property()
+  startDate: Date;
+
+  @Field()
   @Property({ default: 0 })
-  shoutouts?: number;
+  timesClicked?: number;
 
   @Field()
   @Property()
