@@ -59,15 +59,17 @@ const sendNotif = async (
   };
 
   // Send notification to FCM servers
-  admin
-    .messaging()
-    .sendToDevice(deviceToken, message, options)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (deviceToken !== '') {
+    admin
+      .messaging()
+      .sendToDevice(deviceToken, message, options)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 };
 
 const sendNewArticleNotification = async (
