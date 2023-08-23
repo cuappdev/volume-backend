@@ -1,12 +1,16 @@
 import * as admin from 'firebase-admin';
-import { User } from '../entities/User';
-import { Publication } from '../entities/Publication';
 import { Article } from '../entities/Article';
-import UserRepo from './UserRepo';
-import PublicationRepo from './PublicationRepo';
-import ArticleRepo from './ArticleRepo';
+import { Flyer } from '../entities/Flyer';
 import { Magazine } from '../entities/Magazine';
+import { Organization } from '../entities/Organization';
+import { Publication } from '../entities/Publication';
+import { User } from '../entities/User';
+import ArticleRepo from './ArticleRepo';
+import FlyerRepo from './FlyerRepo';
 import MagazineRepo from './MagazineRepo';
+import OrganizationRepo from './OrganizationRepo';
+import PublicationRepo from './PublicationRepo';
+import UserRepo from './UserRepo';
 
 /**
  * General purpose function for sending notifications.
@@ -132,6 +136,38 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
   });
 };
 
+const sendNewFlyerNotification = async (
+  user: User,
+  flyer: Flyer,
+  organization: Organization,
+): Promise<void> => {
+  const notifTitle = organization.name;
+  const notifBody = flyer.title;
+
+  const uniqueData = {
+    flyerID: flyer.id,
+    flyerURL: flyer.flyerURL,
+  };
+
+  sendNotif(user, notifTitle, notifBody, uniqueData, 'new_flyer');
+};
+
+/**
+ * Send notifications for new flyers posted by organizations.
+ */
+const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
+  flyerIDs.forEach(async (f) => {
+    const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
+    flyer.organizationSlugs.forEach(async (slug) => {
+      const organization = await OrganizationRepo.getOrganizationBySlug(slug);
+      const followers = await UserRepo.getUsersFollowingOrganization(slug);
+      followers.forEach(async (follower) => {
+        sendNewFlyerNotification(follower, flyer, organization);
+      });
+    });
+  });
+};
+
 const sendWeeklyDebriefNotification = async (user: User): Promise<void> => {
   const notifTitle = 'Your Weekly Debrief is Ready';
   const notifBody = 'Click to check out whats new on Volume this week!';
@@ -153,5 +189,6 @@ export default {
   sendWeeklyDebriefNotification,
   notifyNewArticles,
   notifyNewMagazines,
+  notifyNewFlyers,
   notifyWeeklyDebrief,
 };
