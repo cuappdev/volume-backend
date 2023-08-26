@@ -131,9 +131,9 @@ const appendReadArticle = async (uuid: string, articleID: string): Promise<User>
     const article = await ArticleRepo.getArticleByID(articleID);
     const checkDuplicates = (prev: boolean, cur: Article) => prev || cur.id === articleID;
 
-  if (article && !user.readArticles.reduce(checkDuplicates, false)) {
-    user.readArticles.push(article);
-  }
+    if (article && !user.readArticles.reduce(checkDuplicates, false)) {
+      user.readArticles.push(article);
+    }
 
     user.save();
   }
