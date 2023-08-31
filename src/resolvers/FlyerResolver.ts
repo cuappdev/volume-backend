@@ -130,7 +130,7 @@ class FlyerResolver {
 
   @Query((_return) => [Flyer], {
     nullable: false,
-    description: `Returns a list of <Flyers> of size <limit> given a <categorySlug>. Results can be offsetted by <offset> >= 0. Default <limit> is ${DEFAULT_LIMIT}`,
+    description: `Returns a list of <Flyers> of size <limit> given a <categorySlug>, sorted by start date descending. Results can be offsetted by <offset> >= 0. Default <limit> is ${DEFAULT_LIMIT}`,
   })
   async getFlyersByCategorySlug(
     @Arg('categorySlug') categorySlug: string,
