@@ -66,7 +66,7 @@ const getMostRecentFlyer = async (organization: Organization): Promise<Flyer> =>
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   return FlyerModel.findOne({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   }).sort({ startDate: 'desc' });
 };
 
@@ -80,7 +80,7 @@ const getClicks = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.reduce((acc, flyer) => {
@@ -98,7 +98,7 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.length;
