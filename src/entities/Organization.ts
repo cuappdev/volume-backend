@@ -6,13 +6,13 @@ export class Organization {
   @Field(() => ID)
   id: string;
 
-  @Field()
-  @Property({ nullable: true })
-  backgroundImageURL: string;
+  @Field({ nullable: true })
+  @Property()
+  backgroundImageURL?: string;
 
-  @Field()
-  @Property({ nullable: true })
-  bio: string;
+  @Field({ nullable: true })
+  @Property()
+  bio?: string;
 
   @Field()
   @Property()
@@ -22,9 +22,9 @@ export class Organization {
   @Property()
   name: string;
 
-  @Field()
-  @Property({ nullable: true })
-  profileImageURL: string;
+  @Field({ nullable: true })
+  @Property()
+  profileImageURL?: string;
 
   @Field()
   @Property()
@@ -35,7 +35,7 @@ export class Organization {
   shoutouts?: number;
 
   @Field()
-  @Property({ nullable: true })
+  @Property()
   websiteURL: string;
 }
 

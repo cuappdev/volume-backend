@@ -158,12 +158,10 @@ const sendNewFlyerNotification = async (
 const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
   flyerIDs.forEach(async (f) => {
     const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
-    flyer.organizationSlugs.forEach(async (slug) => {
-      const organization = await OrganizationRepo.getOrganizationBySlug(slug);
-      const followers = await UserRepo.getUsersFollowingOrganization(slug);
-      followers.forEach(async (follower) => {
-        sendNewFlyerNotification(follower, flyer, organization);
-      });
+    const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+    const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+    followers.forEach(async (follower) => {
+      sendNewFlyerNotification(follower, flyer, organization);
     });
   });
 };
