@@ -42,8 +42,8 @@ describe('getMostRecentFlyer tests:', () => {
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const flyers = await FlyerFactory.createSpecific(_.random(2, 10), {
-      organizationSlugs: [org.slug],
-      organizations: [org],
+      organizationSlug: org.slug,
+      organizations: org,
     });
     await FlyerModel.insertMany(flyers);
 
@@ -71,17 +71,14 @@ describe('getNumFlyer tests:', () => {
     expect(numResp).toEqual(0);
   });
 
-  test('getNumFlyer - Random number of flyers', async () => {
+  test('getNumFlyer - 1 flyer', async () => {
     const org1 = await OrganizationRepo.getOrganizationBySlug(
-      (await OrganizationFactory.getRandomOrganization()).slug,
-    );
-    const org2 = await OrganizationRepo.getOrganizationBySlug(
       (await OrganizationFactory.getRandomOrganization()).slug,
     );
     const numFlyers = _.random(1, 10);
     const flyers = await FlyerFactory.createSpecific(numFlyers, {
-      organizationSlugs: [org1.slug],
-      organizations: [org1, org2],
+      organizationSlug: org1.slug,
+      organization: org1,
     });
     await FlyerModel.insertMany(flyers);
 
@@ -121,8 +118,8 @@ describe('getClicks tests:', () => {
     const numFlyers = _.random(1, 20);
     const numClicks = numFlyers * 2;
     const flyers = await FlyerFactory.createSpecific(numFlyers, {
-      organizationSlugs: [org.slug],
-      organizations: [org],
+      organizationSlug: org.slug,
+      organizations: org,
       timesClicked: 2,
     });
     await FlyerModel.insertMany(flyers);

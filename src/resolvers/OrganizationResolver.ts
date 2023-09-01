@@ -1,5 +1,4 @@
 import { Arg, Resolver, Query, FieldResolver, Root } from 'type-graphql';
-import { Flyer } from '../entities/Flyer';
 import { Organization } from '../entities/Organization';
 import OrganizationRepo from '../repos/OrganizationRepo';
 
@@ -42,21 +41,6 @@ class OrganizationResolver {
   })
   async getOrganizationBySlug(@Arg('slug') slug: string) {
     return OrganizationRepo.getOrganizationBySlug(slug);
-  }
-
-  @FieldResolver((_returns) => Flyer, {
-    nullable: true,
-    description: 'Returns the most recent <Flyer> of an <Organization>',
-  })
-  async mostRecentFlyer(@Root() organization: Organization): Promise<Flyer> {
-    return OrganizationRepo.getMostRecentFlyer(organization);
-  }
-
-  @FieldResolver((_returns) => Number, {
-    description: 'Returns the total number of <Flyers> from an <Organization>',
-  })
-  async numFlyers(@Root() organization: Organization): Promise<number> {
-    return OrganizationRepo.getNumFlyers(organization);
   }
 
   @FieldResolver((_returns) => Number, {

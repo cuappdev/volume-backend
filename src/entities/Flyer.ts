@@ -9,11 +9,15 @@ export class Flyer {
 
   @Field()
   @Property()
-  endDate: Date;
+  categorySlug: string;
 
   @Field()
-  @Property({ nullable: true })
-  flyerURL: string;
+  @Property()
+  endDate: Date;
+
+  @Field({ nullable: true })
+  @Property()
+  flyerURL?: string;
 
   @Field()
   @Property()
@@ -27,17 +31,13 @@ export class Flyer {
   @Property()
   location: string;
 
+  @Field((type) => Organization)
+  @Property({ type: () => Organization })
+  organization: Organization;
+
   @Field()
-  @Property({ default: false })
-  nsfw: boolean;
-
-  @Field((type) => [Organization])
-  @Property({ type: () => [Organization] })
-  organizations: [Organization];
-
-  @Field((type) => [String])
-  @Property({ type: () => [String] })
-  organizationSlugs: [string];
+  @Property()
+  organizationSlug: string;
 
   @Field()
   @Property()

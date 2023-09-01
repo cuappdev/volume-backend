@@ -1,12 +1,11 @@
 import * as admin from 'firebase-admin';
 import { User } from '../entities/User';
-import { Publication } from '../entities/Publication';
-import { Article } from '../entities/Article';
-import UserRepo from './UserRepo';
-import PublicationRepo from './PublicationRepo';
 import ArticleRepo from './ArticleRepo';
-import { Magazine } from '../entities/Magazine';
+import FlyerRepo from './FlyerRepo';
 import MagazineRepo from './MagazineRepo';
+import OrganizationRepo from './OrganizationRepo';
+import PublicationRepo from './PublicationRepo';
+import UserRepo from './UserRepo';
 
 /**
  * General purpose function for sending notifications.
@@ -72,22 +71,6 @@ const sendNotif = async (
   }
 };
 
-const sendNewArticleNotification = async (
-  user: User,
-  article: Article,
-  publication: Publication,
-): Promise<void> => {
-  const notifTitle = publication.name;
-  const notifBody = article.title;
-
-  const uniqueData = {
-    articleID: article.id,
-    articleURL: article.articleURL,
-  };
-
-  sendNotif(user, notifTitle, notifBody, uniqueData, 'new_article');
-};
-
 /**
  * Send notifications for new articles have been posted by publications.
  */
@@ -97,25 +80,17 @@ const notifyNewArticles = async (articleIDs: string[]): Promise<void> => {
     const publication = await PublicationRepo.getPublicationBySlug(article.publicationSlug);
     const followers = await UserRepo.getUsersFollowingPublication(article.publicationSlug);
     followers.forEach(async (follower) => {
-      sendNewArticleNotification(follower, article, publication);
+      const notifTitle = publication.name;
+      const notifBody = article.title;
+
+      const uniqueData = {
+        articleID: article.id,
+        articleURL: article.articleURL,
+      };
+
+      await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_article');
     });
   });
-};
-
-const sendNewMagazineNotification = async (
-  user: User,
-  magazine: Magazine,
-  publication: Publication,
-): Promise<void> => {
-  const notifTitle = publication.name;
-  const notifBody = magazine.title;
-
-  const uniqueData = {
-    magazineID: magazine.id,
-    magazinePDF: magazine.pdfURL,
-  };
-
-  sendNotif(user, notifTitle, notifBody, uniqueData, 'new_magazine');
 };
 
 /**
@@ -127,16 +102,39 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
     const publication = await PublicationRepo.getPublicationBySlug(magazine.publicationSlug);
     const followers = await UserRepo.getUsersFollowingPublication(magazine.publicationSlug);
     followers.forEach(async (follower) => {
-      sendNewMagazineNotification(follower, magazine, publication);
+      const notifTitle = publication.name;
+      const notifBody = magazine.title;
+
+      const uniqueData = {
+        magazineID: magazine.id,
+        magazinePDF: magazine.pdfURL,
+      };
+
+      await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_magazine');
     });
   });
 };
 
-const sendWeeklyDebriefNotification = async (user: User): Promise<void> => {
-  const notifTitle = 'Your Weekly Debrief is Ready';
-  const notifBody = 'Click to check out whats new on Volume this week!';
+/**
+ * Send notifications for new flyers posted by organizations.
+ */
+const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
+  flyerIDs.forEach(async (f) => {
+    const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
+    const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+    const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+    followers.forEach(async (follower) => {
+      const notifTitle = organization.name;
+      const notifBody = flyer.title;
 
-  sendNotif(user, notifTitle, notifBody, {}, 'weekly_debrief');
+      const uniqueData = {
+        flyerID: flyer.id,
+        flyerURL: flyer.flyerURL,
+      };
+
+      await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_flyer');
+    });
+  });
 };
 
 /**
@@ -144,14 +142,16 @@ const sendWeeklyDebriefNotification = async (user: User): Promise<void> => {
  */
 const notifyWeeklyDebrief = async (users: User[]): Promise<void> => {
   users.forEach(async (user) => {
-    sendWeeklyDebriefNotification(user);
+    const notifTitle = 'Your Weekly Debrief is Ready';
+    const notifBody = 'Click to check out whats new on Volume this week!';
+
+    await sendNotif(user, notifTitle, notifBody, {}, 'weekly_debrief');
   });
 };
+
 export default {
-  sendNewArticleNotification,
-  sendNewMagazineNotification,
-  sendWeeklyDebriefNotification,
   notifyNewArticles,
+  notifyNewFlyers,
   notifyNewMagazines,
   notifyWeeklyDebrief,
 };
