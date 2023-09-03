@@ -1,5 +1,4 @@
 import Filter from 'bad-words';
-import Fuse from 'fuse.js';
 import { ObjectId } from 'mongodb';
 
 import { Flyer, FlyerModel } from '../entities/Flyer';
@@ -144,15 +143,12 @@ const getFlyersByOrganizationIDs = async (
  * @returns at most limit Flyers with titles or publishers matching the query
  */
 const searchFlyers = async (query: string, limit = DEFAULT_LIMIT) => {
-  const allFlyers = await FlyerModel.find({});
-  const searcher = new Fuse(allFlyers, {
-    keys: ['title', 'organization.name'],
-  });
-
-  return searcher
-    .search(query)
-    .map((searchRes) => searchRes.item)
-    .slice(0, limit);
+  const flyers = await FlyerModel.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  ).sort({ score: { $meta: "textScore" } });
+  const limitedFlyers = flyers.slice(0, limit);
+  return limitedFlyers
 };
 
 /**

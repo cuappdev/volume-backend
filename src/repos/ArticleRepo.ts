@@ -213,6 +213,7 @@ const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
     { $text: { $search: query } },
     { score: { $meta: "textScore" } }
   ).sort({ score: { $meta: "textScore" } })
+
   const limitedArticles = articles.slice(0, limit)
   return limitedArticles
 };
