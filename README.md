@@ -32,6 +32,8 @@ Then, to start the project, run the following terminal commands:
 
 `eval "$(direnv hook zsh)"`
 
+`npm run start`
+
 
 ## Setting up the database
 
