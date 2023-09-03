@@ -1,5 +1,4 @@
 import Filter from 'bad-words';
-import Fuse from 'fuse.js';
 import { ObjectId } from 'mongodb';
 
 import {
@@ -210,15 +209,12 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
  * @returns at most limit articles with titles or publishers matching the query
  */
 const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
-  const allArticles = await ArticleModel.find({});
-  const searcher = new Fuse(allArticles, {
-    keys: ['title', 'publication.name'],
+  const allArticles = await ArticleModel.find({
+    'title': { $regex: query },
+    'publication.name': { $regex: query }
   });
 
-  return searcher
-    .search(query)
-    .map((searchRes) => searchRes.item)
-    .slice(0, limit);
+  return allArticles.slice(0, limit);
 };
 
 /**

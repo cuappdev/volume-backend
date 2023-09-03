@@ -27,6 +27,7 @@ and install dependencies with
 
 We use `direnv` to keep track of environment variables. Install `direnv` to your machine.
 Then, to start the project, run the following terminal commands:
+
 `direnv allow` 
 
 `eval "$(direnv hook zsh)"`
