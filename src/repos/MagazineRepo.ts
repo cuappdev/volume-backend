@@ -166,10 +166,12 @@ const checkProfanity = async (title: string): Promise<boolean> => {
 };
 
 /**
- * Performs fuzzy search on all magazines to find articles with title/publisher matching the query.
+ * Performs a text search on all Magazines to find Magazines with indexed fields
+ * matching the query
+ * @see https://www.mongodb.com/docs/manual/text-search/#text-search-on-self-managed-deployments
  * @param query the term to search for
  * @param limit the number of results to return
- * @returns at most limit articles with titles or publishers matching the query
+ * @returns at most limit Magazines with indexed fields matching the query
  */
 const searchMagazines = async (query: string, limit = DEFAULT_LIMIT) => {
   const magazines = await MagazineModel.find(

@@ -203,10 +203,12 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
 };
 
 /**
- * Performs fuzzy search on all articles to find articles with title/publisher matching the query.
+ * Performs a text search on all Articles to find Articles with indexed fields
+ * matching the query
+ * @see https://www.mongodb.com/docs/manual/text-search/#text-search-on-self-managed-deployments
  * @param query the term to search for
  * @param limit the number of results to return
- * @returns at most limit articles with titles or publishers matching the query
+ * @returns at most limit Articles with indexed fields matching the query
  */
 const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
   const articles = await ArticleModel.find(
