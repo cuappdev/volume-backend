@@ -204,7 +204,7 @@ describe('getTrending tests', () => {
   });
 
   describe('getFlyersByCategorySlug tests', () => {
-    test('getFlyersByCategorySlug - no flyers', async () => {
+    test('query flyer with invalid slug', async () => {
       const flyers = await FlyerFactory.create(2);
       await FlyerModel.insertMany(flyers);
 
@@ -212,7 +212,7 @@ describe('getTrending tests', () => {
       expect(getFlyersResponse).toHaveLength(0);
     });
 
-    test('getFlyersByCategorySlug - 1 flyer returned, multiple flyers stored', async () => {
+    test('query flyer with existing slug', async () => {
       const flyers = await FlyerFactory.create(4);
       await FlyerModel.insertMany(flyers);
 
@@ -225,7 +225,7 @@ describe('getTrending tests', () => {
       expect(getFlyersResponse).toHaveLength(1);
     });
 
-    test('getFlyersByCategorySlug - 2 flyers returned, restrict to limit', async () => {
+    test('query multiple flyers with existing slug', async () => {
       const flyers = await FlyerFactory.create(4);
       await FlyerModel.insertMany(flyers);
 
