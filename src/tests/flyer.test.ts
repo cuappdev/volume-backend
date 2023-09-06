@@ -202,43 +202,43 @@ describe('getTrending tests', () => {
     const getFlyersResponse = await FlyerRepo.getTrendingFlyers();
     expect(getFlyersResponse).toHaveLength(5);
   });
+});
 
-  describe('getFlyersByCategorySlug tests', () => {
-    test('query flyer with invalid slug', async () => {
-      const flyers = await FlyerFactory.create(2);
-      await FlyerModel.insertMany(flyers);
+describe('getFlyersByCategorySlug tests', () => {
+  test('query flyer with invalid slug', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
 
-      const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(Math.random().toString());
-      expect(getFlyersResponse).toHaveLength(0);
-    });
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(Math.random().toString());
+    expect(getFlyersResponse).toHaveLength(0);
+  });
 
-    test('query flyer with existing slug', async () => {
-      const flyers = await FlyerFactory.create(4);
-      await FlyerModel.insertMany(flyers);
+  test('query flyer with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
 
-      const randomSlug = Math.random().toString();
-      const specificFlyer = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug });
-      await FlyerModel.insertMany(specificFlyer);
+    const randomSlug = Math.random().toString();
+    const specificFlyer = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyer);
 
-      const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(randomSlug);
-      expect(getFlyersResponse[0].categorySlug).toEqual(specificFlyer[0].categorySlug);
-      expect(getFlyersResponse).toHaveLength(1);
-    });
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(randomSlug);
+    expect(getFlyersResponse[0].categorySlug).toEqual(specificFlyer[0].categorySlug);
+    expect(getFlyersResponse).toHaveLength(1);
+  });
 
-    test('query multiple flyers with existing slug', async () => {
-      const flyers = await FlyerFactory.create(4);
-      await FlyerModel.insertMany(flyers);
+  test('query multiple flyers with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
 
-      const randomSlug = Math.random().toString();
-      const specificFlyer = await FlyerFactory.createSpecific(4, { categorySlug: randomSlug });
-      await FlyerModel.insertMany(specificFlyer);
+    const randomSlug = Math.random().toString();
+    const specificFlyers = await FlyerFactory.createSpecific(4, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyers);
 
-      const limit = 2;
-      const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(
-        flyers[0].categorySlug,
-        limit,
-      );
-      expect(getFlyersResponse).toHaveLength(limit);
-    });
+    const limit = 2;
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(
+      specificFlyers[0].categorySlug,
+      limit,
+    );
+    expect(getFlyersResponse).toHaveLength(limit);
   });
 });
