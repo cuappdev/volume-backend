@@ -213,11 +213,10 @@ const getArticlesAfterDate = async (since: string, limit = DEFAULT_LIMIT): Promi
 const searchArticles = async (query: string, limit = DEFAULT_LIMIT) => {
   const articles = await ArticleModel.find(
     { $text: { $search: query } },
-    { score: { $meta: "textScore" } }
-  ).sort({ score: { $meta: "textScore" } })
+    { score: { $meta: 'textScore' } },
+  ).sort({ score: { $meta: 'textScore' } });
 
-  const limitedArticles = articles.slice(0, limit)
-  return limitedArticles
+  return articles.slice(0, limit);
 };
 
 /**

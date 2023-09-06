@@ -147,18 +147,17 @@ const getFlyersByOrganizationIDs = async (
 const searchFlyers = async (query: string, limit = DEFAULT_LIMIT) => {
   const flyers = await FlyerModel.find(
     { $text: { $search: query } },
-    { score: { $meta: "textScore" } }
+    { score: { $meta: 'textScore' } },
   )
     // Sort Flyers by most relevant
     .sort({
-      score: { $meta: "textScore" }
+      score: { $meta: 'textScore' },
     })
     // Filter out past Flyers
     .find({
-      endDate: { $gt: new Date() }
-    })
-  const limitedFlyers = flyers.slice(0, limit);
-  return limitedFlyers
+      endDate: { $gt: new Date() },
+    });
+  return flyers.slice(0, limit);
 };
 
 /**

@@ -176,10 +176,9 @@ const checkProfanity = async (title: string): Promise<boolean> => {
 const searchMagazines = async (query: string, limit = DEFAULT_LIMIT) => {
   const magazines = await MagazineModel.find(
     { $text: { $search: query } },
-    { score: { $meta: "textScore" } }
-  ).sort({ score: { $meta: "textScore" } });
-  const limitedMagazines = magazines.slice(0, limit);
-  return limitedMagazines;
+    { score: { $meta: 'textScore' } },
+  ).sort({ score: { $meta: 'textScore' } });
+  return magazines.slice(0, limit);
 };
 
 export default {
