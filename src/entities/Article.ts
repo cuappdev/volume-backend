@@ -1,7 +1,9 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, index } from '@typegoose/typegoose';
 import { Publication } from './Publication';
 
+// Index articles based on fields to be considered in search
+@index({ title: 'text', 'publication.name': 'text' })
 @ObjectType({ description: 'The Article Model' })
 export class Article {
   @Field(() => ID)

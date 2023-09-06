@@ -15,7 +15,7 @@ beforeAll(async () => {
   await dbConnection();
   await PublicationRepo.addPublicationsToDB();
   await MagazineModel.createCollection();
-  await MagazineModel.createIndexes();
+  await MagazineModel.syncIndexes();
 });
 
 beforeEach(async () => {

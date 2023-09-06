@@ -16,7 +16,7 @@ beforeAll(async () => {
   await dbConnection();
   await OrganizationRepo.addOrganizationsToDB();
   await FlyerModel.createCollection();
-  await FlyerModel.createIndexes();
+  await FlyerModel.syncIndexes();
 });
 
 beforeEach(async () => {
