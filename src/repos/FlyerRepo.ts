@@ -238,7 +238,6 @@ const incrementTimesClicked = async (id: string): Promise<Flyer> => {
 /**
  * Create a new flyer.
  *
- * @function
  * @param {string} categorySlug the slug for this flyer's category
  * @param {string} endDate the end date for this flyer's event in UTC ISO8601 format
  * @param {string} flyerURL the URL for this flyer when tapped
@@ -281,7 +280,6 @@ const createFlyer = async (
 /**
  * Delete a flyer
  *
- * @function
  * @param id the flyer ID to remove
  */
 const deleteFlyer = async (id: string): Promise<Flyer> => {
