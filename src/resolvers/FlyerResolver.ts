@@ -1,7 +1,18 @@
-import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
+import {
+  Resolver,
+  Mutation,
+  Arg,
+  Query,
+  FieldResolver,
+  Root,
+  UseMiddleware,
+  Ctx,
+} from 'type-graphql';
+import { Context } from 'vm';
 import { Flyer } from '../entities/Flyer';
-import FlyerRepo from '../repos/FlyerRepo';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
+import FlyerRepo from '../repos/FlyerRepo';
+import FlyerMiddleware from '../middlewares/FlyerMiddleware';
 
 @Resolver((_of) => Flyer)
 class FlyerResolver {
@@ -154,6 +165,42 @@ class FlyerResolver {
   })
   async incrementTimesClicked(@Arg('id') id: string) {
     return FlyerRepo.incrementTimesClicked(id);
+  }
+
+  @Mutation((_returns) => Flyer, {
+    description: `Creates a single <Flyer> via given <categorySlug>, <endDate>, <flyerURL>, <imageB64>, <location>, <organizationID>, <startDate>, and <title>.
+    <startDate> and <endDate> must be in UTC ISO8601 format (e.g. YYYY-mm-ddTHH:MM:ssZ).
+    <imageB64> must be a Base64 encrypted string without 'data:image/png;base64,' prepended`,
+  })
+  @UseMiddleware(FlyerMiddleware.FlyerUploadErrorInterceptor)
+  async createFlyer(
+    @Arg('categorySlug') categorySlug: string,
+    @Arg('endDate') endDate: string,
+    @Arg('flyerURL', { nullable: true }) flyerURL: string,
+    @Arg('imageB64') imageB64: string,
+    @Arg('location') location: string,
+    @Arg('organizationID') organizationID: string,
+    @Arg('startDate') startDate: string,
+    @Arg('title') title: string,
+    @Ctx() ctx: Context,
+  ) {
+    return FlyerRepo.createFlyer(
+      categorySlug,
+      endDate,
+      flyerURL,
+      ctx.imageURL,
+      location,
+      organizationID,
+      startDate,
+      title,
+    );
+  }
+
+  @Mutation((_returns) => Flyer, {
+    description: `Delete a flyer with the id <id>.`,
+  })
+  async deleteFlyer(@Arg('id') id: string) {
+    return FlyerRepo.deleteFlyer(id);
   }
 }
 
