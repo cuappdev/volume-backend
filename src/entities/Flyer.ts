@@ -1,7 +1,9 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, index } from '@typegoose/typegoose';
 import { Organization } from './Organization';
 
+// Index flyers based on fields to be considered in search
+@index({ title: 'text', 'organization.name': 'text' })
 @ObjectType({ description: 'The Flyer Model' })
 export class Flyer {
   @Field(() => ID)
