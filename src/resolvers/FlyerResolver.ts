@@ -10,9 +10,9 @@ import {
 } from 'type-graphql';
 import { Context } from 'vm';
 import { Flyer } from '../entities/Flyer';
-import FlyerRepo from '../repos/FlyerRepo';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
-import FlyerErrorInterceptor from '../middlewares/FlyerMiddleware';
+import FlyerRepo from '../repos/FlyerRepo';
+import FlyerMiddleware from '../middlewares/FlyerMiddleware';
 
 @Resolver((_of) => Flyer)
 class FlyerResolver {
@@ -172,7 +172,7 @@ class FlyerResolver {
     <startDate> and <endDate> must be in UTC ISO8601 format (e.g. YYYY-mm-ddTHH:MM:ssZ).
     <imageB64> must be a Base64 encrypted string without 'data:image/png;base64,' prepended`,
   })
-  @UseMiddleware(FlyerErrorInterceptor)
+  @UseMiddleware(FlyerMiddleware.FlyerUploadErrorInterceptor)
   async createFlyer(
     @Arg('categorySlug') categorySlug: string,
     @Arg('endDate') endDate: string,
@@ -194,6 +194,13 @@ class FlyerResolver {
       startDate,
       title,
     );
+  }
+
+  @Mutation((_returns) => Flyer, {
+    description: `Delete a flyer with the id <id>.`,
+  })
+  async deleteFlyer(@Arg('id') id: string) {
+    return FlyerRepo.deleteFlyer(id);
   }
 }
 

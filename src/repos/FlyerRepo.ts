@@ -11,6 +11,7 @@ import {
   MAX_NUM_OF_TRENDING_FLYERS,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
+import utils from '../utils';
 
 const { IS_FILTER_ACTIVE } = process.env;
 
@@ -218,7 +219,7 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
 
 /**
  * Increments number of times clicked on a flyer by one.
- * @function
+ *
  * @param {string} id - string representing the unique Object Id of a flyer.
  */
 const incrementTimesClicked = async (id: string): Promise<Flyer> => {
@@ -275,8 +276,25 @@ const createFlyer = async (
   return FlyerModel.create(newFlyer);
 };
 
+/**
+ * Delete a flyer
+ *
+ * @param id the flyer ID to remove
+ */
+const deleteFlyer = async (id: string): Promise<Flyer> => {
+  const flyerToRemove = await FlyerModel.findById(new ObjectId(id));
+  if (!flyerToRemove) {
+    return null;
+  }
+  // Remove image from our servers
+  await utils.removeImage(flyerToRemove.imageURL);
+  const flyer = await FlyerModel.findByIdAndDelete(new ObjectId(id));
+  return flyer;
+};
+
 export default {
   createFlyer,
+  deleteFlyer,
   getAllFlyers,
   getFlyerByID,
   getFlyersAfterDate,
