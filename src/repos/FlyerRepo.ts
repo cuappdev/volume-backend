@@ -220,7 +220,6 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
 /**
  * Increments number of times clicked on a flyer by one.
  *
- * @function
  * @param {string} id - string representing the unique Object Id of a flyer.
  */
 const incrementTimesClicked = async (id: string): Promise<Flyer> => {
