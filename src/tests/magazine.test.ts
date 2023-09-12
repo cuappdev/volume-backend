@@ -14,7 +14,8 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 beforeAll(async () => {
   await dbConnection();
   await PublicationRepo.addPublicationsToDB();
-  await MagazineModel.createCollection;
+  await MagazineModel.createCollection();
+  await MagazineModel.syncIndexes();
 });
 
 beforeEach(async () => {

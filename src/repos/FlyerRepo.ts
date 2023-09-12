@@ -1,5 +1,4 @@
 import Filter from 'bad-words';
-import Fuse from 'fuse.js';
 import { ObjectId } from 'mongodb';
 
 import { Flyer, FlyerModel } from '../entities/Flyer';
@@ -153,21 +152,27 @@ const getFlyersByOrganizationIDs = async (
 };
 
 /**
- * Performs fuzzy search on all Flyers to find Flyers with title/publisher matching the query.
+ * Performs a text search on all Flyers to find Flyers with indexed fields
+ * matching the query
+ * @see https://www.mongodb.com/docs/manual/text-search/#text-search-on-self-managed-deployments
  * @param query the term to search for
  * @param limit the number of results to return
- * @returns at most limit Flyers with titles or publishers matching the query
+ * @returns at most limit Flyers with indexed fields matching the query
  */
 const searchFlyers = async (query: string, limit = DEFAULT_LIMIT) => {
-  const allFlyers = await FlyerModel.find({});
-  const searcher = new Fuse(allFlyers, {
-    keys: ['title', 'organization.name'],
-  });
-
-  return searcher
-    .search(query)
-    .map((searchRes) => searchRes.item)
-    .slice(0, limit);
+  const flyers = await FlyerModel.find(
+    { $text: { $search: query } },
+    { score: { $meta: 'textScore' } },
+  )
+    // Sort Flyers by most relevant
+    .sort({
+      score: { $meta: 'textScore' },
+    })
+    // Filter out past Flyers
+    .find({
+      endDate: { $gt: new Date() },
+    });
+  return flyers.slice(0, limit);
 };
 
 /**
