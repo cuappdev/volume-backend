@@ -61,6 +61,20 @@ const getFlyersBeforeDate = (before: string, limit = DEFAULT_LIMIT): Promise<Fly
   );
 };
 
+const getFlyersByCategorySlug = async (
+  categorySlug: string,
+  limit = DEFAULT_LIMIT,
+  offset = DEFAULT_OFFSET,
+): Promise<Flyer[]> => {
+  return FlyerModel.find({ categorySlug })
+    .sort({ startDate: 'desc' })
+    .skip(offset)
+    .limit(limit)
+    .then((flyers) => {
+      return flyers.filter((flyer) => flyer !== null && !isFlyerFiltered(flyer));
+    });
+};
+
 const getFlyerByID = async (id: string): Promise<Flyer> => {
   return FlyerModel.findById(new ObjectId(id)).then((flyer) => {
     if (!isFlyerFiltered(flyer)) {
@@ -224,22 +238,12 @@ const incrementTimesClicked = async (id: string): Promise<Flyer> => {
   return flyer;
 };
 
-/**
- * Checks if an Flyer's title contains profanity.
- * @function
- * @param {string} title - Flyer title.
- */
-const checkProfanity = async (title: string): Promise<boolean> => {
-  const filter = new Filter();
-  return filter.isProfane(title);
-};
-
 export default {
-  checkProfanity,
   getAllFlyers,
   getFlyerByID,
   getFlyersAfterDate,
   getFlyersBeforeDate,
+  getFlyersByCategorySlug,
   getFlyersByIDs,
   getFlyersByOrganizationID,
   getFlyersByOrganizationIDs,

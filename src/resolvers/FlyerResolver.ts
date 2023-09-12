@@ -128,19 +128,24 @@ class FlyerResolver {
     return FlyerRepo.searchFlyers(query, limit);
   }
 
+  @Query((_return) => [Flyer], {
+    nullable: false,
+    description: `Returns a list of <Flyers> of size <limit> given a <categorySlug>, sorted by start date descending. Results can be offsetted by <offset> >= 0. Default <limit> is ${DEFAULT_LIMIT}`,
+  })
+  async getFlyersByCategorySlug(
+    @Arg('categorySlug') categorySlug: string,
+    @Arg('limit', { defaultValue: DEFAULT_LIMIT }) limit: number,
+    @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
+  ) {
+    return FlyerRepo.getFlyersByCategorySlug(categorySlug, limit, offset);
+  }
+
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of a <Flyer>' })
   async trendiness(@Root() flyer: Flyer): Promise<number> {
     const presentDate = new Date().getTime();
     // Due to the way Mongo interprets 'Flyer' object,
     // Flyer['_doc'] must be used to access fields of a Flyer object
     return flyer['_doc'].timesClicked / ((presentDate - flyer['_doc'].startDate.getTime()) / 1000); // eslint-disable-line
-  }
-
-  @FieldResolver((_returns) => Boolean, {
-    description: 'If an <Flyer> contains not suitable for work content',
-  })
-  async nsfw(@Root() flyer: Flyer): Promise<boolean> {
-    return FlyerRepo.checkProfanity(flyer['_doc'].title); //eslint-disable-line
   }
 
   @Mutation((_returns) => Flyer, {
