@@ -1,5 +1,10 @@
 import fetch from 'node-fetch-commonjs';
 
+interface UploadResponse {
+  success: boolean;
+  data: string;
+}
+
 /**
  * Upload an image to our servers
  *
@@ -17,7 +22,7 @@ const uploadImage = async (imageB64: string): Promise<string> => {
     body: JSON.stringify(imagePayload),
   });
 
-  const responseData = JSON.parse(await response.text());
+  const responseData = (await response.json()) as UploadResponse;
   return responseData.data;
 };
 
@@ -38,11 +43,11 @@ const removeImage = async (imageURL: string): Promise<boolean> => {
     body: JSON.stringify(payload),
   });
 
-  const responseData = JSON.parse(await response.text());
-  if (responseData.success === 'false') {
+  const responseData = (await response.json()) as UploadResponse;
+  if (!responseData.success) {
     console.log(`Removing an image from our servers failed with image URL: ${imageURL}`);
   }
-  return responseData.success === 'true';
+  return responseData.success;
 };
 
 export default { removeImage, uploadImage };
