@@ -297,9 +297,56 @@ const deleteFlyer = async (id: string): Promise<Flyer> => {
   return flyer;
 };
 
+/**
+ * Edit an existing flyer.
+ *
+ * @param {string} id the ID of the flyer to edit
+ * @param {string} categorySlug the slug for this flyer's category
+ * @param {string} endDate the end date for this flyer's event in UTC ISO8601 format
+ * @param {string} flyerURL the URL for this flyer when tapped
+ * @param {string} imageURL the URL representing this flyer's image
+ * @param {string} location the location for this flyer's event
+ * @param {string} startDate the start date for this flyer's event in UTC ISO8601 format
+ * @param {string} title the title for this flyer
+ * @returns the edited Flyer
+ */
+const editFlyer = async (
+  id: string,
+  categorySlug: string = null,
+  endDate: string = null,
+  flyerURL: string = null,
+  imageURL: string = null,
+  location: string = null,
+  startDate: string = null,
+  title: string = null,
+): Promise<Flyer> => {
+  // Fetch flyer given flyer ID
+  const flyer = await FlyerModel.findById(new ObjectId(id));
+
+  if (flyer) {
+    // Remove existing image from our servers (if not null)
+    if (imageURL) await utils.removeImage(flyer.imageURL);
+
+    // Update flyer fields (if not nul)
+    if (categorySlug) flyer.categorySlug = categorySlug;
+    if (endDate) flyer.endDate = Object.assign(new Date(endDate));
+    if (flyerURL) flyer.flyerURL = flyerURL;
+    if (imageURL) flyer.imageURL = imageURL;
+    if (location) flyer.location = location;
+    if (startDate) flyer.startDate = Object.assign(new Date(startDate));
+    if (title) flyer.title = title;
+
+    return flyer.save();
+  }
+
+  // Flyer not found
+  return flyer;
+};
+
 export default {
   createFlyer,
   deleteFlyer,
+  editFlyer,
   getAllFlyers,
   getFlyerByID,
   getFlyersAfterDate,

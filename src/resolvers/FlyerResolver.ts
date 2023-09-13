@@ -202,6 +202,35 @@ class FlyerResolver {
   async deleteFlyer(@Arg('id') id: string) {
     return FlyerRepo.deleteFlyer(id);
   }
+
+  @Mutation((_returns) => Flyer, {
+    description: `Edit <Flyer> with ID <id> via given <categorySlug>, <endDate>, <flyerURL>, <imageB64>, <location>, <startDate>, and <title>.
+    <startDate> and <endDate> must be in UTC ISO8601 format (e.g. YYYY-mm-ddTHH:MM:ssZ).
+    <imageB64> must be a Base64 encrypted string without 'data:image/png;base64,' prepended`,
+  })
+  @UseMiddleware(FlyerMiddleware.FlyerUploadErrorInterceptor)
+  async editFlyer(
+    @Arg('id') id: string,
+    @Arg('categorySlug', { nullable: true }) categorySlug: string,
+    @Arg('endDate', { nullable: true }) endDate: string,
+    @Arg('flyerURL', { nullable: true }) flyerURL: string,
+    @Arg('imageB64', { nullable: true }) imageB64: string,
+    @Arg('location', { nullable: true }) location: string,
+    @Arg('startDate', { nullable: true }) startDate: string,
+    @Arg('title', { nullable: true }) title: string,
+    @Ctx() ctx: Context,
+  ) {
+    return FlyerRepo.editFlyer(
+      id,
+      categorySlug,
+      endDate,
+      flyerURL,
+      ctx.imageURL,
+      location,
+      startDate,
+      title,
+    );
+  }
 }
 
 export default FlyerResolver;
