@@ -10,6 +10,7 @@ import {
   MAX_NUM_OF_TRENDING_FLYERS,
 } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
+import utils from '../utils';
 
 const { IS_FILTER_ACTIVE } = process.env;
 
@@ -223,7 +224,7 @@ const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
 
 /**
  * Increments number of times clicked on a flyer by one.
- * @function
+ *
  * @param {string} id - string representing the unique Object Id of a flyer.
  */
 const incrementTimesClicked = async (id: string): Promise<Flyer> => {
@@ -238,7 +239,67 @@ const incrementTimesClicked = async (id: string): Promise<Flyer> => {
   return flyer;
 };
 
+/**
+ * Create a new flyer.
+ *
+ * @param {string} categorySlug the slug for this flyer's category
+ * @param {string} endDate the end date for this flyer's event in UTC ISO8601 format
+ * @param {string} flyerURL the URL for this flyer when tapped
+ * @param {string} imageURL the URL representing this flyer's image
+ * @param {string} location the location for this flyer's event
+ * @param {string} organizationID the ID of the organization creating this flyer
+ * @param {string} startDate the start date for this flyer's event in UTC ISO8601 format
+ * @param {string} title the title for this flyer
+ * @returns the newly created Flyer
+ */
+const createFlyer = async (
+  categorySlug: string,
+  endDate: string,
+  flyerURL: string,
+  imageURL: string,
+  location: string,
+  organizationID: string,
+  startDate: string,
+  title: string,
+): Promise<Flyer> => {
+  // Fetch organization given organization ID
+  // This call will fail if the organization cannot be found
+  const organization = await OrganizationModel.findById(new ObjectId(organizationID));
+  const organizationSlug = organization.slug;
+
+  const newFlyer = Object.assign(new Flyer(), {
+    categorySlug,
+    endDate,
+    flyerURL,
+    imageURL,
+    location,
+    organization,
+    organizationSlug,
+    startDate,
+    title,
+  });
+  return FlyerModel.create(newFlyer);
+};
+
+/**
+ * Delete a flyer
+ *
+ * @param id the flyer ID to remove
+ */
+const deleteFlyer = async (id: string): Promise<Flyer> => {
+  const flyerToRemove = await FlyerModel.findById(new ObjectId(id));
+  if (!flyerToRemove) {
+    return null;
+  }
+  // Remove image from our servers
+  await utils.removeImage(flyerToRemove.imageURL);
+  const flyer = await FlyerModel.findByIdAndDelete(new ObjectId(id));
+  return flyer;
+};
+
 export default {
+  createFlyer,
+  deleteFlyer,
   getAllFlyers,
   getFlyerByID,
   getFlyersAfterDate,

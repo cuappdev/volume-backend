@@ -243,3 +243,23 @@ describe('getFlyersByCategorySlug tests', () => {
     expect(getFlyersResponse).toHaveLength(limit);
   });
 });
+
+describe('deleteFlyer tests', () => {
+  test('flyer with ID exists', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const fetchedFlyers = await FlyerRepo.getAllFlyers();
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer(fetchedFlyers[0].id);
+    expect(deleteFlyerResponse.id).toStrictEqual(fetchedFlyers[0].id);
+  });
+
+  test('flyer with ID does not exist', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer('64811792f910705ca1a981f8');
+    expect(deleteFlyerResponse).toBeNull();
+  });
+});
