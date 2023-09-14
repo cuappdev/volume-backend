@@ -235,3 +235,63 @@ describe('getTrending tests', () => {
     }
   });
 });
+
+
+describe('getFlyersByCategorySlug tests', () => {
+  test('query flyer with invalid slug', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(Math.random().toString());
+    expect(getFlyersResponse).toHaveLength(0);
+  });
+
+  test('query flyer with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
+
+    const randomSlug = Math.random().toString();
+    const specificFlyer = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyer);
+
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(randomSlug);
+    expect(getFlyersResponse[0].categorySlug).toEqual(specificFlyer[0].categorySlug);
+    expect(getFlyersResponse).toHaveLength(1);
+  });
+
+  test('query multiple flyers with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
+
+    const randomSlug = Math.random().toString();
+    const specificFlyers = await FlyerFactory.createSpecific(4, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyers);
+
+    const limit = 2;
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(
+      specificFlyers[0].categorySlug,
+      limit,
+    );
+    expect(getFlyersResponse).toHaveLength(limit);
+  });
+});
+
+describe('deleteFlyer tests', () => {
+  test('flyer with ID exists', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const fetchedFlyers = await FlyerRepo.getAllFlyers();
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer(fetchedFlyers[0].id);
+    expect(deleteFlyerResponse.id).toStrictEqual(fetchedFlyers[0].id);
+  });
+
+  test('flyer with ID does not exist', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer('64811792f910705ca1a981f8');
+    expect(deleteFlyerResponse).toBeNull();
+  });
+});
