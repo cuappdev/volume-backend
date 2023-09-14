@@ -38,6 +38,31 @@ class FlyerFactory {
     });
   }
 
+  public static async createSpecificsByIndex(
+    n: number,
+    newMappings: (index: number) => { [key: string]: any },
+  ): Promise<Flyer[]> {
+    /**
+     * Returns a list of n number of random Flyer objects with specified
+     * fields values by running the newMappings function on the index of each
+     * new Flyer
+     *
+     * @param n The number of desired random Flyer objects
+     * @param newMappings A function
+     * that takes an index of the Flyer
+     * being created and returns specified values for Flyer parameters [key]
+     * @returns A Promise of the list of n number of random Flyer objects
+     */
+    const arr = await FlyerFactory.create(n);
+    return arr.map((x, i) => {
+      const newDoc = x;
+      Object.entries(newMappings(i)).forEach(([k, v]) => {
+        newDoc[k] = v;
+      });
+      return newDoc;
+    });
+  }
+
   public static async fake(): Promise<Flyer> {
     /**
      * Returns a Flyer with random values in its instance variables
@@ -51,7 +76,6 @@ class FlyerFactory {
     fakeFlyer.endDate = faker.date.future();
     fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.imageURL = faker.image.cats();
-    fakeFlyer.isTrending = _.sample([true, false]);
     fakeFlyer.location = faker.datatype.string();
     fakeFlyer.organization = exampleOrg;
     fakeFlyer.organizationSlug = exampleOrg.slug;

@@ -2,13 +2,7 @@ import Filter from 'bad-words';
 import { ObjectId } from 'mongodb';
 
 import { Flyer, FlyerModel } from '../entities/Flyer';
-import {
-  DEFAULT_LIMIT,
-  DEFAULT_OFFSET,
-  FILTERED_WORDS,
-  MAX_NUM_DAYS_OF_TRENDING_ARTICLES,
-  MAX_NUM_OF_TRENDING_FLYERS,
-} from '../common/constants';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET, FILTERED_WORDS } from '../common/constants';
 import { OrganizationModel } from '../entities/Organization';
 
 const { IS_FILTER_ACTIVE } = process.env;
@@ -166,45 +160,18 @@ const searchFlyers = async (query: string, limit = DEFAULT_LIMIT) => {
  * @function
  * @param {number} limit - number of Flyers to retrieve.
  */
-const getTrendingFlyers = async (limit = DEFAULT_LIMIT): Promise<Flyer[]> => {
-  const flyers = await FlyerModel.find({ isTrending: true }).exec();
-  return flyers.filter((flyer) => !isFlyerFiltered(flyer)).slice(0, limit);
-};
-
-/**
- * Refreshes trending Flyers.
- */
-const refreshTrendingFlyers = async (): Promise<Flyer[]> => {
-  // Set previous trending Flyers to not trending
-  const oldTrendingFlyers = await FlyerModel.find({ isTrending: true }).exec();
-  oldTrendingFlyers.forEach(async (a) => {
-    const flyer = await FlyerModel.findById(new ObjectId(a._id)); // eslint-disable-line
-    flyer.isTrending = false;
-    await flyer.save();
-  });
-
-  // Get new trending Flyers
-  const flyers = await (
-    await FlyerModel.aggregate()
-      // sort flyers by trendiness
-      .sort({ trendiness: 'desc' })
-      // Only get flyers for events that start in the next few days
-      .match({
-        startDate: {
-          $lte: new Date(
-            new Date().setDate(new Date().getDate() + MAX_NUM_DAYS_OF_TRENDING_ARTICLES),
-          ),
-        },
+const getTrendingFlyers = async (limit: number = DEFAULT_LIMIT): Promise<Flyer[]> => {
+  return (
+    FlyerModel.find({
+      // Filter by Flyers in the future
+      endDate: { $gte: new Date() },
+    })
+      // Simply select Flyers with the most trendiness
+      .sort({
+        trendiness: 'desc',
       })
-  ).slice(0, MAX_NUM_OF_TRENDING_FLYERS);
-
-  flyers.forEach(async (a) => {
-    const flyer = await FlyerModel.findById(new ObjectId(a._id)); // eslint-disable-line
-    flyer.isTrending = true;
-    await flyer.save();
-  });
-
-  return flyers;
+      .then((flyers) => flyers.slice(0, limit))
+  );
 };
 
 /**
@@ -247,6 +214,5 @@ export default {
   getFlyersByOrganizationSlugs,
   getTrendingFlyers,
   incrementTimesClicked,
-  refreshTrendingFlyers,
   searchFlyers,
 };
