@@ -8,7 +8,6 @@ import { ApolloServer } from 'apollo-server-express';
 import ArticleResolver from './resolvers/ArticleResolver';
 import ArticleRepo from './repos/ArticleRepo';
 import { dbConnection } from './db/DBConnection';
-import FlyerRepo from './repos/FlyerRepo';
 import FlyerResolver from './resolvers/FlyerResolver';
 import MagazineRepo from './repos/MagazineRepo';
 import MagazineResolver from './resolvers/MagazineResolver';
@@ -86,12 +85,10 @@ const main = async () => {
     // Refresh trending articles, magazines, and flyers once
     ArticleRepo.refreshTrendingArticles();
     MagazineRepo.refreshFeaturedMagazines();
-    FlyerRepo.refreshTrendingFlyers();
     // Refresh trending articles, magazines, and flyers every 12 hours
     cron.schedule('0 */12 * * *', async () => {
       ArticleRepo.refreshTrendingArticles();
       MagazineRepo.refreshFeaturedMagazines();
-      FlyerRepo.refreshTrendingFlyers();
     });
   }
 
