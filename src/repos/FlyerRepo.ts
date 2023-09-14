@@ -160,19 +160,16 @@ const searchFlyers = async (query: string, limit = DEFAULT_LIMIT) => {
  * @function
  * @param {number} limit - number of Flyers to retrieve.
  */
-const getTrendingFlyers = async (limit: number = DEFAULT_LIMIT): Promise<Flyer[]> => {
-  return (
-    FlyerModel.find({
-      // Filter by Flyers in the future
-      endDate: { $gte: new Date() },
+const getTrendingFlyers = async (limit: number = DEFAULT_LIMIT): Promise<Flyer[]> =>
+  FlyerModel.find({
+    // Filter by Flyers in the future
+    endDate: { $gte: new Date() },
+  })
+    // Simply select Flyers with the most trendiness
+    .sort({
+      trendiness: 'desc',
     })
-      // Simply select Flyers with the most trendiness
-      .sort({
-        trendiness: 'desc',
-      })
-      .then((flyers) => flyers.slice(0, limit))
-  );
-};
+    .limit(limit);
 
 /**
  * Increments number of times clicked on a flyer by one.
