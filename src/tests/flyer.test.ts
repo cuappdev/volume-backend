@@ -194,15 +194,10 @@ describe('getTrending tests', () => {
     // Shuffle order of trendiness
     const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
     // Create flyers with random trendiness
-    const randomFlyers = await FlyerFactory.createSpecificsByIndex(
-      randomTrendiness.length,
-      (index) => {
-        return {
-          trendiness: randomTrendiness[index],
-          title: `title${randomTrendiness[index]}`,
-        };
-      },
-    );
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
     await FlyerModel.insertMany(randomFlyers);
 
     const trendingFlyers = await FlyerRepo.getTrendingFlyers(randomTrendiness.length);
@@ -217,15 +212,10 @@ describe('getTrending tests', () => {
     // Shuffle order of trendiness
     const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
     // Create flyers with random trendiness
-    const randomFlyers = await FlyerFactory.createSpecificsByIndex(
-      randomTrendiness.length,
-      (index) => {
-        return {
-          trendiness: randomTrendiness[index],
-          title: `title${randomTrendiness[index]}`,
-        };
-      },
-    );
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
     const numOfOutOfDateTrendingFlyers = 3;
     // Create flyers that are out of date but have high trendiness:
     const outdatedFlyers = await FlyerFactory.createSpecific(numOfOutOfDateTrendingFlyers, {
