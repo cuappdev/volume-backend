@@ -191,17 +191,48 @@ describe('incrementShoutouts tests', () => {
 
 describe('getTrending tests', () => {
   test('getTrendingFlyers - get 5 trending flyers', async () => {
-    const trendingFlyers = await FlyerFactory.createSpecific(5, {
-      isTrending: true,
-    });
-    const notTrendingFlyers = await FlyerFactory.createSpecific(5, {
-      isTrending: false,
-    });
-    await FlyerModel.insertMany(trendingFlyers);
-    await FlyerModel.insertMany(notTrendingFlyers);
+    // Shuffle order of trendiness
+    const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+    // Create flyers with random trendiness
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
+    await FlyerModel.insertMany(randomFlyers);
 
-    const getFlyersResponse = await FlyerRepo.getTrendingFlyers();
-    expect(getFlyersResponse).toHaveLength(5);
+    const trendingFlyers = await FlyerRepo.getTrendingFlyers(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      expect(trendingFlyers[i].trendiness).toEqual(randomTrendiness.length - i - 1);
+    }
+  });
+});
+
+describe('getTrending tests', () => {
+  test('getTrendingFlyers - make sure there are no out of date flyers', async () => {
+    // Shuffle order of trendiness
+    const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+    // Create flyers with random trendiness
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
+    const numOfOutOfDateTrendingFlyers = 3;
+    // Create flyers that are out of date but have high trendiness:
+    const outdatedFlyers = await FlyerFactory.createSpecific(numOfOutOfDateTrendingFlyers, {
+      trendiness: 1000,
+      title: 'outdated',
+      endDate: new Date().setFullYear(new Date().getFullYear() - 1),
+      startDate: new Date().setFullYear(new Date().getFullYear() - 1),
+    });
+
+    await FlyerModel.insertMany(randomFlyers);
+    await FlyerModel.insertMany(outdatedFlyers);
+    const trendingFlyers = await FlyerRepo.getTrendingFlyers(
+      randomTrendiness.length + numOfOutOfDateTrendingFlyers,
+    );
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      expect(trendingFlyers[i].trendiness).not.toEqual(1000);
+    }
   });
 });
 

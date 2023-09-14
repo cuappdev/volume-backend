@@ -26,10 +26,6 @@ export class Flyer {
   imageURL: string;
 
   @Field()
-  @Property({ default: false })
-  isTrending: boolean;
-
-  @Field()
   @Property()
   location: string;
 
