@@ -51,7 +51,6 @@ class FlyerFactory {
     fakeFlyer.endDate = faker.date.future();
     fakeFlyer.flyerURL = faker.datatype.string();
     fakeFlyer.imageURL = faker.image.cats();
-    fakeFlyer.isTrending = _.sample([true, false]);
     fakeFlyer.location = faker.datatype.string();
     fakeFlyer.organization = exampleOrg;
     fakeFlyer.organizationSlug = exampleOrg.slug;
