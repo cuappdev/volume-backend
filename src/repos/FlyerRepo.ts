@@ -329,11 +329,11 @@ const editFlyer = async (
 
     // Update flyer fields (if not nul)
     if (categorySlug) flyer.categorySlug = categorySlug;
-    if (endDate) flyer.endDate = Object.assign(new Date(endDate));
+    if (endDate) flyer.endDate = new Date(endDate);
     if (flyerURL) flyer.flyerURL = flyerURL;
     if (imageURL) flyer.imageURL = imageURL;
     if (location) flyer.location = location;
-    if (startDate) flyer.startDate = Object.assign(new Date(startDate));
+    if (startDate) flyer.startDate = new Date(startDate);
     if (title) flyer.title = title;
 
     return flyer.save();
