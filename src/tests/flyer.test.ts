@@ -236,7 +236,6 @@ describe('getTrending tests', () => {
   });
 });
 
-
 describe('getFlyersByCategorySlug tests', () => {
   test('query flyer with invalid slug', async () => {
     const flyers = await FlyerFactory.create(2);
