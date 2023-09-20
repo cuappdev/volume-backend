@@ -9,6 +9,7 @@ module.exports = {
         $set: {
           organization: { $first: '$organizations' },
           organizationSlug: { $first: '$organizationSlugs' },
+          categorySlug: { $first: '$organizations.categorySlug' },
         },
       },
       {
@@ -31,7 +32,7 @@ module.exports = {
         },
       },
       {
-        $unset: ['organization', 'organizationSlug'],
+        $unset: ['organization', 'organizationSlug', 'categorySlug'],
       },
     ]);
   },
