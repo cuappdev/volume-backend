@@ -8,6 +8,10 @@ export class Organization {
 
   @Field({ nullable: true })
   @Property()
+  accessCode: string;
+
+  @Field({ nullable: true })
+  @Property()
   backgroundImageURL?: string;
 
   @Field({ nullable: true })
