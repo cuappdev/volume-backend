@@ -151,6 +151,16 @@ class FlyerResolver {
     return FlyerRepo.getFlyersByCategorySlug(categorySlug, limit, offset);
   }
 
+  @Query((_return) => [String], {
+    nullable: false,
+    description: `Returns a list of <Strings> representing all of the categories of the different flyers in this database`,
+  })
+  async getAllFlyerCategories(
+  ) {
+    return FlyerRepo.getAllFlyerCategories();
+  }
+
+
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of a <Flyer>' })
   async trendiness(@Root() flyer: Flyer): Promise<number> {
     const presentDate = new Date().getTime();

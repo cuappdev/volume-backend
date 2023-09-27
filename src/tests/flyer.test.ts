@@ -276,6 +276,45 @@ describe('getFlyersByCategorySlug tests', () => {
   });
 });
 
+describe('getAllFlyerCategories tests', () => {
+  test('query 3 different flyers with 2 different categories', async () => {
+
+    const randomSlug1 = "Academic";
+    const specificFlyer1 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug1 });
+    await FlyerModel.insertMany(specificFlyer1);
+
+    const randomSlug2 = "Dance";
+    const specificFlyer2 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug2 });
+    await FlyerModel.insertMany(specificFlyer2);
+
+    const specificFlyer3 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug2 });
+    await FlyerModel.insertMany(specificFlyer3);
+
+    const getFlyersResponse = await FlyerRepo.getAllFlyerCategories();
+    expect(getFlyersResponse.sort()).toEqual([randomSlug1, randomSlug2].sort());
+  });
+
+  test('query 3 different flyers with 3 different categories', async () => {
+
+    const randomSlug1 = Math.random().toString();
+    const specificFlyer1 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug1 });
+    await FlyerModel.insertMany(specificFlyer1);
+
+    const randomSlug2 = Math.random().toString();
+    const specificFlyer2 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug2 });
+    await FlyerModel.insertMany(specificFlyer2);
+
+    const randomSlug3 = Math.random().toString();
+    const specificFlyer3 = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug3 });
+    await FlyerModel.insertMany(specificFlyer3);
+
+    const getFlyersResponse = await FlyerRepo.getAllFlyerCategories();
+    expect(getFlyersResponse.sort()).toEqual([randomSlug1, randomSlug2, randomSlug3].sort());
+  });
+
+
+});
+
 describe('deleteFlyer tests', () => {
   test('flyer with ID exists', async () => {
     const flyers = await FlyerFactory.create(2);
