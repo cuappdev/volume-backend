@@ -6,7 +6,6 @@ export class Organization {
   @Field(() => ID)
   id: string;
 
-  @Field({ nullable: true })
   @Property()
   accessCode: string;
 

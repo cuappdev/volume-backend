@@ -119,6 +119,9 @@ const checkAccessCode = async (
 ): Promise<UnauthorizedError | Organization> => {
   // Get the hashed password given the slug
   const organization = await OrganizationModel.findOne({ slug });
+  if (!organization) {
+    return new Error('Unable to find organization');
+  }
   const hashedPassword = organization.accessCode;
 
   // Check the access code with the hashed password
