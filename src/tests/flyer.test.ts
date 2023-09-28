@@ -298,8 +298,7 @@ describe('deleteFlyer tests', () => {
 describe('Handle non-unique CategorySlugs across flyers in collection', () => {
   test('query 3 different flyers with 2 different categories', async () => {
     const flyerSlugs = ['Academic', 'Dance'];
-    // eslint-disable-next-line prefer-const
-    let generatedFlyers = [];
+    const generatedFlyers = [];
     generatedFlyers.push(
       (await FlyerFactory.createSpecific(1, { categorySlug: flyerSlugs[0] }))[0],
     );
