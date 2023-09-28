@@ -155,11 +155,9 @@ class FlyerResolver {
     nullable: false,
     description: `Returns a list of <Strings> representing all of the categories of the different flyers in this database`,
   })
-  async getAllFlyerCategories(
-  ) {
+  async getAllFlyerCategories() {
     return FlyerRepo.getAllFlyerCategories();
   }
-
 
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of a <Flyer>' })
   async trendiness(@Root() flyer: Flyer): Promise<number> {

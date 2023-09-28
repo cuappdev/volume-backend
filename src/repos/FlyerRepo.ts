@@ -72,14 +72,11 @@ const getFlyersByCategorySlug = async (
 
 /**
  * Looks for unique category slugs for all the Flyers
- * @returns a list of Strings with all the category names. 
+ *
+ * @returns a list of Strings with all the category names.
  */
-const getAllFlyerCategories = async (
-): Promise<String[]> => {
-  return FlyerModel.collection.distinct("categorySlug")
-    .then((categories) => {
-      return categories;
-    });
+const getAllFlyerCategories = (): Promise<string[]> => {
+  return FlyerModel.collection.distinct('categorySlug');
 };
 
 const getFlyerByID = async (id: string): Promise<Flyer> => {
@@ -277,11 +274,11 @@ export default {
   createFlyer,
   deleteFlyer,
   getAllFlyers,
+  getAllFlyerCategories,
   getFlyerByID,
   getFlyersAfterDate,
   getFlyersBeforeDate,
   getFlyersByCategorySlug,
-  getAllFlyerCategories,
   getFlyersByIDs,
   getFlyersByOrganizationID,
   getFlyersByOrganizationIDs,
