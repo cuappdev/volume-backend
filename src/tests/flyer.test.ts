@@ -7,7 +7,7 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 import { DEFAULT_LIMIT } from '../common/constants';
 import FactoryUtils from './data/FactoryUtils';
 import FlyerFactory from './data/FlyerFactory';
-import { FlyerModel } from '../entities/Flyer';
+import { Flyer, FlyerModel } from '../entities/Flyer';
 import FlyerRepo from '../repos/FlyerRepo';
 import OrganizationFactory from './data/OrganizationFactory';
 import OrganizationRepo from '../repos/OrganizationRepo';
@@ -298,13 +298,10 @@ describe('deleteFlyer tests', () => {
 describe('getAllFlyerCategories tests', () => {
   test('Ensure only unique CategorySlugs across flyers in collection are returned', async () => {
     const flyerSlugs = ['Academic', 'Dance'];
-    const generatedFlyers = [];
-    generatedFlyers.push(
-      (await FlyerFactory.createSpecific(1, { categorySlug: flyerSlugs[0] }))[0],
-    );
-    generatedFlyers.push(
-      (await FlyerFactory.createSpecific(2, { categorySlug: flyerSlugs[1] }))[0],
-    );
+    const generatedFlyers: Flyer[] = [];
+    for (const slug of flyerSlugs) {
+      generatedFlyers.push(...(await FlyerFactory.createSpecific(1, { categorySlug: slug })));
+    }
 
     await FlyerModel.insertMany(generatedFlyers);
 
@@ -314,16 +311,10 @@ describe('getAllFlyerCategories tests', () => {
 
   test('When every flyer has a unique CategorySlug, ensure that all unique CategorySlugs are returned', async () => {
     const flyerSlugs = ['Academic', 'Dance', 'Social'];
-    const generatedFlyers = [];
-    generatedFlyers.push(
-      (await FlyerFactory.createSpecific(1, { categorySlug: flyerSlugs[0] }))[0],
-    );
-    generatedFlyers.push(
-      (await FlyerFactory.createSpecific(1, { categorySlug: flyerSlugs[1] }))[0],
-    );
-    generatedFlyers.push(
-      (await FlyerFactory.createSpecific(1, { categorySlug: flyerSlugs[2] }))[0],
-    );
+    const generatedFlyers: Flyer[] = [];
+    for (const slug of flyerSlugs) {
+      generatedFlyers.push(...(await FlyerFactory.createSpecific(1, { categorySlug: slug })));
+    }
 
     await FlyerModel.insertMany(generatedFlyers);
 
