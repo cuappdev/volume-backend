@@ -1,7 +1,9 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, index } from '@typegoose/typegoose';
 import { Organization } from './Organization';
 
+// Index flyers based on fields to be considered in search
+@index({ title: 'text', 'organization.name': 'text' })
 @ObjectType({ description: 'The Flyer Model' })
 export class Flyer {
   @Field(() => ID)
@@ -9,35 +11,31 @@ export class Flyer {
 
   @Field()
   @Property()
-  endDate: Date;
+  categorySlug: string;
 
   @Field()
-  @Property({ nullable: true })
-  flyerURL: string;
+  @Property()
+  endDate: Date;
+
+  @Field({ nullable: true })
+  @Property()
+  flyerURL?: string;
 
   @Field()
   @Property()
   imageURL: string;
 
   @Field()
-  @Property({ default: false })
-  isTrending: boolean;
-
-  @Field()
   @Property()
   location: string;
 
+  @Field((type) => Organization)
+  @Property({ type: () => Organization })
+  organization: Organization;
+
   @Field()
-  @Property({ default: false })
-  nsfw: boolean;
-
-  @Field((type) => [Organization])
-  @Property({ type: () => [Organization] })
-  organizations: [Organization];
-
-  @Field((type) => [String])
-  @Property({ type: () => [String] })
-  organizationSlugs: [string];
+  @Property()
+  organizationSlug: string;
 
   @Field()
   @Property()

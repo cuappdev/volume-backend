@@ -15,6 +15,7 @@ beforeAll(async () => {
   await dbConnection();
   await PublicationRepo.addPublicationsToDB();
   await ArticleModel.createCollection();
+  await ArticleModel.syncIndexes();
 });
 
 beforeEach(async () => {
