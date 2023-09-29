@@ -16,6 +16,7 @@ beforeAll(async () => {
   await dbConnection();
   await OrganizationRepo.addOrganizationsToDB();
   await FlyerModel.createCollection();
+  await FlyerModel.syncIndexes();
 });
 
 beforeEach(async () => {
@@ -88,8 +89,8 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
   test('getFlyersByOrganizationSlug - 1 organization, 1 flyer', async () => {
     const org = await OrganizationFactory.getRandomOrganization();
     const flyers = await FlyerFactory.createSpecific(1, {
-      organizationSlugs: [org.slug],
-      organization: [org],
+      organizationSlug: org.slug,
+      organization: org,
     });
     await FlyerModel.insertMany(flyers);
 
@@ -101,8 +102,8 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
     const org = await OrganizationFactory.getRandomOrganization();
     const flyers = (
       await FlyerFactory.createSpecific(3, {
-        organizationSlugs: [org.slug],
-        organizations: [org],
+        organizationSlug: org.slug,
+        organization: org,
       })
     ).sort(FactoryUtils.compareByStartDate);
 
@@ -111,24 +112,6 @@ describe('getFlyersByOrganizationSlug(s) tests', () => {
 
     expect(FactoryUtils.mapToValue(getFlyersResponse, 'title')).toEqual(
       FactoryUtils.mapToValue(flyers, 'title'),
-    );
-  });
-
-  test('getFlyersByOrganizationSlugs - many organizations, 3 flyers', async () => {
-    const org1 = await OrganizationFactory.getRandomOrganization();
-    const org2 = await OrganizationFactory.getRandomOrganization();
-    const flyers = (
-      await FlyerFactory.createSpecific(3, {
-        organizationSlugs: [org1.slug, org2.slug],
-      })
-    ).sort(FactoryUtils.compareByEndDate);
-    await FlyerModel.insertMany(flyers);
-
-    const getFlyersResponse1 = await FlyerRepo.getFlyersByOrganizationSlugs([org1.slug]);
-    const getFlyersResponse2 = await FlyerRepo.getFlyersByOrganizationSlugs([org2.slug]);
-
-    expect(FactoryUtils.mapToValue(getFlyersResponse1, 'title')).toEqual(
-      FactoryUtils.mapToValue(getFlyersResponse2, 'title'),
     );
   });
 });
@@ -208,16 +191,129 @@ describe('incrementShoutouts tests', () => {
 
 describe('getTrending tests', () => {
   test('getTrendingFlyers - get 5 trending flyers', async () => {
-    const trendingFlyers = await FlyerFactory.createSpecific(5, {
-      isTrending: true,
-    });
-    const notTrendingFlyers = await FlyerFactory.createSpecific(5, {
-      isTrending: false,
-    });
-    await FlyerModel.insertMany(trendingFlyers);
-    await FlyerModel.insertMany(notTrendingFlyers);
+    // Shuffle order of trendiness
+    const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+    // Create flyers with random trendiness
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
+    await FlyerModel.insertMany(randomFlyers);
 
-    const getFlyersResponse = await FlyerRepo.getTrendingFlyers();
-    expect(getFlyersResponse).toHaveLength(5);
+    const trendingFlyers = await FlyerRepo.getTrendingFlyers(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      expect(trendingFlyers[i].trendiness).toEqual(randomTrendiness.length - i - 1);
+    }
+  });
+});
+
+describe('getTrending tests', () => {
+  test('getTrendingFlyers - make sure there are no out of date flyers', async () => {
+    // Shuffle order of trendiness
+    const randomTrendiness = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+    // Create flyers with random trendiness
+    const randomFlyers = await FlyerFactory.create(randomTrendiness.length);
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      randomFlyers[i].trendiness = randomTrendiness[i];
+    }
+    const numOfOutOfDateTrendingFlyers = 3;
+    // Create flyers that are out of date but have high trendiness:
+    const outdatedFlyers = await FlyerFactory.createSpecific(numOfOutOfDateTrendingFlyers, {
+      trendiness: 1000,
+      title: 'outdated',
+      endDate: new Date().setFullYear(new Date().getFullYear() - 1),
+      startDate: new Date().setFullYear(new Date().getFullYear() - 1),
+    });
+
+    await FlyerModel.insertMany(randomFlyers);
+    await FlyerModel.insertMany(outdatedFlyers);
+    const trendingFlyers = await FlyerRepo.getTrendingFlyers(
+      randomTrendiness.length + numOfOutOfDateTrendingFlyers,
+    );
+    for (let i = 0; i < randomTrendiness.length; i++) {
+      expect(trendingFlyers[i].trendiness).not.toEqual(1000);
+    }
+  });
+});
+
+
+describe('getFlyersByCategorySlug tests', () => {
+  test('query flyer with invalid slug', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(Math.random().toString());
+    expect(getFlyersResponse).toHaveLength(0);
+  });
+
+  test('query flyer with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
+
+    const randomSlug = Math.random().toString();
+    const specificFlyer = await FlyerFactory.createSpecific(1, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyer);
+
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(randomSlug);
+    expect(getFlyersResponse[0].categorySlug).toEqual(specificFlyer[0].categorySlug);
+    expect(getFlyersResponse).toHaveLength(1);
+  });
+
+  test('query multiple flyers with existing slug', async () => {
+    const flyers = await FlyerFactory.create(4);
+    await FlyerModel.insertMany(flyers);
+
+    const randomSlug = Math.random().toString();
+    const specificFlyers = await FlyerFactory.createSpecific(4, { categorySlug: randomSlug });
+    await FlyerModel.insertMany(specificFlyers);
+
+    const limit = 2;
+    const getFlyersResponse = await FlyerRepo.getFlyersByCategorySlug(
+      specificFlyers[0].categorySlug,
+      limit,
+    );
+    expect(getFlyersResponse).toHaveLength(limit);
+  });
+});
+
+describe('deleteFlyer tests', () => {
+  test('flyer with ID exists', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const fetchedFlyers = await FlyerRepo.getAllFlyers();
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer(fetchedFlyers[0].id);
+    expect(deleteFlyerResponse.id).toStrictEqual(fetchedFlyers[0].id);
+  });
+
+  test('flyer with ID does not exist', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const deleteFlyerResponse = await FlyerRepo.deleteFlyer('64811792f910705ca1a981f8');
+    expect(deleteFlyerResponse).toBeNull();
+  });
+});
+
+describe('editFlyer tests', () => {
+  test('flyer with ID exists with changes', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const fetchedFlyers = await FlyerRepo.getAllFlyers();
+    const firstFlyer = fetchedFlyers[0];
+
+    const randomSlug = Math.random().toString();
+    const editFlyerResponse = await FlyerRepo.editFlyer(firstFlyer.id, randomSlug);
+    expect(editFlyerResponse.categorySlug).toStrictEqual(randomSlug);
+  });
+
+  test('flyer with ID does not exist', async () => {
+    const flyers = await FlyerFactory.create(2);
+    await FlyerModel.insertMany(flyers);
+
+    const editFlyerResponse = await FlyerRepo.editFlyer('64811792f910705ca1a981f8');
+    expect(editFlyerResponse).toBeNull();
   });
 });

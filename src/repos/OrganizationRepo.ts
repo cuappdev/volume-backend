@@ -1,4 +1,6 @@
 import { ObjectId } from 'mongodb';
+import { compare } from 'bcrypt';
+import { UnauthorizedError } from 'type-graphql';
 import { Organization, OrganizationModel } from '../entities/Organization';
 import { Flyer, FlyerModel } from '../entities/Flyer';
 import organizationsJSON from '../../organizations.json';
@@ -66,7 +68,7 @@ const getMostRecentFlyer = async (organization: Organization): Promise<Flyer> =>
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   return FlyerModel.findOne({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   }).sort({ startDate: 'desc' });
 };
 
@@ -80,7 +82,7 @@ const getClicks = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.reduce((acc, flyer) => {
@@ -98,14 +100,42 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
   // Due to the way Mongo interprets 'Organization' object,
   // Organization['_doc'] must be used to access fields of a Organization object
   const orgFlyers = await FlyerModel.find({
-    organizationSlugs: organization['_doc'].slug, // eslint-disable-line
+    organizationSlug: organization['_doc'].slug, // eslint-disable-line
   });
 
   return orgFlyers.length;
 };
 
+/**
+ * Validate an organization slug and access code
+ *
+ * @param accessCode the non-hashed access code of the organization
+ * @param slug the slug of the organization
+ * @returns {Organization}
+ */
+const checkAccessCode = async (
+  accessCode: string,
+  slug: string,
+): Promise<UnauthorizedError | Organization> => {
+  // Get the hashed password given the slug
+  const organization = await OrganizationModel.findOne({ slug });
+  if (!organization) {
+    return new Error('Unable to find organization');
+  }
+  const hashedPassword = organization.accessCode;
+
+  // Check the access code with the hashed password
+  return compare(accessCode, hashedPassword).then(async (result) => {
+    if (result) {
+      return organization;
+    }
+    return new UnauthorizedError();
+  });
+};
+
 export default {
   addOrganizationsToDB,
+  checkAccessCode,
   getAllOrganizations,
   getClicks,
   getMostRecentFlyer,

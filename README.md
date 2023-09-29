@@ -25,9 +25,18 @@ and install dependencies with
 
 `npm install`
 
-To run the project, use
+We use `direnv` to keep track of environment variables. Install `direnv` to your machine.
+In order to allow direnv to load environment variables, it needs to be able to hook into your shell. If using ZSH, for example, you should add the following line to the end of your `~/.zshrc` file:
+`eval "$(direnv hook zsh)"`
+
+You can find the full list of direnv hook commands [here](https://direnv.net/docs/hook.html)
+
+Then, to start the project, run the following terminal commands
+`direnv allow` 
+
 
 `npm run start`
+
 
 ## Setting up the database
 
