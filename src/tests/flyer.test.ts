@@ -295,8 +295,8 @@ describe('deleteFlyer tests', () => {
   });
 });
 
-describe('Handle non-unique CategorySlugs across flyers in collection', () => {
-  test('query 3 different flyers with 2 different categories', async () => {
+describe('getAllFlyerCategories tests', () => {
+  test('Ensure only unique CategorySlugs across flyers in collection are returned', async () => {
     const flyerSlugs = ['Academic', 'Dance'];
     const generatedFlyers = [];
     generatedFlyers.push(
@@ -312,7 +312,7 @@ describe('Handle non-unique CategorySlugs across flyers in collection', () => {
     expect(getFlyersResponse.sort()).toEqual(flyerSlugs.sort());
   });
 
-  test('query 3 different flyers with 3 different categories', async () => {
+  test('When every flyer has a unique CategorySlug, ensure that all unique CategorySlugs are returned', async () => {
     const flyerSlugs = ['Academic', 'Dance', 'Social'];
     const generatedFlyers = [];
     generatedFlyers.push(
