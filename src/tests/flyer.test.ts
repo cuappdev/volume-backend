@@ -297,7 +297,7 @@ describe('deleteFlyer tests', () => {
 
 describe('getAllFlyerCategories tests', () => {
   test('Ensure only unique CategorySlugs across flyers in collection are returned', async () => {
-    const flyerSlugs = ['Academic', 'Dance'];
+    const flyerSlugs = ['Academic', 'Dance', 'Dance'];
     const generatedFlyers: Flyer[] = [];
     for (const slug of flyerSlugs) {
       generatedFlyers.push(...(await FlyerFactory.createSpecific(1, { categorySlug: slug })));
@@ -306,7 +306,7 @@ describe('getAllFlyerCategories tests', () => {
     await FlyerModel.insertMany(generatedFlyers);
 
     const getFlyersResponse = await FlyerRepo.getAllFlyerCategories();
-    expect(getFlyersResponse.sort()).toEqual(flyerSlugs.sort());
+    expect(getFlyersResponse.sort()).toEqual(['Academic', 'Dance']);
   });
 
   test('When every flyer has a unique CategorySlug, ensure that all unique CategorySlugs are returned', async () => {
