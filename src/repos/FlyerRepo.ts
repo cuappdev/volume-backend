@@ -70,6 +70,15 @@ const getFlyersByCategorySlug = async (
     });
 };
 
+/**
+ * Looks for unique category slugs for all the Flyers
+ *
+ * @returns a list of Strings with all the category names.
+ */
+const getAllFlyerCategories = (): Promise<string[]> => {
+  return FlyerModel.collection.distinct('categorySlug');
+};
+
 const getFlyerByID = async (id: string): Promise<Flyer> => {
   return FlyerModel.findById(new ObjectId(id)).then((flyer) => {
     if (!isFlyerFiltered(flyer)) {
@@ -312,6 +321,7 @@ export default {
   deleteFlyer,
   editFlyer,
   getAllFlyers,
+  getAllFlyerCategories,
   getFlyerByID,
   getFlyersAfterDate,
   getFlyersBeforeDate,
