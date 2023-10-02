@@ -6,6 +6,9 @@ export class Organization {
   @Field(() => ID)
   id: string;
 
+  @Property()
+  accessCode: string;
+
   @Field({ nullable: true })
   @Property()
   backgroundImageURL?: string;

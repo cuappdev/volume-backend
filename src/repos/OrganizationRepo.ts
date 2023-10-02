@@ -1,4 +1,6 @@
 import { ObjectId } from 'mongodb';
+import { compare } from 'bcrypt';
+import { UnauthorizedError } from 'type-graphql';
 import { Organization, OrganizationModel } from '../entities/Organization';
 import { Flyer, FlyerModel } from '../entities/Flyer';
 import organizationsJSON from '../../organizations.json';
@@ -104,8 +106,36 @@ const getNumFlyers = async (organization: Organization): Promise<number> => {
   return orgFlyers.length;
 };
 
+/**
+ * Validate an organization slug and access code
+ *
+ * @param accessCode the non-hashed access code of the organization
+ * @param slug the slug of the organization
+ * @returns {Organization}
+ */
+const checkAccessCode = async (
+  accessCode: string,
+  slug: string,
+): Promise<UnauthorizedError | Organization> => {
+  // Get the hashed password given the slug
+  const organization = await OrganizationModel.findOne({ slug });
+  if (!organization) {
+    return new Error('Unable to find organization');
+  }
+  const hashedPassword = organization.accessCode;
+
+  // Check the access code with the hashed password
+  return compare(accessCode, hashedPassword).then(async (result) => {
+    if (result) {
+      return organization;
+    }
+    return new UnauthorizedError();
+  });
+};
+
 export default {
   addOrganizationsToDB,
+  checkAccessCode,
   getAllOrganizations,
   getClicks,
   getMostRecentFlyer,

@@ -43,6 +43,14 @@ class OrganizationResolver {
     return OrganizationRepo.getOrganizationBySlug(slug);
   }
 
+  @Query((_return) => Organization, {
+    nullable: true,
+    description: `Returns the <Organization> given a <slug> and <accessCode>.`,
+  })
+  async checkAccessCode(@Arg('accessCode') accessCode: string, @Arg('slug') slug: string) {
+    return OrganizationRepo.checkAccessCode(accessCode, slug);
+  }
+
   @FieldResolver((_returns) => Number, {
     description: "Returns the total times clicked of an <Organization's> <Flyers>",
   })
