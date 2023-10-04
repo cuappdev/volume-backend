@@ -76,7 +76,7 @@ const getFlyersByCategorySlug = async (
  * @returns a list of Strings with all the category names.
  */
 const getAllFlyerCategories = (): Promise<string[]> => {
-  return FlyerModel.collection.distinct('categorySlug');
+  return FlyerModel.find().distinct('categorySlug').exec();
 };
 
 const getFlyerByID = async (id: string): Promise<Flyer> => {
