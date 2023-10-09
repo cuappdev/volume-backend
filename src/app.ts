@@ -36,7 +36,7 @@ const main = async () => {
   const app = Express();
 
   app.use(Express.urlencoded({ extended: false }));
-  app.use(Express.json());
+  app.use(Express.json({ limit: '50mb' }));
 
   const server = new ApolloServer({
     schema,
