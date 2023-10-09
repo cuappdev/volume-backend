@@ -98,8 +98,8 @@ class FlyerResolver {
 
   @Query((_returns) => [Flyer], {
     nullable: false,
-    description: `Returns a list of <Flyers> <since> a given date, limited by <limit>. 
-  <since> is formatted as an compliant RFC 2822 timestamp. Valid examples include: "2019-01-31", "Aug 9, 1995", "Wed, 09 Aug 1995 00:00:00", etc. Default <limit> is ${DEFAULT_LIMIT}`,
+    description: `Returns a list of <Flyers> <since> a given date, limited by <limit>.
+    <since> must be in UTC ISO8601 format (e.g. YYYY-mm-ddTHH:MM:ssZ). Default <limit> is ${DEFAULT_LIMIT}`,
   })
   async getFlyersAfterDate(
     @Arg('since') since: string,
@@ -110,8 +110,8 @@ class FlyerResolver {
 
   @Query((_returns) => [Flyer], {
     nullable: false,
-    description: `Returns a list of <Flyers> <before> a given date, limited by <limit>. 
-  <before> is formatted as an compliant RFC 2822 timestamp. Valid examples include: "2019-01-31", "Aug 9, 1995", "Wed, 09 Aug 1995 00:00:00", etc. Default <limit> is ${DEFAULT_LIMIT}`,
+    description: `Returns a list of <Flyers> <before> a given date, limited by <limit>.
+    <before> must be in UTC ISO8601 format (e.g. YYYY-mm-ddTHH:MM:ssZ). Default <limit> is ${DEFAULT_LIMIT}`,
   })
   async getFlyersBeforeDate(
     @Arg('before') before: string,
@@ -149,6 +149,14 @@ class FlyerResolver {
     @Arg('offset', { defaultValue: DEFAULT_OFFSET }) offset: number,
   ) {
     return FlyerRepo.getFlyersByCategorySlug(categorySlug, limit, offset);
+  }
+
+  @Query((_return) => [String], {
+    nullable: false,
+    description: `Returns a list of <Strings> representing all of the categories of the different flyers in this database`,
+  })
+  async getAllFlyerCategories() {
+    return FlyerRepo.getAllFlyerCategories();
   }
 
   @FieldResolver((_returns) => Number, { description: 'The trendiness score of a <Flyer>' })

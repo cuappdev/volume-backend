@@ -7,7 +7,7 @@ import { dbConnection, disconnectDB } from './data/TestingDBConnection';
 import { DEFAULT_LIMIT } from '../common/constants';
 import FactoryUtils from './data/FactoryUtils';
 import FlyerFactory from './data/FlyerFactory';
-import { FlyerModel } from '../entities/Flyer';
+import { Flyer, FlyerModel } from '../entities/Flyer';
 import FlyerRepo from '../repos/FlyerRepo';
 import OrganizationFactory from './data/OrganizationFactory';
 import OrganizationRepo from '../repos/OrganizationRepo';
@@ -236,7 +236,6 @@ describe('getTrending tests', () => {
   });
 });
 
-
 describe('getFlyersByCategorySlug tests', () => {
   test('query flyer with invalid slug', async () => {
     const flyers = await FlyerFactory.create(2);
@@ -315,5 +314,37 @@ describe('editFlyer tests', () => {
 
     const editFlyerResponse = await FlyerRepo.editFlyer('64811792f910705ca1a981f8');
     expect(editFlyerResponse).toBeNull();
+  });
+});
+
+describe('getAllFlyerCategories tests', () => {
+  test('Ensure only unique CategorySlugs across flyers in collection are returned', async () => {
+    const flyerSlugs = ['Academic', 'Dance', 'Dance'];
+    let generatedFlyers: Flyer[] = [];
+    for (const slug of flyerSlugs) {
+      generatedFlyers = generatedFlyers.concat(
+        await FlyerFactory.createSpecific(1, { categorySlug: slug }),
+      );
+    }
+
+    await FlyerModel.insertMany(generatedFlyers);
+
+    const getFlyersResponse = await FlyerRepo.getAllFlyerCategories();
+    expect(getFlyersResponse.sort()).toEqual(['Academic', 'Dance']);
+  });
+
+  test('When every flyer has a unique CategorySlug, ensure that all unique CategorySlugs are returned', async () => {
+    const flyerSlugs = ['Academic', 'Dance', 'Social'];
+    let generatedFlyers: Flyer[] = [];
+    for (const slug of flyerSlugs) {
+      generatedFlyers = generatedFlyers.concat(
+        await FlyerFactory.createSpecific(1, { categorySlug: slug }),
+      );
+    }
+
+    await FlyerModel.insertMany(generatedFlyers);
+
+    const getFlyersResponse = await FlyerRepo.getAllFlyerCategories();
+    expect(getFlyersResponse.sort()).toEqual(flyerSlugs.sort());
   });
 });
