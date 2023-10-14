@@ -13,6 +13,7 @@ import { Flyer } from '../entities/Flyer';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
 import FlyerRepo from '../repos/FlyerRepo';
 import FlyerMiddleware from '../middlewares/FlyerMiddleware';
+import NotificationRepo from '../repos/NotificationRepo';
 
 @Resolver((_of) => Flyer)
 class FlyerResolver {
@@ -192,7 +193,7 @@ class FlyerResolver {
     @Arg('title') title: string,
     @Ctx() ctx: Context,
   ) {
-    return FlyerRepo.createFlyer(
+    const flyer = await FlyerRepo.createFlyer(
       categorySlug,
       endDate,
       flyerURL,
@@ -202,12 +203,16 @@ class FlyerResolver {
       startDate,
       title,
     );
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just added a new flyer!');
+    return flyer;
   }
 
   @Mutation((_returns) => Flyer, {
     description: `Delete a flyer with the id <id>.`,
   })
   async deleteFlyer(@Arg('id') id: string) {
+    const flyer = await FlyerRepo.getFlyerByID(id);
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just deleted a flyer');
     return FlyerRepo.deleteFlyer(id);
   }
 
@@ -228,7 +233,7 @@ class FlyerResolver {
     @Arg('title', { nullable: true }) title: string,
     @Ctx() ctx: Context,
   ) {
-    return FlyerRepo.editFlyer(
+    const flyer = await FlyerRepo.editFlyer(
       id,
       categorySlug,
       endDate,
@@ -238,6 +243,8 @@ class FlyerResolver {
       startDate,
       title,
     );
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just edited a flyer!');
+    return flyer;
   }
 }
 

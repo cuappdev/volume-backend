@@ -251,6 +251,7 @@ const createFlyer = async (
     startDate,
     title,
   });
+
   return FlyerModel.create(newFlyer);
 };
 

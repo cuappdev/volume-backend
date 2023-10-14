@@ -123,6 +123,7 @@ const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
     const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
     const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
     const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+
     followers.forEach(async (follower) => {
       const notifTitle = organization.name;
       const notifBody = flyer.title;
@@ -134,6 +135,27 @@ const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
 
       await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_flyer');
     });
+  });
+};
+
+/**
+ * Send notifications for new flyers, edited flyers, or deleted flyers by organizations followed by the user.
+ */
+const notifyFlyersForOrganizations = async (flyerID: string, titleParam: string): Promise<void> => {
+  const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
+  const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+  const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+
+  followers.forEach(async (follower) => {
+    const notifTitle = organization.name.concat(titleParam);
+    const notifBody = flyer.title;
+
+    const uniqueData = {
+      flyerID: flyer.id,
+      flyerURL: flyer.flyerURL,
+    };
+
+    await sendNotif(follower, notifTitle, notifBody, uniqueData, 'flyer_notif');
   });
 };
 
@@ -153,5 +175,6 @@ export default {
   notifyNewArticles,
   notifyNewFlyers,
   notifyNewMagazines,
+  notifyFlyersForOrganizations,
   notifyWeeklyDebrief,
 };
