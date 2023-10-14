@@ -323,6 +323,7 @@ export default {
   editFlyer,
   getAllFlyers,
   getAllFlyerCategories,
+  getAllFlyerCategories,
   getFlyerByID,
   getFlyersAfterDate,
   getFlyersBeforeDate,
