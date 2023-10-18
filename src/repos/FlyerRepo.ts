@@ -76,7 +76,7 @@ const getFlyersByCategorySlug = async (
  * @returns a list of Strings with all the category names.
  */
 const getAllFlyerCategories = (): Promise<string[]> => {
-  return FlyerModel.collection.distinct('categorySlug');
+  return FlyerModel.find().distinct('categorySlug').exec();
 };
 
 const getFlyerByID = async (id: string): Promise<Flyer> => {
@@ -304,6 +304,7 @@ const editFlyer = async (
     // Update flyer fields (if not nul)
     if (categorySlug) flyer.categorySlug = categorySlug;
     if (endDate) flyer.endDate = new Date(endDate);
+
     if (flyerURL) flyer.flyerURL = flyerURL;
     if (imageURL) flyer.imageURL = imageURL;
     if (location) flyer.location = location;
@@ -322,7 +323,6 @@ export default {
   deleteFlyer,
   editFlyer,
   getAllFlyers,
-  getAllFlyerCategories,
   getAllFlyerCategories,
   getFlyerByID,
   getFlyersAfterDate,

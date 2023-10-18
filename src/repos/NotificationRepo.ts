@@ -116,39 +116,41 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
 };
 
 /**
- * Send notifications for new flyers posted by organizations.
- */
-const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
-  flyerIDs.forEach(async (f) => {
-    const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
-    const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
-    const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
-
-    followers.forEach(async (follower) => {
-      const notifTitle = organization.name;
-      const notifBody = flyer.title;
-
-      const uniqueData = {
-        flyerID: flyer.id,
-        flyerURL: flyer.flyerURL,
-      };
-
-      await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_flyer');
-    });
-  });
-};
-
-/**
  * Send notifications for new flyers, edited flyers, or deleted flyers by organizations followed by the user.
+ * @param flyerID ID of the flyer being added/changed/deleted
+ * @param bodyText a string containing the body of the notification
+ * @param action a string indicating the action being peformed, a for add, e for edit, d for delete
  */
-const notifyFlyersForOrganizations = async (flyerID: string, titleParam: string): Promise<void> => {
+const notifyFlyersForOrganizations = async (
+  flyerID: string,
+  bodyText: string,
+  action: string,
+): Promise<void> => {
   const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
   const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
   const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
-
+  let notifTitle = '';
+  let notifBody = '';
   followers.forEach(async (follower) => {
-    const notifTitle = organization.name.concat(titleParam);
-    const notifBody = flyer.title;
+    console.log('outside');
+    if (action === 'a') {
+      console.log('inside');
+      notifTitle = 'New '.concat(organization.name.concat(' Event!'));
+      notifBody = flyer.title.concat(
+        ' on '.concat(flyer.startDate.toDateString().concat(' at '.concat(flyer.location))),
+      );
+      console.log(notifBody);
+    }
+    if (action === 'e') {
+      notifTitle = 'New Update from '.concat(organization.name.concat('!'));
+      notifBody = flyer.title.concat(' has '.concat(bodyText));
+    }
+    if (action === 'd') {
+      notifTitle = organization.name.concat(' Event Deleted');
+      notifBody = flyer.title.concat(
+        ' on '.concat(flyer.startDate.toDateString().concat(' has been removed')),
+      );
+    }
 
     const uniqueData = {
       flyerID: flyer.id,
@@ -173,7 +175,7 @@ const notifyWeeklyDebrief = async (users: User[]): Promise<void> => {
 
 export default {
   notifyNewArticles,
-  notifyNewFlyers,
+  // notifyNewFlyers,
   notifyNewMagazines,
   notifyFlyersForOrganizations,
   notifyWeeklyDebrief,

@@ -203,7 +203,7 @@ class FlyerResolver {
       startDate,
       title,
     );
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just added a new flyer!');
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just added a new flyer!', 'a');
     return flyer;
   }
 
@@ -212,7 +212,7 @@ class FlyerResolver {
   })
   async deleteFlyer(@Arg('id') id: string) {
     const flyer = await FlyerRepo.getFlyerByID(id);
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just deleted a flyer');
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just deleted a flyer', 'd');
     return FlyerRepo.deleteFlyer(id);
   }
 
@@ -243,7 +243,31 @@ class FlyerResolver {
       startDate,
       title,
     );
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just edited a flyer!');
+    let editedResponse = '';
+    if ((endDate != null && location != null) || (location != null && startDate != null)) {
+      editedResponse = editedResponse.concat('changed its date and location');
+    } else if (endDate != null && startDate != null) {
+      editedResponse = editedResponse.concat('changed its date');
+    } else if (endDate != null) {
+      const date = new Date(endDate);
+      editedResponse = editedResponse.concat(
+        'changed its end date to '.concat(date.toDateString()),
+      );
+    } else if (location != null) {
+      if (editedResponse !== '') {
+        editedResponse = editedResponse.concat(' and ');
+      }
+      editedResponse = editedResponse.concat('changed its location to '.concat(location));
+    } else if (startDate != null) {
+      const date = new Date(startDate);
+      if (editedResponse !== '') {
+        editedResponse = editedResponse.concat(' and ');
+      }
+      editedResponse = editedResponse.concat(
+        'changed its start date to '.concat(date.toDateString()),
+      );
+    }
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, 'e');
     return flyer;
   }
 }
