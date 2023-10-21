@@ -21,9 +21,13 @@ const uploadImage = async (imageB64: string): Promise<string> => {
     method: 'POST',
     body: JSON.stringify(imagePayload),
   });
-
-  const responseData = (await response.json()) as UploadResponse;
-  return responseData.data;
+  let responseData: UploadResponse | undefined;
+  try {
+    responseData = (await response.json()) as UploadResponse;
+  } catch (e) {
+    console.log(`error sending request: ${e}`);
+  }
+  return responseData?.data;
 };
 
 /**
