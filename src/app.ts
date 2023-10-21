@@ -16,6 +16,11 @@ import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
+import multer from 'multer';
+import utils from './utils';
+import { Flyer, FlyerModel } from './entities/Flyer';
+import { OrganizationModel } from './entities/Organization';
+import { ObjectID } from 'bson';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -69,6 +74,64 @@ const main = async () => {
     const { flyerIDs } = req.body;
     NotificationRepo.notifyNewFlyers(flyerIDs);
     res.json({ success: 'true' });
+  });
+
+  const storage = multer.memoryStorage();
+  const upload = multer({ storage: storage });
+
+  // Not really sure where in the code base go, but here's the working route!
+  // I did my part :)
+  // Is just using `/flyers/` the right route here?
+  app.post('/flyers/', upload.single('file'), async (req, res) => {
+    // Ensure there is an image file present
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const {
+      categorySlug,
+      endDate,
+      flyerURL,
+      location,
+      organizationID,
+      startDate,
+      title,
+    } = req.body;
+
+    // Is there a better way to do this? (assert request body has required fields)
+    if (
+      categorySlug == null ||
+      endDate == null ||
+      flyerURL == null ||
+      location == null ||
+      organizationID == null ||
+      startDate == null ||
+      title == null
+    ) {
+      return res.status(400).json({ error: 'Missing a required field' });
+    }
+
+    // Get the file from form-data and await the upload service
+    const imageB64 = req.file.buffer.toString('base64');
+    const imageURL = await utils.uploadImage(imageB64);
+
+    // Find the organization related to the request
+    const organization = await OrganizationModel.findById(new ObjectID(organizationID));
+    const organizationSlug = organization.slug;
+
+    // Create the new flyer and put it on the app
+    const newFlyer = Object.assign(new Flyer(), {
+      categorySlug,
+      endDate,
+      flyerURL,
+      imageURL,
+      location,
+      organization,
+      organizationSlug,
+      startDate,
+      title,
+    });
+    await FlyerModel.create(newFlyer);
+    return res.status(201).json(newFlyer);
   });
 
   server.applyMiddleware({ app });

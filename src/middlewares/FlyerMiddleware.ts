@@ -13,7 +13,7 @@ const FlyerUploadErrorInterceptor: MiddlewareFn<Context> = async ({ args, contex
     // If null, move on
     return await next();
   } catch (err) {
-    throw new Error('An error occured while uploading the flyer image.');
+    throw new Error(err as string);
   }
 };
 
