@@ -1,26 +1,25 @@
-import 'reflect-metadata';
-import cron from 'node-cron';
-import admin from 'firebase-admin';
 import Express from 'express';
+import admin from 'firebase-admin';
+import cron from 'node-cron';
+import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
 import { ApolloServer } from 'apollo-server-express';
-import ArticleResolver from './resolvers/ArticleResolver';
-import ArticleRepo from './repos/ArticleRepo';
+import multer from 'multer';
 import { dbConnection } from './db/DBConnection';
-import FlyerResolver from './resolvers/FlyerResolver';
+import { Flyer, FlyerModel } from './entities/Flyer';
+import ArticleRepo from './repos/ArticleRepo';
 import MagazineRepo from './repos/MagazineRepo';
-import MagazineResolver from './resolvers/MagazineResolver';
 import NotificationRepo from './repos/NotificationRepo';
+import OrganizationRepo from './repos/OrganizationRepo';
+import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
+import ArticleResolver from './resolvers/ArticleResolver';
+import FlyerResolver from './resolvers/FlyerResolver';
+import MagazineResolver from './resolvers/MagazineResolver';
 import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
-import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
-import multer from 'multer';
 import utils from './utils';
-import { Flyer, FlyerModel } from './entities/Flyer';
-import { OrganizationModel } from './entities/Organization';
-import { ObjectID } from 'bson';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -79,9 +78,6 @@ const main = async () => {
   const storage = multer.memoryStorage();
   const upload = multer({ storage: storage });
 
-  // Not really sure where in the code base go, but here's the working route!
-  // I did my part :)
-  // Is just using `/flyers/` the right route here?
   app.post('/flyers/', upload.single('file'), async (req, res) => {
     // Ensure there is an image file present
     if (!req.file) {
@@ -97,7 +93,7 @@ const main = async () => {
       title,
     } = req.body;
 
-    // Is there a better way to do this? (assert request body has required fields)
+    // Assert request body has required fields
     if (
       categorySlug == null ||
       endDate == null ||
@@ -115,7 +111,7 @@ const main = async () => {
     const imageURL = await utils.uploadImage(imageB64);
 
     // Find the organization related to the request
-    const organization = await OrganizationModel.findById(new ObjectID(organizationID));
+    const organization = await OrganizationRepo.getOrganizationByID(organizationID);
     const organizationSlug = organization.slug;
 
     // Create the new flyer and put it on the app
