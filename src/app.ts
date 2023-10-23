@@ -66,7 +66,11 @@ const main = async () => {
   });
 
   server.applyMiddleware({ app });
-
+  app.post('/collect/flyers/', (req, res) => {
+    const { flyerIDs } = req.body;
+    NotificationRepo.notifyNewFlyers(flyerIDs);
+    res.json({ success: 'true' });
+  });
   async function setupWeeklyDebriefRefreshCron() {
     // Refresh weekly debriefs and sent notifications once a week
     cron.schedule('0 0 * * 0', async () => {

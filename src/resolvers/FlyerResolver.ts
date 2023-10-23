@@ -11,10 +11,15 @@ import {
 import { Context } from 'vm';
 import { Flyer } from '../entities/Flyer';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../common/constants';
-import FlyerRepo from '../repos/FlyerRepo';
+import FlyerRepo, { Actions } from '../repos/FlyerRepo';
 import FlyerMiddleware from '../middlewares/FlyerMiddleware';
 import NotificationRepo from '../repos/NotificationRepo';
 
+// export enum Actions {
+//   ADD,
+//   EDIT,
+//   DELETE,
+// }
 @Resolver((_of) => Flyer)
 class FlyerResolver {
   @Query((_returns) => Flyer, {
@@ -203,7 +208,11 @@ class FlyerResolver {
       startDate,
       title,
     );
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just added a new flyer!', 'a');
+    NotificationRepo.notifyFlyersForOrganizations(
+      flyer.id,
+      ' just added a new flyer!',
+      Actions.ADD,
+    );
     return flyer;
   }
 
@@ -212,7 +221,11 @@ class FlyerResolver {
   })
   async deleteFlyer(@Arg('id') id: string) {
     const flyer = await FlyerRepo.getFlyerByID(id);
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, ' just deleted a flyer', 'd');
+    NotificationRepo.notifyFlyersForOrganizations(
+      flyer.id,
+      ' just deleted a flyer',
+      Actions.DELETE,
+    );
     return FlyerRepo.deleteFlyer(id);
   }
 
@@ -244,30 +257,27 @@ class FlyerResolver {
       title,
     );
     let editedResponse = '';
-    if ((endDate != null && location != null) || (location != null && startDate != null)) {
-      editedResponse = editedResponse.concat('changed its date and location');
-    } else if (endDate != null && startDate != null) {
-      editedResponse = editedResponse.concat('changed its date');
-    } else if (endDate != null) {
+    if ((endDate && location) || (location && startDate)) {
+      // if endDate and location or startDate and location are nonempty, notification body would return date and location changed
+      editedResponse = 'changed its date and location';
+    } else if (endDate && startDate) {
+      // if both endDate and startDate values changed, the notifcation body would just return that the event changed its date
+      editedResponse = 'changed its date';
+    } else if (endDate) {
+      // if only the endDate changed for the event, then the notification body would print out specifically what the date was changed to
       const date = new Date(endDate);
-      editedResponse = editedResponse.concat(
-        'changed its end date to '.concat(date.toDateString()),
-      );
-    } else if (location != null) {
-      if (editedResponse !== '') {
-        editedResponse = editedResponse.concat(' and ');
-      }
-      editedResponse = editedResponse.concat('changed its location to '.concat(location));
-    } else if (startDate != null) {
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      editedResponse = `changed its end date to ${date.toDateString()}`;
+    } else if (location) {
+      // if only the location changed for the event, then the notification body would print out specifically what the location was changed to
+      editedResponse = `changed its location to ${location}`;
+    } else if (startDate) {
+      // if only the startDate changed for the event, then the notification body would print out specifically what the date was changed to
       const date = new Date(startDate);
-      if (editedResponse !== '') {
-        editedResponse = editedResponse.concat(' and ');
-      }
-      editedResponse = editedResponse.concat(
-        'changed its start date to '.concat(date.toDateString()),
-      );
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      editedResponse = `changed its start date to ${date.toDateString()}`;
     }
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, 'e');
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, Actions.EDIT);
     return flyer;
   }
 }

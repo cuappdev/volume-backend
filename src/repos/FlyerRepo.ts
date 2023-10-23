@@ -7,7 +7,11 @@ import { OrganizationModel } from '../entities/Organization';
 import utils from '../utils';
 
 const { IS_FILTER_ACTIVE } = process.env;
-
+export enum Actions {
+  ADD,
+  EDIT,
+  DELETE,
+}
 function isFlyerFiltered(flyer: Flyer) {
   if (IS_FILTER_ACTIVE === 'true') {
     const filter = new Filter({ list: FILTERED_WORDS });

@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import { User } from '../entities/User';
 import ArticleRepo from './ArticleRepo';
-import FlyerRepo from './FlyerRepo';
+import FlyerRepo, { Actions } from './FlyerRepo';
 import MagazineRepo from './MagazineRepo';
 import OrganizationRepo from './OrganizationRepo';
 import PublicationRepo from './PublicationRepo';
@@ -114,7 +114,28 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
     });
   });
 };
+/**
+ * Send notifications for new flyers posted by organizations.
+ */
 
+const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
+  flyerIDs.forEach(async (f) => {
+    const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
+    const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+    const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+    followers.forEach(async (follower) => {
+      const notifTitle = organization.name;
+      const notifBody = flyer.title;
+
+      const uniqueData = {
+        flyerID: flyer.id,
+        flyerURL: flyer.flyerURL,
+      };
+
+      await sendNotif(follower, notifTitle, notifBody, uniqueData, 'new_flyer');
+    });
+  });
+};
 /**
  * Send notifications for new flyers, edited flyers, or deleted flyers by organizations followed by the user.
  * @param flyerID ID of the flyer being added/changed/deleted
@@ -124,7 +145,7 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
 const notifyFlyersForOrganizations = async (
   flyerID: string,
   bodyText: string,
-  action: string,
+  action: Actions,
 ): Promise<void> => {
   const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
   const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
@@ -132,24 +153,19 @@ const notifyFlyersForOrganizations = async (
   let notifTitle = '';
   let notifBody = '';
   followers.forEach(async (follower) => {
-    console.log('outside');
-    if (action === 'a') {
-      console.log('inside');
-      notifTitle = 'New '.concat(organization.name.concat(' Event!'));
-      notifBody = flyer.title.concat(
-        ' on '.concat(flyer.startDate.toDateString().concat(' at '.concat(flyer.location))),
-      );
-      console.log(notifBody);
+    if (action === Actions.ADD) {
+      notifTitle = `New ${organization.name} Event!`;
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} at ${flyer.location}`;
     }
-    if (action === 'e') {
-      notifTitle = 'New Update from '.concat(organization.name.concat('!'));
-      notifBody = flyer.title.concat(' has '.concat(bodyText));
+    if (action === Actions.EDIT) {
+      notifTitle = `New Update from ${organization.name}!`;
+      notifBody = `${flyer.title} has ${bodyText}`;
     }
-    if (action === 'd') {
-      notifTitle = organization.name.concat(' Event Deleted');
-      notifBody = flyer.title.concat(
-        ' on '.concat(flyer.startDate.toDateString().concat(' has been removed')),
-      );
+    if (action === Actions.DELETE) {
+      notifTitle = `${organization.name} Event Deleted`;
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} has been removed`;
     }
 
     const uniqueData = {
@@ -175,7 +191,7 @@ const notifyWeeklyDebrief = async (users: User[]): Promise<void> => {
 
 export default {
   notifyNewArticles,
-  // notifyNewFlyers,
+  notifyNewFlyers,
   notifyNewMagazines,
   notifyFlyersForOrganizations,
   notifyWeeklyDebrief,
