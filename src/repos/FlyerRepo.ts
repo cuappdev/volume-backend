@@ -8,9 +8,9 @@ import utils from '../utils';
 
 const { IS_FILTER_ACTIVE } = process.env;
 export enum Actions {
-  ADD,
-  EDIT,
-  DELETE,
+  Add,
+  Edit,
+  Delete,
 }
 function isFlyerFiltered(flyer: Flyer) {
   if (IS_FILTER_ACTIVE === 'true') {

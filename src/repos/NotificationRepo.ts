@@ -153,19 +153,24 @@ const notifyFlyersForOrganizations = async (
   let notifTitle = '';
   let notifBody = '';
   followers.forEach(async (follower) => {
-    if (action === Actions.ADD) {
-      notifTitle = `New ${organization.name} Event!`;
-      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
-      notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} at ${flyer.location}`;
-    }
-    if (action === Actions.EDIT) {
-      notifTitle = `New Update from ${organization.name}!`;
-      notifBody = `${flyer.title} has ${bodyText}`;
-    }
-    if (action === Actions.DELETE) {
-      notifTitle = `${organization.name} Event Deleted`;
-      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
-      notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} has been removed`;
+    switch (action) {
+      case Actions.Add:
+        notifTitle = `New ${organization.name} Event!`;
+        // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+        notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} at ${flyer.location}`;
+        break;
+      case Actions.Edit:
+        notifTitle = `New Update from ${organization.name}!`;
+        notifBody = `${flyer.title} has ${bodyText}`;
+        break;
+      case Actions.Delete:
+        notifTitle = `${organization.name} Event Deleted`;
+        // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+        notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} has been removed`;
+        break;
+      default:
+        notifTitle = '';
+        notifBody = '';
     }
 
     const uniqueData = {

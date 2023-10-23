@@ -15,11 +15,6 @@ import FlyerRepo, { Actions } from '../repos/FlyerRepo';
 import FlyerMiddleware from '../middlewares/FlyerMiddleware';
 import NotificationRepo from '../repos/NotificationRepo';
 
-// export enum Actions {
-//   ADD,
-//   EDIT,
-//   DELETE,
-// }
 @Resolver((_of) => Flyer)
 class FlyerResolver {
   @Query((_returns) => Flyer, {
@@ -211,7 +206,7 @@ class FlyerResolver {
     NotificationRepo.notifyFlyersForOrganizations(
       flyer.id,
       ' just added a new flyer!',
-      Actions.ADD,
+      Actions.Add,
     );
     return flyer;
   }
@@ -224,7 +219,7 @@ class FlyerResolver {
     NotificationRepo.notifyFlyersForOrganizations(
       flyer.id,
       ' just deleted a flyer',
-      Actions.DELETE,
+      Actions.Delete,
     );
     return FlyerRepo.deleteFlyer(id);
   }
@@ -277,7 +272,8 @@ class FlyerResolver {
       // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
       editedResponse = `changed its start date to ${date.toDateString()}`;
     }
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, Actions.EDIT);
+
+    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, Actions.Edit);
     return flyer;
   }
 }
