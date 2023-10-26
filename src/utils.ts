@@ -1,4 +1,6 @@
+import { createReadStream, unlinkSync } from 'fs';
 import fetch from 'node-fetch-commonjs';
+import FormData from 'form-data';
 
 interface UploadResponse {
   success: boolean;
@@ -8,22 +10,27 @@ interface UploadResponse {
 /**
  * Upload an image to our servers
  *
- * @param imageB64 the base64 string to upload
+ * @param image the file that the user sent in their form data request
  * @returns the URl representing the image
  */
-const uploadImage = async (imageB64: string): Promise<string> => {
+const uploadImage = async (image: Express.Multer.File): Promise<string> => {
   // Upload image via a POST request
-  const imagePayload = {
-    bucket: process.env.UPLOAD_BUCKET,
-    image: `data:image/png;base64,${imageB64}`,
-  };
+  const form = new FormData();
+  form.append('bucket', process.env.UPLOAD_BUCKET);
+  form.append('image', createReadStream(image.path));
+
   const response = await fetch(`${process.env.UPLOAD_SERVICE_URL}/upload/`, {
     method: 'POST',
-    body: JSON.stringify(imagePayload),
+    headers: form.getHeaders(),
+    body: form,
   });
+  // Delete the image after sending it to the upload service
+  unlinkSync(image.path);
+
   let responseData: UploadResponse | undefined;
   try {
-    responseData = (await response.json()) as UploadResponse;
+    const json = await response.json();
+    responseData = json as UploadResponse;
   } catch (e) {
     console.log(`error sending request: ${e}`);
   }

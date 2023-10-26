@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
 import { ApolloServer } from 'apollo-server-express';
-import multer from 'multer';
+import multer, { diskStorage } from 'multer';
 import { dbConnection } from './db/DBConnection';
 import { Flyer, FlyerModel } from './entities/Flyer';
 import ArticleRepo from './repos/ArticleRepo';
@@ -20,6 +20,7 @@ import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import utils from './utils';
+import path from 'path';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -75,8 +76,13 @@ const main = async () => {
     res.json({ success: 'true' });
   });
 
-  const storage = multer.memoryStorage();
-  const upload = multer({ storage: storage });
+  const storage = diskStorage({
+    destination: 'uploads/',
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    },
+  });
+  const upload = multer({ storage });
 
   app.post('/flyers/', upload.single('file'), async (req, res) => {
     // Ensure there is an image file present
@@ -107,8 +113,8 @@ const main = async () => {
     }
 
     // Get the file from form-data and await the upload service
-    const imageB64 = req.file.buffer.toString('base64');
-    const imageURL = await utils.uploadImage(imageB64);
+    const imageURL = await utils.uploadImage(req.file);
+    console.log(`image url = ${imageURL}`);
 
     // Find the organization related to the request
     const organization = await OrganizationRepo.getOrganizationByID(organizationID);
@@ -128,6 +134,50 @@ const main = async () => {
     });
     await FlyerModel.create(newFlyer);
     return res.status(201).json(newFlyer);
+  });
+
+  app.post('/flyers/edit/', upload.single('file'), async (req, res) => {
+    const {
+      categorySlug,
+      endDate,
+      flyerURL,
+      location,
+      organizationID,
+      startDate,
+      title,
+      flyerID,
+    } = req.body;
+
+    // Assert request body has required fields
+    if (flyerID == null) {
+      return res.status(400).json({ error: 'Missing a required flyerID field' });
+    }
+
+    // Get the file from form-data and await the upload service
+    const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
+
+    // Find the organization related to the request
+    const organization = await OrganizationRepo.getOrganizationByID(organizationID);
+    const organizationSlug = organization.slug;
+
+    const oldFlyer = await FlyerModel.findById(flyerID);
+    FlyerModel.updateOne(
+      { id: flyerID },
+      {
+        $set: {
+          categorySlug: categorySlug ?? oldFlyer.categorySlug,
+          endDate: endDate ?? oldFlyer.endDate,
+          flyerURL: flyerURL ?? oldFlyer.flyerURL,
+          imageURL: imageURL ?? oldFlyer.imageURL,
+          location: location ?? oldFlyer.location,
+          organization: organization ?? oldFlyer.organization,
+          organizationSlug: organizationSlug ?? oldFlyer.organizationSlug,
+          startDate: startDate ?? oldFlyer.startDate,
+          title: title ?? oldFlyer.title,
+        },
+      },
+    );
+    return res.status(201).json(await FlyerModel.findById(flyerID));
   });
 
   server.applyMiddleware({ app });
