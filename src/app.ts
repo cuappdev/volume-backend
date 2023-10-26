@@ -84,7 +84,20 @@ const main = async () => {
   });
   const upload = multer({ storage });
 
-  app.post('/flyers/', upload.single('file'), async (req, res) => {
+  /**
+   * Route to create a flyer, uses form-data that should have request with key-value pairs
+   * All of the following files are required:
+   *  categorySlug
+      endDate
+      flyerURL
+      location
+      organizationID
+      startDate
+      title
+   * There also must be a file with the key `image` which should be the image
+      associated with the flyer.
+   */
+  app.post('/flyers/', upload.single('image'), async (req, res) => {
     // Ensure there is an image file present
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -137,8 +150,10 @@ const main = async () => {
   });
 
   /**
-   * Route to edit a flyer.
+   * Route to edit a flyer, uses form-data.
    * Requires flyerID field for which flyer we are editing.
+   * Other flyer fields can optionally be sent in the form-data as key-value pairs
+   * Image URL should use a file in the form-data.
    */
   app.post('/flyers/edit/', upload.single('file'), async (req, res) => {
     const {
