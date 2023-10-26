@@ -136,6 +136,10 @@ const main = async () => {
     return res.status(201).json(newFlyer);
   });
 
+  /**
+   * Route to edit a flyer.
+   * Requires flyerID field for which flyer we are editing.
+   */
   app.post('/flyers/edit/', upload.single('file'), async (req, res) => {
     const {
       categorySlug,
@@ -152,7 +156,10 @@ const main = async () => {
     if (flyerID == null) {
       return res.status(400).json({ error: 'Missing a required flyerID field' });
     }
-
+    const oldFlyer = await FlyerModel.findById(flyerID);
+    if (oldFlyer == null) {
+      return res.status(400).json({ error: 'flyerID not associated with any flyers' });
+    }
     // Get the file from form-data and await the upload service
     const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
 
@@ -160,7 +167,6 @@ const main = async () => {
     const organization = await OrganizationRepo.getOrganizationByID(organizationID);
     const organizationSlug = organization.slug;
 
-    const oldFlyer = await FlyerModel.findById(flyerID);
     FlyerModel.updateOne(
       { id: flyerID },
       {
