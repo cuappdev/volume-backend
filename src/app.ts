@@ -1,21 +1,26 @@
-import 'reflect-metadata';
-import cron from 'node-cron';
-import admin from 'firebase-admin';
 import Express from 'express';
+import admin from 'firebase-admin';
+import cron from 'node-cron';
+import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
 import { ApolloServer } from 'apollo-server-express';
-import ArticleResolver from './resolvers/ArticleResolver';
-import ArticleRepo from './repos/ArticleRepo';
+import multer, { diskStorage } from 'multer';
 import { dbConnection } from './db/DBConnection';
-import FlyerResolver from './resolvers/FlyerResolver';
+import { Flyer, FlyerModel } from './entities/Flyer';
+import ArticleRepo from './repos/ArticleRepo';
 import MagazineRepo from './repos/MagazineRepo';
-import MagazineResolver from './resolvers/MagazineResolver';
 import NotificationRepo from './repos/NotificationRepo';
+import OrganizationRepo from './repos/OrganizationRepo';
+import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
+import ArticleResolver from './resolvers/ArticleResolver';
+import FlyerResolver from './resolvers/FlyerResolver';
+import MagazineResolver from './resolvers/MagazineResolver';
 import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
-import WeeklyDebriefRepo from './repos/WeeklyDebriefRepo';
+import utils from './utils';
+import path from 'path';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -69,6 +74,131 @@ const main = async () => {
     const { flyerIDs } = req.body;
     NotificationRepo.notifyNewFlyers(flyerIDs);
     res.json({ success: 'true' });
+  });
+
+  const storage = diskStorage({
+    destination: 'uploads/',
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    },
+  });
+  const upload = multer({ storage });
+
+  /**
+   * Route to create a flyer, uses form-data that should have request with key-value pairs
+   * All of the following files are required:
+   *  categorySlug
+      endDate
+      flyerURL
+      location
+      organizationID
+      startDate
+      title
+   * There also must be a file with the key `image` which should be the image
+      associated with the flyer.
+   */
+  app.post('/flyers/', upload.single('image'), async (req, res) => {
+    // Ensure there is an image file present
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const {
+      categorySlug,
+      endDate,
+      flyerURL,
+      location,
+      organizationID,
+      startDate,
+      title,
+    } = req.body;
+
+    // Assert request body has required fields
+    if (
+      categorySlug == null ||
+      endDate == null ||
+      flyerURL == null ||
+      location == null ||
+      organizationID == null ||
+      startDate == null ||
+      title == null
+    ) {
+      return res.status(400).json({ error: 'Missing a required field' });
+    }
+
+    // Get the file from form-data and await the upload service
+    const imageURL = await utils.uploadImage(req.file);
+    console.log(`image url = ${imageURL}`);
+
+    // Find the organization related to the request
+    const organization = await OrganizationRepo.getOrganizationByID(organizationID);
+    const organizationSlug = organization.slug;
+
+    // Create the new flyer and put it on the app
+    const newFlyer = Object.assign(new Flyer(), {
+      categorySlug,
+      endDate,
+      flyerURL,
+      imageURL,
+      location,
+      organization,
+      organizationSlug,
+      startDate,
+      title,
+    });
+    await FlyerModel.create(newFlyer);
+    return res.status(201).json(newFlyer);
+  });
+
+  /**
+   * Route to edit a flyer, uses form-data.
+   * Requires flyerID field for which flyer we are editing.
+   * Other flyer fields can optionally be sent in the form-data as key-value pairs
+   * Image URL should use a file in the form-data.
+   */
+  app.post('/flyers/edit/', upload.single('file'), async (req, res) => {
+    const {
+      categorySlug,
+      endDate,
+      flyerURL,
+      location,
+      organizationID,
+      startDate,
+      title,
+      flyerID,
+    } = req.body;
+
+    // Assert request body has required fields
+    if (flyerID == null) {
+      return res.status(400).json({ error: 'Missing a required flyerID field' });
+    }
+    const oldFlyer = await FlyerModel.findById(flyerID);
+    if (oldFlyer == null) {
+      return res.status(400).json({ error: 'flyerID not associated with any flyers' });
+    }
+    // Get the file from form-data and await the upload service
+    const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
+
+    // Find the organization related to the request
+    const organization = await OrganizationRepo.getOrganizationByID(organizationID);
+    const organizationSlug = organization.slug;
+
+    FlyerModel.updateOne(
+      { id: flyerID },
+      {
+        $set: {
+          categorySlug: categorySlug ?? oldFlyer.categorySlug,
+          endDate: endDate ?? oldFlyer.endDate,
+          flyerURL: flyerURL ?? oldFlyer.flyerURL,
+          imageURL: imageURL ?? oldFlyer.imageURL,
+          location: location ?? oldFlyer.location,
+          organization: organization ?? oldFlyer.organization,
+          organizationSlug: organizationSlug ?? oldFlyer.organizationSlug,
+          startDate: startDate ?? oldFlyer.startDate,
+          title: title ?? oldFlyer.title,
+        },
+      },
+    );
+    return res.status(201).json(await FlyerModel.findById(flyerID));
   });
 
   server.applyMiddleware({ app });
