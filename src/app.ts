@@ -6,6 +6,7 @@ import { buildSchema } from 'type-graphql';
 
 import { ApolloServer } from 'apollo-server-express';
 import multer, { diskStorage } from 'multer';
+import path from 'path';
 import { dbConnection } from './db/DBConnection';
 import { Flyer, FlyerModel } from './entities/Flyer';
 import ArticleRepo from './repos/ArticleRepo';
@@ -20,7 +21,7 @@ import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import utils from './utils';
-import path from 'path';
+import FlyerRepo from './repos/FlyerRepo';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -95,7 +96,7 @@ const main = async () => {
       startDate
       title
    * There also must be a file with the key `image` which should be the image
-      associated with the flyer.
+      associated with the flyer. The image type must be png.
    */
   app.post('/flyers/', upload.single('image'), async (req, res) => {
     // Ensure there is an image file present
@@ -151,53 +152,39 @@ const main = async () => {
 
   /**
    * Route to edit a flyer, uses form-data.
-   * Requires flyerID field for which flyer we are editing.
-   * Other flyer fields can optionally be sent in the form-data as key-value pairs
-   * Image URL should use a file in the form-data.
+   *
+   * Requires `flyerID` field for which flyer we are editing.
+   * Other flyer fields can optionally be sent in the form-data as key-value pairs.
+   *
+   * The file with the key `image` which should be the image associated with the flyer.
+   * The image type must be png.
    */
-  app.post('/flyers/edit/', upload.single('file'), async (req, res) => {
-    const {
+  app.post('/flyers/edit/', upload.single('image'), async (req, res) => {
+    const { categorySlug, endDate, flyerURL, location, startDate, title, flyerID } = req.body;
+
+    // Assert request body has required fields
+    if (!flyerID) {
+      return res.status(400).json({ error: 'Missing a required flyerID field' });
+    }
+
+    const oldFlyer = await FlyerModel.findById(flyerID);
+    if (!oldFlyer) {
+      return res.status(400).json({ error: 'flyerID not associated with any flyers' });
+    }
+
+    // Get the file from form-data and await the upload service
+    const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
+    await FlyerRepo.editFlyer(
+      flyerID,
       categorySlug,
       endDate,
       flyerURL,
+      imageURL,
       location,
-      organizationID,
       startDate,
       title,
-      flyerID,
-    } = req.body;
-
-    // Assert request body has required fields
-    if (flyerID == null) {
-      return res.status(400).json({ error: 'Missing a required flyerID field' });
-    }
-    const oldFlyer = await FlyerModel.findById(flyerID);
-    if (oldFlyer == null) {
-      return res.status(400).json({ error: 'flyerID not associated with any flyers' });
-    }
-    // Get the file from form-data and await the upload service
-    const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
-
-    // Find the organization related to the request
-    const organization = await OrganizationRepo.getOrganizationByID(organizationID);
-    const organizationSlug = organization.slug;
-
-    FlyerModel.updateOne(
-      { id: flyerID },
-      {
-        $set: {
-          categorySlug: categorySlug ?? oldFlyer.categorySlug,
-          endDate: endDate ?? oldFlyer.endDate,
-          flyerURL: flyerURL ?? oldFlyer.flyerURL,
-          imageURL: imageURL ?? oldFlyer.imageURL,
-          location: location ?? oldFlyer.location,
-          organization: organization ?? oldFlyer.organization,
-          organizationSlug: organizationSlug ?? oldFlyer.organizationSlug,
-          startDate: startDate ?? oldFlyer.startDate,
-          title: title ?? oldFlyer.title,
-        },
-      },
     );
+
     return res.status(201).json(await FlyerModel.findById(flyerID));
   });
 
