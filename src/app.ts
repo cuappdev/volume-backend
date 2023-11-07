@@ -168,7 +168,7 @@ const main = async () => {
     }
 
     const oldFlyer = await FlyerModel.findById(flyerID);
-    if (oldFlyer == null) {
+    if (!oldFlyer) {
       return res.status(400).json({ error: 'flyerID not associated with any flyers' });
     }
 
