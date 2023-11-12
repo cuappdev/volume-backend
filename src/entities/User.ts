@@ -35,10 +35,6 @@ export class User {
   @Property({ default: 0 })
   numShoutouts?: number;
 
-  @Field()
-  @Property({ default: 0 })
-  numBookmarkedArticles?: number;
-
   @Field((type) => [Article])
   @Property({ required: true, type: () => Article, default: [] })
   readArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
@@ -58,6 +54,18 @@ export class User {
   @Field((type) => [Organization])
   @Property({ required: true, type: () => Organization, default: [] })
   followedOrganizations: mongoose.Types.DocumentArray<DocumentType<Organization>>;
+
+  @Field((type) => [Article])
+  @Property({ required: true, type: () => Article, default: [] })
+  bookmarkedArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
+
+  @Field((type) => [Magazine])
+  @Property({ required: true, type: () => String, default: [] })
+  bookmarkedMagazines: mongoose.Types.DocumentArray<DocumentType<Magazine>>;
+
+  @Field((type) => [Flyer])
+  @Property({ required: true, type: () => String, default: [] })
+  bookmarkedFlyers: mongoose.Types.DocumentArray<DocumentType<Flyer>>;
 
   @Field({ nullable: true })
   @Property()
