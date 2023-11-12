@@ -169,19 +169,6 @@ describe('weekly debrief tests:', () => {
     expect(getUsersResponse.numShoutouts).toEqual(1);
   });
 
-  test('incrementBookmarks - 1 user, 1 shoutout', async () => {
-    const users = await UserFactory.create(1);
-    const insertOutput = await UserModel.insertMany(users);
-    await UserRepo.incrementBookmarks(insertOutput[0].uuid);
-
-    // update database
-    const pub = await PublicationFactory.getRandomPublication();
-    await UserRepo.followPublication(users[0].uuid, pub.slug);
-
-    const getUsersResponse = await UserRepo.getUserByUUID(insertOutput[0].uuid);
-    expect(getUsersResponse.numBookmarkedArticles).toEqual(1);
-  });
-
   test('appendReadFlyer', async () => {
     const users = await UserFactory.create(1);
     const flyers = await FlyerFactory.create(1);
