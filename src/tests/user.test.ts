@@ -214,3 +214,51 @@ describe('weekly debrief tests:', () => {
     expect(getUsersResponse.readArticles).toHaveLength(1);
   });
 });
+
+describe('(un)bookmark tests:', () => {
+  test('bookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    await ArticleModel.insertMany(articles);
+
+    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
+  });
+
+  test('unbookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    await ArticleModel.insertMany(articles);
+
+    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    await UserRepo.unbookmarkArticle(users[0].uuid, articles[0].id);
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
+  });
+
+  test('bookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    await ArticleModel.insertMany(articles);
+
+    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
+  });
+
+  test('unbookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    await ArticleModel.insertMany(articles);
+
+    await UserRepo.unbookmarkArticle(users[0].uuid, articles[0].id);
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
+  });
+});
