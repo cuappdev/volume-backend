@@ -220,9 +220,13 @@ describe('(un)bookmark tests:', () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
-    await ArticleModel.insertMany(articles);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
 
-    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
     const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
   });
@@ -231,15 +235,19 @@ describe('(un)bookmark tests:', () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
-    await ArticleModel.insertMany(articles);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
 
-    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
-    await UserRepo.unbookmarkArticle(users[0].uuid, articles[0].id);
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
+    await UserRepo.unbookmarkArticle(users[0].uuid, insertOutput[0].id);
     const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
   });
 
-  test('bookmark articles - 1 user, 1 article', async () => {
+  test('bookmark articles2 - 1 user, 1 article', async () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
@@ -251,7 +259,7 @@ describe('(un)bookmark tests:', () => {
     expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
   });
 
-  test('unbookmark articles - 1 user, 1 article', async () => {
+  test('unbookmark articles2 - 1 user, 1 article', async () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
