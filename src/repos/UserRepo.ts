@@ -263,7 +263,7 @@ const unbookmarkArticle = async (uuid: string, articleID: string): Promise<User>
 
     if (articleIndex === -1) return user;
 
-    user.followedOrganizations.splice(articleIndex, 1);
+    user.bookmarkedArticles.splice(articleIndex, 1);
     return user.save();
   }
   return user;
@@ -280,7 +280,7 @@ const unbookmarkMagazine = async (uuid: string, magazineID: string): Promise<Use
 
     if (magazineIndex === -1) return user;
 
-    user.followedOrganizations.splice(magazineIndex, 1);
+    user.bookmarkedMagazines.splice(magazineIndex, 1);
     return user.save();
   }
   return user;
@@ -297,7 +297,7 @@ const unbookmarkFlyer = async (uuid: string, flyerID: string): Promise<User> => 
 
     if (flyerIndex === -1) return user;
 
-    user.followedOrganizations.splice(flyerIndex, 1);
+    user.bookmarkedFlyers.splice(flyerIndex, 1);
     return user.save();
   }
   return user;
