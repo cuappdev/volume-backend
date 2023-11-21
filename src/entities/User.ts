@@ -60,11 +60,11 @@ export class User {
   bookmarkedArticles: mongoose.Types.DocumentArray<DocumentType<Article>>;
 
   @Field((type) => [Magazine])
-  @Property({ required: true, type: () => String, default: [] })
+  @Property({ required: true, type: () => Magazine, default: [] })
   bookmarkedMagazines: mongoose.Types.DocumentArray<DocumentType<Magazine>>;
 
   @Field((type) => [Flyer])
-  @Property({ required: true, type: () => String, default: [] })
+  @Property({ required: true, type: () => Flyer, default: [] })
   bookmarkedFlyers: mongoose.Types.DocumentArray<DocumentType<Flyer>>;
 
   @Field({ nullable: true })

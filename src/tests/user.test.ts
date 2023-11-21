@@ -239,10 +239,15 @@ describe('(un)bookmark tests:', () => {
     await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
 
     // update database
-    const pub = await PublicationFactory.getRandomPublication();
-    await UserRepo.followPublication(users[0].uuid, pub.slug);
+    const pub1 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub1.slug);
 
     await UserRepo.unbookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub2 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub2.slug);
+
     const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
   });
@@ -251,10 +256,19 @@ describe('(un)bookmark tests:', () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
-    await ArticleModel.insertMany(articles);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
 
-    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
-    await UserRepo.bookmarkArticle(users[0].uuid, articles[0].id);
+    // update database
+    const pub1 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub1.slug);
+
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub2 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub2.slug);
+
     const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
   });
@@ -263,9 +277,13 @@ describe('(un)bookmark tests:', () => {
     const users = await UserFactory.create(1);
     const articles = await ArticleFactory.create(1);
     await UserModel.insertMany(users);
-    await ArticleModel.insertMany(articles);
+    const insertOutput = await ArticleModel.insertMany(articles);
 
-    await UserRepo.unbookmarkArticle(users[0].uuid, articles[0].id);
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
+    await UserRepo.unbookmarkArticle(users[0].uuid, insertOutput[0].id);
     const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
   });
