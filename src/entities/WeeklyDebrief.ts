@@ -27,10 +27,6 @@ export default class WeeklyDebrief {
 
   @Field()
   @Property({ default: 0 })
-  numBookmarkedArticles?: number;
-
-  @Field()
-  @Property({ default: 0 })
   numReadArticles?: number;
 
   @Field((type) => [Article])

@@ -79,14 +79,14 @@ const getMagazinesByPublicationSlugs = async (
     });
 };
 
-function getMagazineByID(id: string) {
-  return MagazineModel.findById(id).then((magazine) => {
+const getMagazineByID = async (id: string): Promise<Magazine> => {
+  return MagazineModel.findById(new ObjectId(id)).then((magazine) => {
     if (!isMagazineFiltered(magazine)) {
       return magazine;
     }
     return null;
   });
-}
+};
 
 function getMagazinesByIDs(ids: string[]) {
   return Promise.all(ids.map((id) => MagazineModel.findById(new ObjectId(id)))).then(

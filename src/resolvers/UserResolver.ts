@@ -84,10 +84,52 @@ class UserResolver {
 
   @Mutation((_returns) => User, {
     nullable: true,
-    description: 'Increments the number of bookmarks for the <User> given by <uuid>',
+    description: 'Adds the <Article> given by <articleID> to the <User> <bookmarkedArticles> field',
   })
-  async bookmarkArticle(@Arg('uuid') uuid: string) {
-    return await UserRepo.incrementBookmarks(uuid);
+  async bookmarkArticle(@Arg('uuid') uuid: string, @Arg('articleID') articleID: string) {
+    return await UserRepo.bookmarkArticle(uuid, articleID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description:
+      'Adds the <Magazine> given by <magazineID> to the <User> <bookmarkedMagazines> field',
+  })
+  async bookmarkMagazine(@Arg('uuid') uuid: string, @Arg('magazineID') magazineID: string) {
+    return await UserRepo.bookmarkMagazine(uuid, magazineID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: 'Adds the <Flyer> given by <flyerID> to the <User> <bookmarkedFlyers> field',
+  })
+  async bookmarkFlyer(@Arg('uuid') uuid: string, @Arg('flyerID') flyerID: string) {
+    return await UserRepo.bookmarkFlyer(uuid, flyerID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: 'Removes the <Article> given by <articleID> from the <User> <bookmarkedArticles>',
+  })
+  async unbookmarkArticle(@Arg('uuid') uuid: string, @Arg('articleID') articleID: string) {
+    return await UserRepo.unbookmarkArticle(uuid, articleID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description:
+      'Removes the <Magazine> given by <magazineID> from the <User> <bookmarkedMagazines>',
+  })
+  async unbookmarkMagazine(@Arg('uuid') uuid: string, @Arg('magazineID') magazineID: string) {
+    return await UserRepo.unbookmarkMagazine(uuid, magazineID);
+  }
+
+  @Mutation((_returns) => User, {
+    nullable: true,
+    description: 'Removes the <Flyer> given by <flyerID> from the <User> <bookmarkedFlyers>',
+  })
+  async unbookmarkFlyer(@Arg('uuid') uuid: string, @Arg('flyerID') flyerID: string) {
+    return await UserRepo.unbookmarkFlyer(uuid, flyerID);
   }
 
   @Mutation((_returns) => [User], {
