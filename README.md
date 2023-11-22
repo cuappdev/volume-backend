@@ -32,11 +32,9 @@ In order to allow direnv to load environment variables, it needs to be able to h
 You can find the full list of direnv hook commands [here](https://direnv.net/docs/hook.html)
 
 Then, to start the project, run the following terminal commands
-`direnv allow` 
-
+`direnv allow`
 
 `npm run start`
-
 
 ## Setting up the database
 

@@ -9,6 +9,7 @@ nohup.out
 Makefile
 start.sh
 *secrets*
+.idea
 
 # ignore database dumps
 dump/

@@ -451,6 +451,22 @@
         }
       ],
       "websiteURL": "https://cornellsun.com/"
+    },
+    {
+      "bio": "Women of MENA is a digital publication at the intersection of culture and gender studies. Rooted in inclusivity for people of all gender identities, our platform focuses on unpacking the gender dynamics of the Middle East and North Africa (MENA) region and sharing women's stories!",
+      "bioShort": "A digital publication at the intersection of culture and gender studies",
+      "contentTypes": ["articles"],
+      "rssName": "Women of MENA",
+      "rssURL": "https://womenofmena.wordpress.com/feed/",
+      "name": "Women of MENA",
+      "slug": "womena",
+      "socialURLs": [
+        {
+          "social": "insta",
+          "URL": "https://www.instagram.com/cornellwomenofmena/"
+        }
+      ],
+      "websiteURL": "https://womenofmena.wordpress.com/"
     }
   ]
 }
