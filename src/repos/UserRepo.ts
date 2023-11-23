@@ -122,7 +122,7 @@ const getUsersFollowingOrganization = async (orgSlug: string): Promise<User[]> =
 };
 
 /**
- * Return all users who follow an organization
+ * Return all users who have a flyer bookmarked
  */
 const getUsersBookmarkedFlyer = async (flyerID: string): Promise<User[]> => {
   const matchedUsers = await UserModel.find({
