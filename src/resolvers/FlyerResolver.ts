@@ -216,11 +216,7 @@ class FlyerResolver {
   })
   async deleteFlyer(@Arg('id') id: string) {
     const flyer = await FlyerRepo.getFlyerByID(id);
-    NotificationRepo.notifyFlyersForOrganizations(
-      flyer.id,
-      ' just deleted a flyer',
-      Actions.Delete,
-    );
+    NotificationRepo.notifyFlyersForBookmarks(flyer.id, ' just deleted a flyer', Actions.Delete);
     return FlyerRepo.deleteFlyer(id);
   }
 
@@ -273,7 +269,7 @@ class FlyerResolver {
       editedResponse = `changed its start date to ${date.toDateString()}`;
     }
 
-    NotificationRepo.notifyFlyersForOrganizations(flyer.id, editedResponse, Actions.Edit);
+    NotificationRepo.notifyFlyersForBookmarks(flyer.id, editedResponse, Actions.Edit);
     return flyer;
   }
 }

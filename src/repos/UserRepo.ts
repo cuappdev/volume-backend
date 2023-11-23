@@ -122,6 +122,15 @@ const getUsersFollowingOrganization = async (orgSlug: string): Promise<User[]> =
 };
 
 /**
+ * Return all users who follow an organization
+ */
+const getUsersBookmarkedFlyer = async (flyerID: string): Promise<User[]> => {
+  const matchedUsers = await UserModel.find({
+    bookmarkedFlyers: { $elemMatch: { _id: flyerID } },
+  });
+  return matchedUsers;
+};
+/**
  * Add article to a user's readArticles
  */
 const appendReadArticle = async (uuid: string, articleID: string): Promise<User> => {
@@ -314,6 +323,7 @@ export default {
   getUserByUUID,
   getUsersFollowingPublication,
   getUsersFollowingOrganization,
+  getUsersBookmarkedFlyer,
   bookmarkArticle,
   bookmarkMagazine,
   bookmarkFlyer,

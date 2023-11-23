@@ -159,6 +159,38 @@ const notifyFlyersForOrganizations = async (
         // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
         notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} at ${flyer.location}`;
         break;
+      default:
+        notifTitle = '';
+        notifBody = '';
+    }
+
+    const uniqueData = {
+      flyerID: flyer.id,
+      flyerURL: flyer.flyerURL,
+    };
+
+    await sendNotif(follower, notifTitle, notifBody, uniqueData, 'flyer_notif');
+  });
+};
+
+/**
+ * Send notifications for new flyers, edited flyers, or deleted flyers by organizations followed by the user.
+ * @param flyerID ID of the flyer being added/changed/deleted
+ * @param bodyText a string containing the body of the notification
+ * @param action a string indicating the action being peformed, a for add, e for edit, d for delete
+ */
+const notifyFlyersForBookmarks = async (
+  flyerID: string,
+  bodyText: string,
+  action: Actions,
+): Promise<void> => {
+  const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
+  const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+  const followers = await UserRepo.getUsersBookmarkedFlyer(flyerID);
+  let notifTitle = '';
+  let notifBody = '';
+  followers.forEach(async (follower) => {
+    switch (action) {
       case Actions.Edit:
         notifTitle = `New Update from ${organization.name}!`;
         notifBody = `${flyer.title} has ${bodyText}`;
@@ -198,6 +230,7 @@ export default {
   notifyNewArticles,
   notifyNewFlyers,
   notifyNewMagazines,
+  notifyFlyersForBookmarks,
   notifyFlyersForOrganizations,
   notifyWeeklyDebrief,
 };
