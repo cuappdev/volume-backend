@@ -114,10 +114,10 @@ const notifyNewMagazines = async (magazineIDs: string[]): Promise<void> => {
     });
   });
 };
+
 /**
  * Send notifications for new flyers posted by organizations.
  */
-
 const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
   flyerIDs.forEach(async (f) => {
     const flyer = await FlyerRepo.getFlyerByID(f); // eslint-disable-line
@@ -139,20 +139,23 @@ const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
 
 /**
  * Send notifications for edited flyers or deleted flyers for those bookmarked by the user.
- * @param flyerID ID of the flyer being added/changed/deleted
- * @param bodyText a string containing the body of the notification
- * @param action a string indicating the action being peformed, a for add, e for edit, d for delete
+ *
+ * @param flyerID - ID of the flyer being added/changed/deleted
+ * @param bodyText - a string containing the body of the notification
+ * @param action - a string indicating the action being peformed, a for add, e for edit, d for delete
  */
 const notifyFlyersForBookmarks = async (
   flyerID: string,
   bodyText: string,
   action: Actions,
 ): Promise<void> => {
-  const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
+  const flyer = await FlyerRepo.getFlyerByID(flyerID);
   const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
   const followers = await UserRepo.getUsersBookmarkedFlyer(flyerID);
+
   let notifTitle = '';
   let notifBody = '';
+
   followers.forEach(async (follower) => {
     switch (action) {
       case Actions.Edit:
@@ -180,9 +183,10 @@ const notifyFlyersForBookmarks = async (
 
 /**
  * Send notifications for new flyers by organizations followed by the user.
- * @param flyerID ID of the flyer being added/changed/deleted
- * @param bodyText a string containing the body of the notification
- * @param action a string indicating the action being peformed, a for add, e for edit, d for delete
+ *
+ * @param flyerID - ID of the flyer being added/changed/deleted
+ * @param bodyText -  a string containing the body of the notification
+ * @param action - a string indicating the action being peformed, a for add, e for edit, d for delete
  */
 const notifyFlyersForOrganizations = async (
   flyerID: string,
@@ -192,8 +196,10 @@ const notifyFlyersForOrganizations = async (
   const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
   const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
   const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+
   let notifTitle = '';
   let notifBody = '';
+
   followers.forEach(async (follower) => {
     switch (action) {
       case Actions.Add:

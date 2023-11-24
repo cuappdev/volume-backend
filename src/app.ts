@@ -189,6 +189,7 @@ const main = async () => {
   });
 
   server.applyMiddleware({ app });
+
   async function setupWeeklyDebriefRefreshCron() {
     // Refresh weekly debriefs and sent notifications once a week
     cron.schedule('0 0 * * 0', async () => {
