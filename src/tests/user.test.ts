@@ -169,19 +169,6 @@ describe('weekly debrief tests:', () => {
     expect(getUsersResponse.numShoutouts).toEqual(1);
   });
 
-  test('incrementBookmarks - 1 user, 1 shoutout', async () => {
-    const users = await UserFactory.create(1);
-    const insertOutput = await UserModel.insertMany(users);
-    await UserRepo.incrementBookmarks(insertOutput[0].uuid);
-
-    // update database
-    const pub = await PublicationFactory.getRandomPublication();
-    await UserRepo.followPublication(users[0].uuid, pub.slug);
-
-    const getUsersResponse = await UserRepo.getUserByUUID(insertOutput[0].uuid);
-    expect(getUsersResponse.numBookmarkedArticles).toEqual(1);
-  });
-
   test('appendReadFlyer', async () => {
     const users = await UserFactory.create(1);
     const flyers = await FlyerFactory.create(1);
@@ -225,5 +212,79 @@ describe('weekly debrief tests:', () => {
 
     const getUsersResponse = await UserRepo.getUserByUUID(users[0].uuid);
     expect(getUsersResponse.readArticles).toHaveLength(1);
+  });
+});
+
+describe('(un)bookmark tests:', () => {
+  test('bookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
+  });
+
+  test('unbookmark articles - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub1 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub1.slug);
+
+    await UserRepo.unbookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub2 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub2.slug);
+
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
+  });
+
+  test('bookmark articles2 - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    const insertOutput = await ArticleModel.insertMany(articles);
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub1 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub1.slug);
+
+    await UserRepo.bookmarkArticle(users[0].uuid, insertOutput[0].id);
+
+    // update database
+    const pub2 = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub2.slug);
+
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(1);
+  });
+
+  test('unbookmark articles2 - 1 user, 1 article', async () => {
+    const users = await UserFactory.create(1);
+    const articles = await ArticleFactory.create(1);
+    await UserModel.insertMany(users);
+    const insertOutput = await ArticleModel.insertMany(articles);
+
+    // update database
+    const pub = await PublicationFactory.getRandomPublication();
+    await UserRepo.followPublication(users[0].uuid, pub.slug);
+
+    await UserRepo.unbookmarkArticle(users[0].uuid, insertOutput[0].id);
+    const getUserResponse = await UserRepo.getUserByUUID(users[0].uuid);
+    expect(getUserResponse.bookmarkedArticles).toHaveLength(0);
   });
 });
