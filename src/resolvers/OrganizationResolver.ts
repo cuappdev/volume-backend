@@ -57,6 +57,13 @@ class OrganizationResolver {
   async clicks(@Root() organization: Organization): Promise<number> {
     return OrganizationRepo.getClicks(organization);
   }
+
+  @FieldResolver((_returns) => Number, {
+    description: "Returns the total times clicked of an <Organization's> <Flyers>",
+  })
+  async numFlyers(@Root() organization: Organization): Promise<number> {
+    return OrganizationRepo.getNumFlyers(organization);
+  }
 }
 
 export default OrganizationResolver;
