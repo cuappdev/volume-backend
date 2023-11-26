@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import { User } from '../entities/User';
 import ArticleRepo from './ArticleRepo';
-import FlyerRepo from './FlyerRepo';
+import FlyerRepo, { Actions } from './FlyerRepo';
 import MagazineRepo from './MagazineRepo';
 import OrganizationRepo from './OrganizationRepo';
 import PublicationRepo from './PublicationRepo';
@@ -138,6 +138,90 @@ const notifyNewFlyers = async (flyerIDs: string[]): Promise<void> => {
 };
 
 /**
+ * Send notifications for edited flyers or deleted flyers for those bookmarked by the user.
+ *
+ * @param flyerID - ID of the flyer being added/changed/deleted
+ * @param bodyText - a string containing the body of the notification
+ * @param action - a string indicating the action being peformed, a for add, e for edit, d for delete
+ */
+const notifyFlyersForBookmarks = async (
+  flyerID: string,
+  bodyText: string,
+  action: Actions,
+): Promise<void> => {
+  const flyer = await FlyerRepo.getFlyerByID(flyerID);
+  const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+  const followers = await UserRepo.getUsersBookmarkedFlyer(flyerID);
+
+  let notifTitle = '';
+  let notifBody = '';
+
+  followers.forEach(async (follower) => {
+    switch (action) {
+      case Actions.Edit:
+        notifTitle = `New Update from ${organization.name}!`;
+        notifBody = `${flyer.title} has ${bodyText}`;
+        break;
+      case Actions.Delete:
+        notifTitle = `${organization.name} Event Deleted`;
+        // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+        notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} has been removed`;
+        break;
+      default:
+        notifTitle = '';
+        notifBody = '';
+    }
+
+    const uniqueData = {
+      flyerID: flyer.id,
+      flyerURL: flyer.flyerURL,
+    };
+
+    await sendNotif(follower, notifTitle, notifBody, uniqueData, 'flyer_notif');
+  });
+};
+
+/**
+ * Send notifications for new flyers by organizations followed by the user.
+ *
+ * @param flyerID - ID of the flyer being added/changed/deleted
+ * @param bodyText -  a string containing the body of the notification
+ * @param action - a string indicating the action being peformed, a for add, e for edit, d for delete
+ */
+const notifyFlyersForOrganizations = async (
+  flyerID: string,
+  bodyText: string,
+  action: Actions,
+): Promise<void> => {
+  const flyer = await FlyerRepo.getFlyerByID(flyerID); // eslint-disable-line
+  const organization = await OrganizationRepo.getOrganizationBySlug(flyer.organizationSlug);
+  const followers = await UserRepo.getUsersFollowingOrganization(flyer.organizationSlug);
+
+  let notifTitle = '';
+  let notifBody = '';
+
+  followers.forEach(async (follower) => {
+    switch (action) {
+      case Actions.Add:
+        notifTitle = `New ${organization.name} Event!`;
+        // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+        notifBody = `${flyer.title} on ${flyer.startDate.toDateString()} at ${flyer.location}`;
+        break;
+      default:
+        notifTitle = '';
+        notifBody = '';
+    }
+
+    const uniqueData = {
+      flyerID: flyer.id,
+      flyerURL: flyer.flyerURL,
+    };
+
+    await sendNotif(follower, notifTitle, notifBody, uniqueData, 'flyer_notif');
+  });
+};
+
+/**
  * Send notifications for weekly debrief release.
  */
 const notifyWeeklyDebrief = async (users: User[]): Promise<void> => {
@@ -153,5 +237,7 @@ export default {
   notifyNewArticles,
   notifyNewFlyers,
   notifyNewMagazines,
+  notifyFlyersForBookmarks,
+  notifyFlyersForOrganizations,
   notifyWeeklyDebrief,
 };
