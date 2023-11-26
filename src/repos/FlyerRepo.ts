@@ -7,7 +7,11 @@ import { OrganizationModel } from '../entities/Organization';
 import utils from '../utils';
 
 const { IS_FILTER_ACTIVE } = process.env;
-
+export enum Actions {
+  Add,
+  Edit,
+  Delete,
+}
 function isFlyerFiltered(flyer: Flyer) {
   if (IS_FILTER_ACTIVE === 'true') {
     const filter = new Filter({ list: FILTERED_WORDS });
@@ -251,6 +255,7 @@ const createFlyer = async (
     startDate,
     title,
   });
+
   return FlyerModel.create(newFlyer);
 };
 
@@ -303,6 +308,7 @@ const editFlyer = async (
     // Update flyer fields (if not nul)
     if (categorySlug) flyer.categorySlug = categorySlug;
     if (endDate) flyer.endDate = new Date(endDate);
+
     if (flyerURL) flyer.flyerURL = flyerURL;
     if (imageURL) flyer.imageURL = imageURL;
     if (location) flyer.location = location;

@@ -21,7 +21,7 @@ import OrganizationResolver from './resolvers/OrganizationResolver';
 import PublicationResolver from './resolvers/PublicationResolver';
 import UserResolver from './resolvers/UserResolver';
 import utils from './utils';
-import FlyerRepo from './repos/FlyerRepo';
+import FlyerRepo, { Actions } from './repos/FlyerRepo';
 
 const main = async () => {
   const schema = await buildSchema({
@@ -146,7 +146,12 @@ const main = async () => {
       startDate,
       title,
     });
-    await FlyerModel.create(newFlyer);
+    const flyer = await FlyerModel.create(newFlyer);
+    NotificationRepo.notifyFlyersForOrganizations(
+      flyer.id,
+      ' just added a new flyer!',
+      Actions.Add,
+    );
     return res.status(201).json(newFlyer);
   });
 
@@ -174,7 +179,7 @@ const main = async () => {
 
     // Get the file from form-data and await the upload service
     const imageURL = req.file ? await utils.uploadImage(req.file) : undefined;
-    await FlyerRepo.editFlyer(
+    const flyer = await FlyerRepo.editFlyer(
       flyerID,
       categorySlug,
       endDate,
@@ -185,6 +190,29 @@ const main = async () => {
       title,
     );
 
+    let editedResponse = '';
+    if ((endDate && location) || (location && startDate)) {
+      // if endDate and location or startDate and location are nonempty, notification body would return date and location changed
+      editedResponse = 'changed its date and location';
+    } else if (endDate && startDate) {
+      // if both endDate and startDate values changed, the notifcation body would just return that the event changed its date
+      editedResponse = 'changed its date';
+    } else if (endDate) {
+      // if only the endDate changed for the event, then the notification body would print out specifically what the date was changed to
+      const date = new Date(endDate);
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      editedResponse = `changed its end date to ${date.toDateString()}`;
+    } else if (location) {
+      // if only the location changed for the event, then the notification body would print out specifically what the location was changed to
+      editedResponse = `changed its location to ${location}`;
+    } else if (startDate) {
+      // if only the startDate changed for the event, then the notification body would print out specifically what the date was changed to
+      const date = new Date(startDate);
+      // the format for toDateString is Day of the Week Month Date Year ex: Tue Sep 05 2023
+      editedResponse = `changed its start date to ${date.toDateString()}`;
+    }
+
+    NotificationRepo.notifyFlyersForBookmarks(flyer.id, editedResponse, Actions.Edit);
     return res.status(201).json(await FlyerModel.findById(flyerID));
   });
 
